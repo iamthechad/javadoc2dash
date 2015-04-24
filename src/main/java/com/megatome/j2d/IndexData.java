@@ -28,4 +28,8 @@ public class IndexData {
     public List<File> getFilesToIndex() {
         return filesToIndex;
     }
+
+    public boolean hasFilesToIndex() {
+        return !filesToIndex.isEmpty();
+    }
 }
