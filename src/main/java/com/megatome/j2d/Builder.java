@@ -27,11 +27,15 @@ public class Builder {
 
     private static final String PLIST_FILE = "Info.plist";
     private static final String DB_FILE = "docSet.dsidx";
+    private static final String ICON_FILE = "icon.png";
 
     private static final String CREATE_INDEX_SQL = "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT)";
     private static final String INSERT_INDEX_SQL = "INSERT INTO searchIndex(name, type, path) VALUES (?, ?, ?)";
 
     private final String docsetRoot;
+    private final String displayName;
+    private final String keyword;
+    private final String iconFilePath;
     private final String docsetDir;
     private final String javadocRoot;
     private File documentsDir;
@@ -40,12 +44,18 @@ public class Builder {
     public static void main(String... args) {
         final String docsetName = args[0];
         final String javadocRoot = args[1];
-        final Builder builder = new Builder(docsetName, javadocRoot);
+        final String displayName = (args.length >= 3) ? args[2] : null;
+        final String keyword = (args.length >= 4) ? args[3] : null;
+        final String iconFilePath = (args.length >= 5) ? args[4] : null;
+        final Builder builder = new Builder(docsetName, javadocRoot, displayName, keyword, iconFilePath);
         builder.build();
     }
 
-    public Builder(String docsetName, String javadocRoot) {
+    public Builder(String docsetName, String javadocRoot, String displayName, String keyword, String iconFilePath) {
         docsetRoot = docsetName;
+        this.displayName = (displayName == null) ? docsetRoot : displayName;
+        this.keyword = (keyword == null) ? docsetRoot : keyword;
+        this.iconFilePath = iconFilePath;
         this.docsetDir = docsetRoot + ".docset";
         this.javadocRoot = javadocRoot;
         this.javadocDir = getFile(javadocRoot);
@@ -54,6 +64,9 @@ public class Builder {
     public void build() {
         try {
             createDocSetStructure();
+            if (null != iconFilePath) {
+                copyIconFile();
+            }
             final IndexData indexData = findIndexFile(javadocDir);
             copyFiles(javadocDir);
             createPList(indexData);
@@ -64,9 +77,23 @@ public class Builder {
         }
     }
 
+    private void copyIconFile() throws BuilderException {
+        try {
+            copyFile(getFile(iconFilePath), getFile(this.docsetDir, ICON_FILE));
+            LOG.info("Icon file copied");
+        } catch (IOException e) {
+            final String message = "Failed to copy icon file to docset";
+            LOG.error(message, e);
+            throw new BuilderException(message, e);
+        }
+    }
+
     private void createPList(IndexData indexData) throws BuilderException {
         final String plist = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict><key>CFBundleIdentifier</key><string>%s</string><key>CFBundleName</key><string>%s</string><key>DocSetPlatformFamily</key><string>%s</string><key>dashIndexFilePath</key><string>%s</string><key>DashDocSetFamily</key><string>java</string><key>isDashDocset</key><true/></dict></plist>",
-                docsetRoot, docsetRoot, docsetRoot, indexData.getDocsetIndexFile());
+                docsetRoot, displayName, keyword, indexData.getDocsetIndexFile());
+        // CFBundleIdentifier = ?
+        // CFBundleName = Display Name
+        // DocSetPlatformFamily = keyword
         try {
             write(getFile(docsetDir, CONTENTS, PLIST_FILE), plist);
             LOG.info("Created the plist file in the docset");
