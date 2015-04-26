@@ -1,4 +1,4 @@
-package com.megatome.j2d;
+package com.megatome.j2d.support;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
-public enum MatchType {
+enum MatchType {
     CLASS("Class", "class", "Class in", "- class"),
     STATIC_METHOD("Method", "method", "Static method in"),
     FIELD("Field", "field", "Static variable in", "Field in"),

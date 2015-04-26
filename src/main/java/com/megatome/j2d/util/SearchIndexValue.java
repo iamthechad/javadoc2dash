@@ -1,4 +1,4 @@
-package com.megatome.j2d;
+package com.megatome.j2d.util;
 
 public class SearchIndexValue {
     private final String name;

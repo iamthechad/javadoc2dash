@@ -1,13 +1,14 @@
 package com.megatome.j2d;
 
 import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.IndexData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.megatome.j2d.DBSupport.createIndex;
-import static com.megatome.j2d.DocSetSupport.*;
-import static com.megatome.j2d.JavadocSupport.findIndexFile;
-import static com.megatome.j2d.JavadocSupport.findSearchIndexValues;
+import static com.megatome.j2d.support.DBSupport.createIndex;
+import static com.megatome.j2d.support.DocSetSupport.*;
+import static com.megatome.j2d.support.JavadocSupport.findIndexFile;
+import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
 
 public class Builder {
     private static final Logger LOG = LoggerFactory.getLogger(Builder.class);
@@ -18,16 +19,6 @@ public class Builder {
     private final String iconFilePath;
     private final String docsetDir;
     private final String javadocRoot;
-
-    public static void main(String... args) {
-        final String docsetName = args[0];
-        final String javadocRoot = args[1];
-        final String displayName = (args.length >= 3) ? args[2] : null;
-        final String keyword = (args.length >= 4) ? args[3] : null;
-        final String iconFilePath = (args.length >= 5) ? args[4] : null;
-        final Builder builder = new Builder(docsetName, javadocRoot, displayName, keyword, iconFilePath);
-        builder.build();
-    }
 
     public Builder(String docsetName, String javadocRoot, String displayName, String keyword, String iconFilePath) {
         docsetRoot = docsetName;

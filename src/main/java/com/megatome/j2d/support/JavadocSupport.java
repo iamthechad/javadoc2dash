@@ -1,5 +1,7 @@
-package com.megatome.j2d;
+package com.megatome.j2d.support;
 
+import com.megatome.j2d.util.IndexData;
+import com.megatome.j2d.util.SearchIndexValue;
 import com.megatome.j2d.exception.BuilderException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

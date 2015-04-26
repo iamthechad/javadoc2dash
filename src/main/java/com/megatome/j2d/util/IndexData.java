@@ -1,4 +1,4 @@
-package com.megatome.j2d;
+package com.megatome.j2d.util;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
-package com.megatome.j2d;
+package com.megatome.j2d.support;
 
+import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.exception.BuilderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
