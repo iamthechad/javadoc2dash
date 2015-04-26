@@ -15,16 +15,15 @@
  */
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.util.SearchIndexValue;
 import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.SearchIndexValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.sql.*;
 import java.util.List;
 
-import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
  * Utility class for SQLite DB manipulation of the docset.
@@ -45,10 +44,11 @@ public final class DBSupport {
      * @param dbFileDir Directory to create the DB file in.
      * @throws BuilderException
      */
-    public static void createIndex(List<SearchIndexValue> indexValues, File dbFileDir) throws BuilderException {
-        final File dbFile = getFile(dbFileDir, DB_FILE);
+    public static void createIndex(List<SearchIndexValue> indexValues, String dbFileDir) throws BuilderException {
+
+        final String dbFile = concat(dbFileDir, DB_FILE);
         // Create DB file
-        try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
+        try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
              final Statement stmt = connection.createStatement()){
             stmt.execute(CREATE_INDEX_SQL);
             // Update DB

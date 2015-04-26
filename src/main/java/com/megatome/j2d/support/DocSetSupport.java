@@ -15,7 +15,6 @@
  */
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.exception.BuilderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
  * Utility class for operations on the docset.
@@ -135,8 +135,8 @@ public class DocSetSupport {
      * @param docsetDir Directory of the docset
      * @return Directory
      */
-    public static File getDBDir(String docsetDir) {
-        return getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES);
+    public static String getDBDir(String docsetDir) {
+        return concat(concat(getDocsetRoot(docsetDir), CONTENTS), RESOURCES);
     }
 
     private static String getDocsetRoot(String docsetDir) {
