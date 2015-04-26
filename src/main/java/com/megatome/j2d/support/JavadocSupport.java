@@ -46,23 +46,22 @@ public final class JavadocSupport {
 
     /**
      * Find the file to be used as the docset index and locate all Javadoc files to be indexed.
-     * @param javadocRoot Directory where the Javadoc is located
+     * @param javadocDir Directory where the Javadoc is located
      * @return IndexData object
      * @throws BuilderException
      * @see IndexData
      */
-    public static IndexData findIndexFile(String javadocRoot) throws BuilderException {
+    public static IndexData findIndexFile(File javadocDir) throws BuilderException {
         final IndexData indexData = new IndexData();
-        final File javadocDir = getFile(javadocRoot);
         if (!javadocDir.exists() || !javadocDir.isDirectory()) {
-            throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocRoot));
+            throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
         }
 
         LOG.info("Looking for javadoc files");
 
         String docsetIndexFile = "overview-summary.html";
 
-        if (!getFile(javadocRoot, docsetIndexFile).exists()) {
+        if (!getFile(javadocDir, docsetIndexFile).exists()) {
             docsetIndexFile = null;
         }
 
@@ -76,7 +75,7 @@ public final class JavadocSupport {
         }
 
         if (!indexData.hasFilesToIndex()) {
-            throw new BuilderException(String.format("Did not find any javadoc files. Make sure that %s is a directory containing javadoc", javadocRoot));
+            throw new BuilderException(String.format("Did not find any javadoc files. Make sure that %s is a directory containing javadoc", javadocDir.getAbsolutePath()));
         }
 
         indexData.setDocsetIndexFile(docsetIndexFile);

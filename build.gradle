@@ -15,7 +15,8 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.xerial:sqlite-jdbc:3.8.7'
     compile 'org.jsoup:jsoup:1.8.2'
-    compile "org.slf4j:slf4j-api:1.7.9"
+    compile 'org.slf4j:slf4j-api:1.7.9'
+    compile 'net.sf.jopt-simple:jopt-simple:4.8'
 
     runtime "log4j:log4j:1.2.17"
     runtime "org.slf4j:slf4j-log4j12:1.7.9"

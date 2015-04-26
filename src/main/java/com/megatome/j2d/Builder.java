@@ -20,6 +20,8 @@ import com.megatome.j2d.util.IndexData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 import static com.megatome.j2d.support.DBSupport.createIndex;
 import static com.megatome.j2d.support.DocSetSupport.*;
 import static com.megatome.j2d.support.JavadocSupport.findIndexFile;
@@ -34,8 +36,8 @@ public class Builder {
     private final String docsetRoot;
     private final String displayName;
     private final String keyword;
-    private final String iconFilePath;
-    private final String javadocRoot;
+    private final File iconFilePath;
+    private final File javadocRoot;
 
     /**
      * Ctor
@@ -45,7 +47,7 @@ public class Builder {
      * @param keyword Keyword to associate this docset with. Defaults to <code>docsetName</code> is unspecified
      * @param iconFilePath Path to an icon to include in the docset. Should be a 32x32 PNG. No icon will be used if this is unspecified.
      */
-    public Builder(String docsetName, String javadocRoot, String displayName, String keyword, String iconFilePath) {
+    public Builder(String docsetName, File javadocRoot, String displayName, String keyword, File iconFilePath) {
         docsetRoot = docsetName;
         this.displayName = (displayName == null) ? docsetRoot : displayName;
         this.keyword = (keyword == null) ? docsetRoot : keyword;

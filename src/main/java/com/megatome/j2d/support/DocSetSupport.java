@@ -73,17 +73,17 @@ public class DocSetSupport {
 
     /**
      * Copy an icon file to the docset. If the file path is not specified, no error happens.
-     * @param iconFilePath Path of the file to copy as the docset icon.
+     * @param iconFile File to copy as the docset icon.
      * @param docsetDir Directory of the docset
      * @throws BuilderException
      */
-    public static void copyIconFile(String iconFilePath, String docsetDir) throws BuilderException {
-        if (null == iconFilePath) {
+    public static void copyIconFile(File iconFile, String docsetDir) throws BuilderException {
+        if (null == iconFile) {
             return;
         }
 
         try {
-            copyFile(getFile(iconFilePath), getFile(getDocsetRoot(docsetDir), ICON_FILE));
+            copyFile(iconFile, getFile(getDocsetRoot(docsetDir), ICON_FILE));
             LOG.info("Icon file copied");
         } catch (IOException e) {
             final String message = "Failed to copy icon file to docset";
@@ -99,8 +99,18 @@ public class DocSetSupport {
      * @throws BuilderException
      */
     public static void copyFiles(final String sourceDir, String docsetDir) throws BuilderException {
+        copyFiles(getFile(sourceDir), docsetDir);
+    }
+
+    /**
+     * Copy all files and folders from a source location into the docset.
+     * @param sourceDir Source directory to copy from
+     * @param docsetDir Directory of the docset
+     * @throws BuilderException
+     */
+    public static void copyFiles(final File sourceDir, String docsetDir) throws BuilderException {
         try {
-            copyDirectory(getFile(sourceDir), getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS));
+            copyDirectory(sourceDir, getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS));
             LOG.info("Copied javadoc files into docset");
         } catch (IOException e) {
             throw new BuilderException("Could not copy files into the docset", e);
