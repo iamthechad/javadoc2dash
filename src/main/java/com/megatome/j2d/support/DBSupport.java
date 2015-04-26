@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Megatome Technologies, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.megatome.j2d.support;
 
 import com.megatome.j2d.util.SearchIndexValue;
@@ -11,6 +26,9 @@ import java.util.List;
 
 import static org.apache.commons.io.FileUtils.getFile;
 
+/**
+ * Utility class for SQLite DB manipulation of the docset.
+ */
 public final class DBSupport {
     private static final Logger LOG = LoggerFactory.getLogger(DBSupport.class);
 
@@ -21,6 +39,12 @@ public final class DBSupport {
     private static final String CREATE_INDEX_SQL = "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT)";
     private static final String INSERT_INDEX_SQL = "INSERT INTO searchIndex(name, type, path) VALUES (?, ?, ?)";
 
+    /**
+     * Create a new DB file, and insert all of the specified index values.
+     * @param indexValues Index values to insert into the DB
+     * @param dbFileDir Directory to create the DB file in.
+     * @throws BuilderException
+     */
     public static void createIndex(List<SearchIndexValue> indexValues, File dbFileDir) throws BuilderException {
         final File dbFile = getFile(dbFileDir, DB_FILE);
         // Create DB file

@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Megatome Technologies, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.megatome.j2d.support;
 
 import com.megatome.j2d.util.IndexData;
@@ -19,6 +34,9 @@ import java.util.regex.Pattern;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
+/**
+ * Utility class to support Javadoc related docset tasks.
+ */
 public final class JavadocSupport {
     private static final Logger LOG = LoggerFactory.getLogger(JavadocSupport.class);
 
@@ -26,6 +44,13 @@ public final class JavadocSupport {
 
     private JavadocSupport() {}
 
+    /**
+     * Find the file to be used as the docset index and locate all Javadoc files to be indexed.
+     * @param javadocRoot Directory where the Javadoc is located
+     * @return IndexData object
+     * @throws BuilderException
+     * @see IndexData
+     */
     public static IndexData findIndexFile(String javadocRoot) throws BuilderException {
         final IndexData indexData = new IndexData();
         final File javadocDir = getFile(javadocRoot);
@@ -59,6 +84,12 @@ public final class JavadocSupport {
         return indexData;
     }
 
+    /**
+     * Find all values to be indexed within the specified list of files.
+     * @param filesToIndex List of Javadoc files to parse
+     * @return List of relevant values to be indexed in the docset
+     * @throws BuilderException
+     */
     public static List<SearchIndexValue> findSearchIndexValues(List<File> filesToIndex) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
         for (final File f : filesToIndex) {
