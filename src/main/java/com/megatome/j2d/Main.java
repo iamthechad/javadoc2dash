@@ -19,6 +19,7 @@ import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class Main {
         final OptionParser parser = new OptionParser();
         final OptionSpec<String> docsetName = parser.accepts("name", "Name of the generated docset").withRequiredArg().ofType(String.class).required();
         final OptionSpec<File> javadocRoot = parser.accepts("javadoc", "Directory containing Javadoc to bundle in the docset.").withRequiredArg().ofType(File.class).required();
+        final OptionSpec<File> outputLocation = parser.accepts("out", "Directory where the docset will be created.").withRequiredArg().ofType(File.class).defaultsTo(FileUtils.getFile("."));
         final OptionSpec<String> displayName = parser.accepts("displayName", "Name to show for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<String> keyword = parser.accepts("keyword", "Keyword to use for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<File> iconFile = parser.accepts("icon", "Icon file to use for the docset. No icon will be used if not specified.").withRequiredArg().ofType(File.class).describedAs("32x32 PNG");
@@ -51,7 +53,8 @@ public class Main {
                 options.valueOf(javadocRoot),
                 options.valueOf(displayName),
                 options.valueOf(keyword),
-                options.valueOf(iconFile));
+                options.valueOf(iconFile),
+                options.valueOf(outputLocation));
         builder.build();
     }
 

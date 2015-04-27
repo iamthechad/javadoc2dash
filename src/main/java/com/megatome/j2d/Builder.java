@@ -17,10 +17,13 @@ package com.megatome.j2d;
 
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.megatome.j2d.support.DBSupport.createIndex;
 import static com.megatome.j2d.support.DocSetSupport.*;
@@ -33,11 +36,12 @@ import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
 public class Builder {
     private static final Logger LOG = LoggerFactory.getLogger(Builder.class);
 
-    private final String docsetRoot;
+    private final String docsetName;
     private final String displayName;
     private final String keyword;
     private final File iconFilePath;
     private final File javadocRoot;
+    private final File outputDirectory;
 
     /**
      * Ctor
@@ -46,19 +50,22 @@ public class Builder {
      * @param displayName Name to display in Dash. Defaults to <code>docsetName</code> if unspecified
      * @param keyword Keyword to associate this docset with. Defaults to <code>docsetName</code> is unspecified
      * @param iconFilePath Path to an icon to include in the docset. Should be a 32x32 PNG. No icon will be used if this is unspecified.
+     * @param outputDirectory Location for the created docset
      */
-    public Builder(String docsetName, File javadocRoot, String displayName, String keyword, File iconFilePath) {
-        docsetRoot = docsetName;
-        this.displayName = (displayName == null) ? docsetRoot : displayName;
-        this.keyword = (keyword == null) ? docsetRoot : keyword;
+    public Builder(String docsetName, File javadocRoot, String displayName, String keyword, File iconFilePath, File outputDirectory) {
+        this.docsetName = docsetName;
+        this.displayName = (displayName == null) ? docsetName : displayName;
+        this.keyword = (keyword == null) ? docsetName : keyword;
         this.iconFilePath = iconFilePath;
         this.javadocRoot = javadocRoot;
+        this.outputDirectory = outputDirectory;
     }
 
     /**
      * Build the docset.
      */
     public void build() {
+        final String docsetRoot = FilenameUtils.concat(outputDirectory.getAbsolutePath(), docsetName);
         try {
             createDocSetStructure(docsetRoot);
             copyIconFile(iconFilePath, docsetRoot);
