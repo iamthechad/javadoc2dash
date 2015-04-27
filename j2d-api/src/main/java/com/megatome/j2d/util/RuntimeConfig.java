@@ -15,8 +15,6 @@
  */
 package com.megatome.j2d.util;
 
-import java.io.OutputStream;
-
 /**
  * Utility class to hold static runtime configuration.
  */

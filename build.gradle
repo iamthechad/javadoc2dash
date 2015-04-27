@@ -1,21 +1,35 @@
-apply plugin: 'java'
-apply plugin:'application'
+ext.projectVersion = '1.0.1'
 
-sourceCompatibility = 1.7
-version = '1.0'
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
+    version = "$projectVersion"
 
-mainClassName = "com.megatome.j2d.Main"
-
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencies {
-    compile 'commons-io:commons-io:2.4'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'org.xerial:sqlite-jdbc:3.8.7'
-    compile 'org.jsoup:jsoup:1.8.2'
-    compile 'net.sf.jopt-simple:jopt-simple:4.8'
+project(":j2d-cli") {
+    apply plugin:'application'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    mainClassName = "com.megatome.j2d.Main"
+
+    dependencies {
+        compile project(":j2d-api")
+        compile 'net.sf.jopt-simple:jopt-simple:4.8'
+
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
+}
+
+project(":j2d-api") {
+    dependencies {
+        compile 'commons-io:commons-io:2.4'
+        compile 'org.apache.commons:commons-lang3:3.3.2'
+        compile 'org.xerial:sqlite-jdbc:3.8.7'
+        compile 'org.jsoup:jsoup:1.8.2'
+
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
 }
