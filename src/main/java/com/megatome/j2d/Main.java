@@ -15,6 +15,7 @@
  */
 package com.megatome.j2d;
 
+import com.megatome.j2d.util.RuntimeConfig;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -34,6 +35,7 @@ public class Main {
         final OptionSpec<String> displayName = parser.accepts("displayName", "Name to show for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<String> keyword = parser.accepts("keyword", "Keyword to use for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<File> iconFile = parser.accepts("icon", "Icon file to use for the docset. No icon will be used if not specified.").withRequiredArg().ofType(File.class).describedAs("32x32 PNG");
+        final OptionSpec<Void> verbose = parser.accepts("verbose", "Show more information");
         final OptionSpec<Void> help = parser.acceptsAll( Arrays.asList("h", "?"), "Show help" ).forHelp();
 
         final OptionSet options;
@@ -48,6 +50,7 @@ public class Main {
             return;
         }
 
+        RuntimeConfig.setVerbose(options.has(verbose));
         final Builder builder = new Builder(
                 options.valueOf(docsetName),
                 options.valueOf(javadocRoot),

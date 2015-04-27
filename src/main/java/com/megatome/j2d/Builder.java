@@ -17,13 +17,10 @@ package com.megatome.j2d;
 
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
-import org.apache.commons.io.FileUtils;
+import com.megatome.j2d.util.RuntimeConfig;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.megatome.j2d.support.DBSupport.createIndex;
 import static com.megatome.j2d.support.DocSetSupport.*;
@@ -34,8 +31,6 @@ import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
  * Class responsible for creating the docset.
  */
 public class Builder {
-    private static final Logger LOG = LoggerFactory.getLogger(Builder.class);
-
     private final String docsetName;
     private final String displayName;
     private final String keyword;
@@ -73,9 +68,12 @@ public class Builder {
             copyFiles(javadocRoot, docsetRoot);
             createPList(docsetRoot, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
             createIndex(findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
-            LOG.info("Finished creating docset");
+            System.out.println("Finished creating docset: " + docsetRoot);
         } catch (BuilderException e) {
-            LOG.error("Failed to create docset", e);
+            System.out.println("Failed to create docset: " + e.getMessage());
+            if (RuntimeConfig.isVerbose()) {
+                e.printStackTrace();
+            }
         }
     }
 }

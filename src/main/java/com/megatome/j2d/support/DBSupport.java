@@ -17,20 +17,17 @@ package com.megatome.j2d.support;
 
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.SearchIndexValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.List;
 
+import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
 import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
  * Utility class for SQLite DB manipulation of the docset.
  */
 public final class DBSupport {
-    private static final Logger LOG = LoggerFactory.getLogger(DBSupport.class);
-
     private static final String DB_FILE = "docSet.dsidx";
 
     private DBSupport() {}
@@ -63,6 +60,6 @@ public final class DBSupport {
         } catch (SQLException e) {
             throw new BuilderException("Error writing to SQLite DB", e);
         }
-        LOG.info("Created the SQLite search index");
+        printIfVerbose("Created the SQLite search index");
     }
 }

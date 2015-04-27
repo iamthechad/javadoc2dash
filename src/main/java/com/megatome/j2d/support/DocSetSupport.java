@@ -16,12 +16,11 @@
 package com.megatome.j2d.support;
 
 import com.megatome.j2d.exception.BuilderException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
+import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
 import static org.apache.commons.io.FileUtils.*;
 import static org.apache.commons.io.FilenameUtils.concat;
 
@@ -29,8 +28,6 @@ import static org.apache.commons.io.FilenameUtils.concat;
  * Utility class for operations on the docset.
  */
 public class DocSetSupport {
-    private static final Logger LOG = LoggerFactory.getLogger(DocSetSupport.class);
-
     private DocSetSupport() {}
 
     private static final String CONTENTS = "Contents";
@@ -50,13 +47,11 @@ public class DocSetSupport {
         final File docsetRootDir = getFile(getDocsetRoot(docsetDir));
         // Create dir
         if (docsetRootDir.exists()) {
-            LOG.info("A docset named {} already exists. Trying to remove.", docsetDir);
+            printIfVerbose(String.format("A docset named %s already exists. Trying to remove.", docsetDir));
             try {
                 deleteDirectory(docsetRootDir);
             } catch (IOException e) {
-                final String message = "Failed to delete existing docset.";
-                LOG.error(message, e);
-                throw new BuilderException(message, e);
+                throw new BuilderException("Failed to delete existing docset.", e);
             }
         }
 
@@ -64,11 +59,9 @@ public class DocSetSupport {
         try {
             forceMkdir(documentsDir);
         } catch (IOException e) {
-            final String message = "Failed to create new docset directory.";
-            LOG.error(message, e);
-            throw new BuilderException(message, e);
+            throw new BuilderException("Failed to create new docset directory.", e);
         }
-        LOG.info("Docset directory structure created");
+        printIfVerbose("Docset directory structure created");
     }
 
     /**
@@ -84,11 +77,9 @@ public class DocSetSupport {
 
         try {
             copyFile(iconFile, getFile(getDocsetRoot(docsetDir), ICON_FILE));
-            LOG.info("Icon file copied");
+            printIfVerbose("Icon file copied");
         } catch (IOException e) {
-            final String message = "Failed to copy icon file to docset";
-            LOG.error(message, e);
-            throw new BuilderException(message, e);
+            throw new BuilderException("Failed to copy icon file to docset", e);
         }
     }
 
@@ -111,7 +102,7 @@ public class DocSetSupport {
     public static void copyFiles(final File sourceDir, String docsetDir) throws BuilderException {
         try {
             copyDirectory(sourceDir, getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS));
-            LOG.info("Copied javadoc files into docset");
+            printIfVerbose("Copied javadoc files into docset");
         } catch (IOException e) {
             throw new BuilderException("Could not copy files into the docset", e);
         }
@@ -134,7 +125,7 @@ public class DocSetSupport {
         // DocSetPlatformFamily = keyword
         try {
             write(getFile(getDocsetRoot(docsetDir), CONTENTS, PLIST_FILE), plist);
-            LOG.info("Created the plist file in the docset");
+            printIfVerbose("Created the plist file in the docset");
         } catch (IOException e) {
             throw new BuilderException("Failed to write plist file into docset", e);
         }

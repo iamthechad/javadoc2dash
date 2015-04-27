@@ -15,15 +15,13 @@
  */
 package com.megatome.j2d.support;
 
+import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
-import com.megatome.j2d.exception.BuilderException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,13 +31,12 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
 
 /**
  * Utility class to support Javadoc related docset tasks.
  */
 public final class JavadocSupport {
-    private static final Logger LOG = LoggerFactory.getLogger(JavadocSupport.class);
-
     private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
 
     private JavadocSupport() {}
@@ -57,7 +54,7 @@ public final class JavadocSupport {
             throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
         }
 
-        LOG.info("Looking for javadoc files");
+        printIfVerbose("Looking for javadoc files");
 
         String docsetIndexFile = "overview-summary.html";
 
@@ -79,7 +76,7 @@ public final class JavadocSupport {
         }
 
         indexData.setDocsetIndexFile(docsetIndexFile);
-        LOG.info("Found javadoc files");
+        printIfVerbose("Found javadoc files");
         return indexData;
     }
 
@@ -130,7 +127,7 @@ public final class JavadocSupport {
                 }
 
                 if (null == type) {
-                    LOG.error("Unknown type found. Please submit a bug report. (Text: {}, Name: {}, className: {})", text, name, className);
+                    System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
                     continue;
                 }
                 final String linkPath = e.attr("href");
