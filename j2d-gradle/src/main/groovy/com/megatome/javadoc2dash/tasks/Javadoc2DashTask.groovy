@@ -1,5 +1,6 @@
 package com.megatome.javadoc2dash.tasks
 
+import com.megatome.j2d.Builder
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
@@ -31,8 +32,8 @@ class Javadoc2DashTask extends DefaultTask {
             logger.quiet "Keyword: $keyword"
             logger.quiet "Icon File: $iconFile"
             logger.quiet "Output Location: $outputLocation"
-            //Builder builder = new Builder(docsetName, javadocRoot, displayName, keyword, iconFile, outputLocation)
-            //builder.build()
+            Builder builder = new Builder(docsetName, javadocRoot, displayName, keyword, iconFile, outputLocation)
+            builder.build()
         }
     }
 
