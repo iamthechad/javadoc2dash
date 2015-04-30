@@ -1,5 +1,8 @@
 language: groovy
 jdk:
-  - oraclejdk8
-  - oraclejdk7
-  - openjdk7
+- oraclejdk8
+- oraclejdk7
+- openjdk7
+notifications:
+  slack:
+    secure: alp5GJJqdBSH11BZ8jR9BB1TtYBi+p+F9UFHltLpGBJHv+AEHf+pBmY4vM0tulNeZpvOhDRkJ014RQpm7bLjvnoxyt60zCVDSpKLp3Pp7IrrgsgQ4oycwEwSExCzfehHxurP+eIi3I3RkdYvnxXkVobvaCzbGgikRM0qNTRPYEE=
