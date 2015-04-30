@@ -49,6 +49,12 @@ public class DocsetCreator {
         private File outputDirectory = FileUtils.getFile(".");
 
         public Builder(String docsetName, File javadocRoot) {
+            if (null == docsetName || docsetName.isEmpty()) {
+                throw new IllegalArgumentException("The docsetName must be specified");
+            }
+            if (null == javadocRoot) {
+                throw new IllegalArgumentException("The javadocRoot must be specified");
+            }
             this.docsetName = docsetName;
             this.javadocRoot = javadocRoot;
             this.displayName = docsetName;

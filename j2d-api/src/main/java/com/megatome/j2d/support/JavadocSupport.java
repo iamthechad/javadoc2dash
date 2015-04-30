@@ -18,12 +18,14 @@ package com.megatome.j2d.support;
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,11 @@ public final class JavadocSupport {
         final File indexFilesDir = getFile(javadocDir, "index-files");
         if (indexFilesDir.exists() && indexFilesDir.isDirectory()) {
             docsetIndexFile = (docsetIndexFile != null) ? docsetIndexFile : "index-1.html";
-            // TODO Loop over dir to find objects to index
+            for (File f : FileUtils.listFiles(indexFilesDir, new String[]{"html"}, false)) {
+                if (f.getName().startsWith("index-")) {
+                    indexData.addFileToIndex(f);
+                }
+            }
         } else {
             docsetIndexFile = (docsetIndexFile != null) ? docsetIndexFile : "index-all.html";
             indexData.addFileToIndex(getFile(javadocDir, "index-all.html"));
