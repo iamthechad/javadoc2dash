@@ -66,7 +66,7 @@ public class Builder {
             copyIconFile(iconFilePath, docsetRoot);
             final IndexData indexData = findIndexFile(javadocRoot);
             copyFiles(javadocRoot, docsetRoot);
-            createPList(docsetRoot, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
+            createPList(docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
             createIndex(findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
             System.out.println("Finished creating docset: " + docsetRoot);
         } catch (BuilderException e) {
