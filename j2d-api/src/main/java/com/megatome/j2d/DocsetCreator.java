@@ -17,7 +17,6 @@ package com.megatome.j2d;
 
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
-import com.megatome.j2d.util.LogUtility;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -28,6 +27,7 @@ import static com.megatome.j2d.support.JavadocSupport.findIndexFile;
 import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.io.FilenameUtils.concat;
+import static com.megatome.j2d.util.LogUtility.*;
 
 /**
  * Class responsible for creating the docset.
@@ -139,7 +139,7 @@ public class DocsetCreator {
      * @throws BuilderException If an error occurs creating the docset
      */
     public void makeDocset(Logger logger) throws BuilderException {
-        LogUtility.setLogger(logger);
+        setLogger(logger);
         final String docsetRoot = concat(outputDirectory.getAbsolutePath(), docsetName);
         createDocSetStructure(docsetRoot);
         copyIconFile(iconFilePath, docsetRoot);
@@ -147,7 +147,7 @@ public class DocsetCreator {
         copyFiles(javadocRoot, docsetRoot);
         createPList(docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
         createIndex(findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
-        LogUtility.log("Finished creating docset: {}", docsetRoot);
+        log("Finished creating docset: {}", docsetRoot);
     }
 
     /**

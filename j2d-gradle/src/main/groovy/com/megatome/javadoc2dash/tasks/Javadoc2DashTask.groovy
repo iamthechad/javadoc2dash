@@ -26,12 +26,6 @@ class Javadoc2DashTask extends DefaultTask {
     @TaskAction
     void start() {
         withExceptionHandling {
-            logger.quiet "Docset Name: $docsetName"
-            logger.quiet "Javadoc Root: $javadocRoot"
-            logger.quiet "Display Name: $displayName"
-            logger.quiet "Keyword: $keyword"
-            logger.quiet "Icon File: $iconFile"
-            logger.quiet "Output Location: $outputLocation"
             DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocRoot)
                 .displayName(displayName)
                 .keyword(keyword)
