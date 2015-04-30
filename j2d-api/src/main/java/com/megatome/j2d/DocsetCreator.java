@@ -18,6 +18,7 @@ package com.megatome.j2d;
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.RuntimeConfig;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -30,13 +31,71 @@ import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
 /**
  * Class responsible for creating the docset.
  */
-public class Builder {
+public class DocsetCreator {
     private final String docsetName;
     private final String displayName;
     private final String keyword;
     private final File iconFilePath;
     private final File javadocRoot;
     private final File outputDirectory;
+
+    public static class Builder {
+        private final String docsetName;
+        private final File javadocRoot;
+
+        private String displayName;
+        private String keyword;
+        private File iconFilePath = null;
+        private File outputDirectory = FileUtils.getFile(".");
+
+        public Builder(String docsetName, File javadocRoot) {
+            this.docsetName = docsetName;
+            this.javadocRoot = javadocRoot;
+            this.displayName = docsetName;
+            this.keyword = docsetName;
+        }
+
+        public Builder displayName(String displayName) {
+            if (null != displayName && !displayName.isEmpty()) {
+                this.displayName = displayName;
+            }
+            return this;
+        }
+
+        public Builder keyword(String keyword) {
+            if (null != keyword && !keyword.isEmpty()) {
+                this.keyword = keyword;
+            }
+            return this;
+        }
+
+        public Builder outputDirectory(File outputDirectory) {
+            if (null != outputDirectory) {
+                this.outputDirectory = outputDirectory;
+            }
+            return this;
+        }
+
+        public Builder iconFile(File iconFile) {
+            if (null != iconFile) {
+                this.iconFilePath = iconFile;
+            }
+            return this;
+        }
+
+        public DocsetCreator build() {
+            return new DocsetCreator(this);
+        }
+    }
+
+    private DocsetCreator(Builder builder) {
+        this.docsetName = builder.docsetName;
+        this.displayName = builder.displayName;
+        this.keyword = builder.keyword;
+        this.iconFilePath = builder.iconFilePath;
+        this.javadocRoot = builder.javadocRoot;
+        this.outputDirectory = builder.outputDirectory;
+    }
 
     /**
      * Ctor
@@ -47,19 +106,19 @@ public class Builder {
      * @param iconFilePath Path to an icon to include in the docset. Should be a 32x32 PNG. No icon will be used if this is unspecified.
      * @param outputDirectory Location for the created docset
      */
-    public Builder(String docsetName, File javadocRoot, String displayName, String keyword, File iconFilePath, File outputDirectory) {
+    /*public DocsetCreator(String docsetName, File javadocRoot, String displayName, String keyword, File iconFilePath, File outputDirectory) {
         this.docsetName = docsetName;
         this.displayName = (displayName == null) ? docsetName : displayName;
         this.keyword = (keyword == null) ? docsetName : keyword;
         this.iconFilePath = iconFilePath;
         this.javadocRoot = javadocRoot;
         this.outputDirectory = outputDirectory;
-    }
+    }*/
 
     /**
      * Build the docset.
      */
-    public void build() {
+    public void makeDocset() {
         final String docsetRoot = FilenameUtils.concat(outputDirectory.getAbsolutePath(), docsetName);
         try {
             createDocSetStructure(docsetRoot);
