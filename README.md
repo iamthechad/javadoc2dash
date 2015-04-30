@@ -1,3 +1,8 @@
+[![Build Status](http://img.shields.io/travis/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
+[![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Badges](http://img.shields.io/:badges-4/4-ff6799.svg)](https://github.com/badges/badgerbadgerbadger)
+
 # Javadoc2Dash - Build Dash docsets from Javadoc
  
 This project is based off of https://github.com/Kapeli/javadocset. This is a Java-based solution so that Dash docsets
