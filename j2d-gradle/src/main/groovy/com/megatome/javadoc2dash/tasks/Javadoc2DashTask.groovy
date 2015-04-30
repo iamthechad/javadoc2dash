@@ -1,9 +1,9 @@
 package com.megatome.javadoc2dash.tasks
 
-import com.megatome.j2d.Builder
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.TaskAction
 
 class Javadoc2DashTask extends DefaultTask {
@@ -12,7 +12,10 @@ class Javadoc2DashTask extends DefaultTask {
     @Input File outputLocation
     @Input String displayName
     @Input String keyword
-    @Input File iconFile
+
+    @Input
+    @Optional
+    File iconFile
 
     Javadoc2DashTask() {
         this.description = 'Create a Dash docset from Javadoc';

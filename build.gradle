@@ -49,6 +49,12 @@ project(":j2d-gradle") {
 }
 
 project(":j2d-api") {
+    apply plugin: 'maven'
+
+    archivesBaseName = 'javadoc2dash-api'
+    group = 'com.megatome.javadoc2dash'
+    version = '1.0'
+
     dependencies {
         compile 'commons-io:commons-io:2.4'
         compile 'org.apache.commons:commons-lang3:3.3.2'
@@ -56,5 +62,13 @@ project(":j2d-api") {
         compile 'org.jsoup:jsoup:1.8.2'
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "file://$projectDir/../../repo")
+            }
+        }
     }
 }
