@@ -15,12 +15,14 @@ class Javadoc2DashPlugin implements Plugin<Project> {
 
     private void addTasks(Project project) {
         def extension = project.extensions.findByName("javadoc2dash")
-        project.task('javadoc2dash', type: Javadoc2DashTask, dependsOn: 'javadoc') {
+        project.task('javadoc2dash', type: Javadoc2DashTask) {
+            dependsOn({ extension.javadocTask })
             conventionMapping.docsetName = { extension.docsetName }
             conventionMapping.displayName = { extension.displayName }
             conventionMapping.keyword = { extension.keyword }
             conventionMapping.javadocRoot = { extension.javadocRoot }
-            conventionMapping.outputLocation = { extension. outputLocation }
+            conventionMapping.outputLocation = { extension.outputLocation }
+            conventionMapping.iconFile = { extension.iconFile }
         }
     }
 }
@@ -32,6 +34,7 @@ class Javadoc2DashPluginExtension {
     String displayName
     String keyword
     File iconFile
+    String javadocTask
 
     Javadoc2DashPluginExtension(Project project) {
         docsetName = project.name
@@ -39,5 +42,7 @@ class Javadoc2DashPluginExtension {
         keyword = project.name
         javadocRoot = project.file("${project.docsDir}/javadoc")
         outputLocation = project.file("${project.buildDir}")
+        iconFile = null
+        javadocTask = "javadoc"
     }
 }
