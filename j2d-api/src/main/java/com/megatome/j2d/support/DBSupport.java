@@ -21,7 +21,7 @@ import com.megatome.j2d.util.SearchIndexValue;
 import java.sql.*;
 import java.util.List;
 
-import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
+import static com.megatome.j2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
@@ -60,6 +60,6 @@ public final class DBSupport {
         } catch (SQLException e) {
             throw new BuilderException("Error writing to SQLite DB", e);
         }
-        printIfVerbose("Created the SQLite search index");
+        logVerbose("Created the SQLite search index");
     }
 }

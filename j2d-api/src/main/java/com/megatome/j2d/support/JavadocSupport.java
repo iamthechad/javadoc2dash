@@ -25,15 +25,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.megatome.j2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
 
 /**
  * Utility class to support Javadoc related docset tasks.
@@ -56,7 +55,7 @@ public final class JavadocSupport {
             throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
         }
 
-        printIfVerbose("Looking for javadoc files");
+        logVerbose("Looking for javadoc files");
 
         String docsetIndexFile = "overview-summary.html";
 
@@ -82,7 +81,7 @@ public final class JavadocSupport {
         }
 
         indexData.setDocsetIndexFile(docsetIndexFile);
-        printIfVerbose("Found javadoc files");
+        logVerbose("Found javadoc files");
         return indexData;
     }
 

@@ -20,9 +20,9 @@ import com.megatome.j2d.exception.BuilderException;
 import java.io.File;
 import java.io.IOException;
 
-import static com.megatome.j2d.util.RuntimeConfig.printIfVerbose;
 import static org.apache.commons.io.FileUtils.*;
 import static org.apache.commons.io.FilenameUtils.concat;
+import static com.megatome.j2d.util.LogUtility.*;
 
 /**
  * Utility class for operations on the docset.
@@ -47,7 +47,7 @@ public class DocSetSupport {
         final File docsetRootDir = getFile(getDocsetRoot(docsetDir));
         // Create dir
         if (docsetRootDir.exists()) {
-            printIfVerbose(String.format("A docset named %s already exists. Trying to remove.", docsetDir));
+            logVerbose("A docset named {} already exists. Trying to remove.", docsetDir);
             try {
                 deleteDirectory(docsetRootDir);
             } catch (IOException e) {
@@ -61,7 +61,7 @@ public class DocSetSupport {
         } catch (IOException e) {
             throw new BuilderException("Failed to create new docset directory.", e);
         }
-        printIfVerbose("Docset directory structure created");
+        logVerbose("Docset directory structure created");
     }
 
     /**
@@ -77,7 +77,7 @@ public class DocSetSupport {
 
         try {
             copyFile(iconFile, getFile(getDocsetRoot(docsetDir), ICON_FILE));
-            printIfVerbose("Icon file copied");
+            logVerbose("Icon file copied");
         } catch (IOException e) {
             throw new BuilderException("Failed to copy icon file to docset", e);
         }
@@ -102,7 +102,7 @@ public class DocSetSupport {
     public static void copyFiles(final File sourceDir, String docsetDir) throws BuilderException {
         try {
             copyDirectory(sourceDir, getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS));
-            printIfVerbose("Copied javadoc files into docset");
+            logVerbose("Copied javadoc files into docset");
         } catch (IOException e) {
             throw new BuilderException("Could not copy files into the docset", e);
         }
@@ -125,7 +125,7 @@ public class DocSetSupport {
         // DocSetPlatformFamily = keyword
         try {
             write(getFile(getDocsetRoot(docsetDir), CONTENTS, PLIST_FILE), plist);
-            printIfVerbose("Created the plist file in the docset");
+            logVerbose("Created the plist file in the docset");
         } catch (IOException e) {
             throw new BuilderException("Failed to write plist file into docset", e);
         }

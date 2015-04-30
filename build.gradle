@@ -18,8 +18,6 @@ project(":j2d-cli") {
     dependencies {
         compile project(":j2d-api")
         compile 'net.sf.jopt-simple:jopt-simple:4.8'
-
-        testCompile group: 'junit', name: 'junit', version: '4.11'
     }
 }
 
@@ -29,7 +27,7 @@ project(":j2d-gradle") {
 
     archivesBaseName = 'javadoc2dash-plugin'
     group = 'com.megatome.javadoc2dash'
-    version = '1.0'
+    version = '0.9-SNAPSHOT'
 
     dependencies {
         compile gradleApi()
@@ -56,13 +54,15 @@ project(":j2d-api") {
 
     archivesBaseName = 'javadoc2dash-api'
     group = 'com.megatome.javadoc2dash'
-    version = '1.0'
+    version = '0.9-SNAPSHOT'
 
     dependencies {
         compile 'commons-io:commons-io:2.4'
         compile 'org.apache.commons:commons-lang3:3.3.2'
         compile 'org.xerial:sqlite-jdbc:3.8.7'
         compile 'org.jsoup:jsoup:1.8.2'
+        compile "org.slf4j:slf4j-api:1.7.12"
+        compile "org.slf4j:slf4j-simple:1.7.12"
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
     }

@@ -15,7 +15,7 @@
  */
 package com.megatome.j2d;
 
-import com.megatome.j2d.util.RuntimeConfig;
+import com.megatome.j2d.exception.BuilderException;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -25,6 +25,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+
+import static com.megatome.j2d.util.LogUtility.log;
+import static com.megatome.j2d.util.LogUtility.setVerbose;
 
 public class Main {
     public static void main(String... args) {
@@ -50,14 +53,18 @@ public class Main {
             return;
         }
 
-        RuntimeConfig.setVerbose(options.has(verbose));
+        setVerbose(options.has(verbose));
         final DocsetCreator.Builder builder = new DocsetCreator.Builder(options.valueOf(docsetName), options.valueOf(javadocRoot))
             .displayName(options.valueOf(displayName))
             .displayName(options.valueOf(keyword))
             .iconFile(options.valueOf(iconFile))
             .outputDirectory(options.valueOf(outputLocation));
         final DocsetCreator docsetCreator = builder.build();
-        docsetCreator.makeDocset();
+        try {
+            docsetCreator.makeDocset();
+        } catch (BuilderException e) {
+            log("Failed to create docset: {}", e.getMessage());
+        }
     }
 
     private static void usage(OptionParser parser) {
