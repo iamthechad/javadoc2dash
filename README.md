@@ -8,6 +8,10 @@
 This project is based off of https://github.com/Kapeli/javadocset. This is a Java-based solution so that Dash docsets
 can be easily created from many environments, not just those that run OS X.
 
+## Gradle plugin
+
+Coming soon, once I get things posted to the right places on the interweb.
+
 ## Running the utility
 
 Clone the project or grab the [latest release](https://github.com/iamthechad/javadoc2dash/releases). Running the utility will vary a bit depending on how you retrieve the project.
