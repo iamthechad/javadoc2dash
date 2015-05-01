@@ -1,12 +1,28 @@
-ext.projectVersion = '1.0.1'
+ext.projectVersion = '1.0.2'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+    }
+}
 
 subprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.7
     version = "$projectVersion"
+    group = "com.megatome.javadoc2dash"
 
     repositories {
-        mavenCentral()
+        jcenter()
+    }
+
+    def javaApiUrl = 'http://docs.oracle.com/javase/1.7.0/docs/api/'
+    def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
+    tasks.withType(Javadoc) {
+        options.links(javaApiUrl, groovyApiUrl)
     }
 }
 
@@ -26,8 +42,6 @@ project(":j2d-gradle") {
     apply plugin: 'maven'
 
     archivesBaseName = 'javadoc2dash-plugin'
-    group = 'com.megatome.javadoc2dash'
-    version = '0.9-SNAPSHOT'
 
     dependencies {
         compile gradleApi()
@@ -51,10 +65,10 @@ project(":j2d-gradle") {
 
 project(":j2d-api") {
     apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     archivesBaseName = 'javadoc2dash-api'
-    group = 'com.megatome.javadoc2dash'
-    version = '0.9-SNAPSHOT'
 
     dependencies {
         compile 'commons-io:commons-io:2.4'
@@ -73,5 +87,67 @@ project(":j2d-api") {
                 repository(url: "file://$projectDir/../../repo")
             }
         }
+    }
+
+    def pomConfig = {
+        licenses {
+            license {
+                name "The Apache Software License, Version 2.0"
+                url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution "repo"
+            }
+        }
+        developers {
+            developer {
+                id "iamthechad"
+                name "Chad Johnston"
+                email "cjohnston@megatome.com"
+            }
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifactId archivesBaseName
+                artifact sourceJar
+                artifact javadocJar
+
+                pom.withXml {
+                    def root = asNode()
+                    root.appendNode('description', 'API for creating Dash docsets from Javadoc')
+                    root.children().last() + pomConfig
+                }
+            }
+        }
+    }
+
+    bintray {
+        user = bintray_user
+        key = bintray_key
+        publications = ['mavenJava']
+        dryRun = false
+        publish = false
+        pkg {
+            repo = 'maven'
+            name = 'javadoc2dash-api'
+            desc = 'API for creating Dash docsets from Javadoc'
+            websiteUrl = 'https://github.com/iamthechad/javadoc2dash'
+            issueTrackerUrl = 'https://github.com/iamthechad/javadoc2dash/issues'
+            vcsUrl = 'https://github.com/iamthechad/javadoc2dash.git'
+            licenses = ['Apache-2.0']
+            labels = ['javadoc', 'dash', 'api']
+            publicDownloadNumbers = true
+        }
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
     }
 }
