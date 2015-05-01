@@ -124,8 +124,8 @@ project(":j2d-api") {
     }
 
     bintray {
-        user = bintray_user
-        key = bintray_key
+        user = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
+        key = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
         publications = ['mavenJava']
         dryRun = false
         publish = false
