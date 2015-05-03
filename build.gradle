@@ -3,9 +3,13 @@ ext.projectVersion = '1.0.2'
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
 }
 
@@ -40,6 +44,7 @@ project(":j2d-cli") {
 project(":j2d-gradle") {
     apply plugin: 'groovy'
     apply plugin: 'maven'
+    apply plugin: "com.gradle.plugin-publish"
 
     archivesBaseName = 'javadoc2dash-plugin'
 
@@ -58,6 +63,20 @@ project(":j2d-gradle") {
         repositories {
             mavenDeployer {
                 repository(url: "file://$projectDir/../../repo")
+            }
+        }
+    }
+
+    pluginBundle {
+        website = 'https://github.com/iamthechad/javadoc2dash'
+        vcsUrl = 'https://github.com/iamthechad/javadoc2dash'
+        description = 'Create Dash docsets from Javadoc'
+        tags = ['javadoc', 'dash']
+
+        plugins {
+            javadoc2dashPlugin {
+                id = 'com.megatome.javadoc2dash'
+                displayName = 'Javadoc to Dash'
             }
         }
     }
