@@ -8,6 +8,7 @@ buildscript {
         }
     }
     dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
@@ -15,6 +16,9 @@ buildscript {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.github.kt3k.coveralls'
+
     sourceCompatibility = 1.7
     version = "$projectVersion"
     group = "com.megatome.javadoc2dash"
@@ -27,6 +31,13 @@ subprojects {
     def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
     tasks.withType(Javadoc) {
         options.links(javaApiUrl, groovyApiUrl)
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled = true // coveralls plugin depends on xml format report
+            html.enabled = true
+        }
     }
 }
 
