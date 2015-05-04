@@ -157,4 +157,52 @@ public class DocsetCreator {
     public void makeDocset() throws BuilderException {
         makeDocset(null);
     }
+
+    /**
+     * Get the docset name
+     * @return Docset name
+     */
+    public String getDocsetName() {
+        return docsetName;
+    }
+
+    /**
+     * Get the display name
+     * @return Display name
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * Get the keyword
+     * @return Keyword
+     */
+    public String getKeyword() {
+        return keyword;
+    }
+
+    /**
+     * Get the icon file path
+     * @return Icon file path
+     */
+    public File getIconFilePath() {
+        return iconFilePath;
+    }
+
+    /**
+     * Get the Javadoc root directory
+     * @return Javadoc directory
+     */
+    public File getJavadocRoot() {
+        return javadocRoot;
+    }
+
+    /**
+     * Get the output directory
+     * @return Output directory
+     */
+    public File getOutputDirectory() {
+        return outputDirectory;
+    }
 }
