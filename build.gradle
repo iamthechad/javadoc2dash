@@ -1,5 +1,7 @@
 ext.projectVersion = '1.0.2'
 
+apply plugin: 'com.github.kt3k.coveralls'
+
 buildscript {
     repositories {
         jcenter()
@@ -14,18 +16,19 @@ buildscript {
     }
 }
 
-subprojects {
+allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'com.github.kt3k.coveralls'
-
-    sourceCompatibility = 1.7
-    version = "$projectVersion"
-    group = "com.megatome.javadoc2dash"
 
     repositories {
         jcenter()
     }
+}
+
+subprojects {
+    sourceCompatibility = 1.7
+    version = "$projectVersion"
+    group = "com.megatome.javadoc2dash"
 
     def javaApiUrl = 'http://docs.oracle.com/javase/1.7.0/docs/api/'
     def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
@@ -39,6 +42,36 @@ subprojects {
             html.enabled = true
         }
     }
+}
+
+task jacocoRootReport(type: JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+}
+
+def publishedProjects = subprojects.findAll {
+    !it.path.startsWith(':j2d-cli')
+}
+
+coveralls {
+    sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 project(":j2d-cli") {
