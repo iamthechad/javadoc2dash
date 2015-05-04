@@ -71,7 +71,7 @@ public final class JavadocSupport {
                     indexData.addFileToIndex(f);
                 }
             }
-        } else {
+        } else if (getFile(javadocDir, "index-all.html").exists()){
             docsetIndexFile = (docsetIndexFile != null) ? docsetIndexFile : "index-all.html";
             indexData.addFileToIndex(getFile(javadocDir, "index-all.html"));
         }

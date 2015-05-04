@@ -1,20 +1,22 @@
 package com.megatome.j2d.support;
 
+import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
-import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.*;
 
+import static org.apache.commons.io.FileUtils.getFile;
 import static org.junit.Assert.*;
 
 public class JavadocSupportTest {
-    private static final File resourcesRoot = FileUtils.getFile("src", "test", "resources");
+    private static final File resourcesRoot = getFile("src", "test", "resources");
     private static final String JAVADOC_DIR = "javadoc";
     private static final String JAVADOC_SPLIT_DIR = "javadoc-split";
+    private static final String NOT_JAVADOC_DIR = "not-javadoc";
     private static final Map<String, Integer> expectedTypes = new HashMap<>();
 
     @BeforeClass
@@ -36,6 +38,21 @@ public class JavadocSupportTest {
         getAndVerifyIndexFiles(15, JAVADOC_SPLIT_DIR);
     }
 
+    @Test(expected = BuilderException.class)
+    public void testMissingJavadocDir() throws Exception {
+        JavadocSupport.findIndexFile(getFile(resourcesRoot, "FOO"));
+    }
+
+    @Test(expected = BuilderException.class)
+    public void testJavadocDirIsFile() throws Exception {
+        JavadocSupport.findIndexFile(getFile(resourcesRoot, JAVADOC_DIR, "index.html"));
+    }
+
+    @Test(expected = BuilderException.class)
+    public void testNonJavadocDir() throws Exception {
+        JavadocSupport.findIndexFile(getFile(resourcesRoot, NOT_JAVADOC_DIR));
+    }
+
     @Test
     public void testBuildIndexDataNonSplit() throws Exception {
         verifyFoundIndexValues(getAndVerifyIndexFiles(1, JAVADOC_DIR));
@@ -47,7 +64,7 @@ public class JavadocSupportTest {
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, String javadocPath) throws Exception {
-        final IndexData indexData = JavadocSupport.findIndexFile(FileUtils.getFile(resourcesRoot, javadocPath));
+        final IndexData indexData = JavadocSupport.findIndexFile(getFile(resourcesRoot, javadocPath));
         assertNotNull(indexData);
         final String indexFile = indexData.getDocsetIndexFile();
         assertNotNull(indexFile);
@@ -82,3 +99,5 @@ public class JavadocSupportTest {
         }
     }
 }
+
+
