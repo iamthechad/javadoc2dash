@@ -1,8 +1,31 @@
 [![Build Status](http://img.shields.io/travis/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg?branch=master)](https://coveralls.io/r/iamthechad/javadoc2dash?branch=master)
 [![Download](https://api.bintray.com/packages/iamthechad/maven/javadoc2dash-api/images/download.svg) ](https://bintray.com/iamthechad/maven/javadoc2dash-api/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Badges](http://img.shields.io/:badges-5/5-ff6799.svg)](https://github.com/badges/badgerbadgerbadger)
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Javadoc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
+- [Gradle plugin](#gradle-plugin)
+  - [Add the plugin to your project](#add-the-plugin-to-your-project)
+  - [Specify settings](#specify-settings)
+  - [Create the docset](#create-the-docset)
+  - [Example](#example)
+- [Using the API](#using-the-api)
+  - [Add dependencies to your project](#add-dependencies-to-your-project)
+  - [Use the API](#use-the-api)
+- [Using the CLI](#using-the-cli)
+  - [Download the CLI](#download-the-cli)
+    - [Running in a cloned repository](#running-in-a-cloned-repository)
+    - [Running a release zip](#running-a-release-zip)
+  - [Creating a docset](#creating-a-docset)
+    - [Examples](#examples)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Javadoc2Dash - Build Dash docsets from Javadoc
  
