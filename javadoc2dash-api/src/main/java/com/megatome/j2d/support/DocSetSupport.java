@@ -30,9 +30,9 @@ import static com.megatome.j2d.util.LogUtility.*;
 public class DocSetSupport {
     private DocSetSupport() {}
 
-    private static final String CONTENTS = "Contents";
-    private static final String RESOURCES = "Resources";
-    private static final String DOCUMENTS = "Documents";
+    static final String CONTENTS = "Contents";
+    static final String RESOURCES = "Resources";
+    static final String DOCUMENTS = "Documents";
 
     private static final String PLIST_FILE = "Info.plist";
     private static final String ICON_FILE = "icon.png";
@@ -140,7 +140,7 @@ public class DocSetSupport {
         return concat(concat(getDocsetRoot(docsetDir), CONTENTS), RESOURCES);
     }
 
-    private static String getDocsetRoot(String docsetDir) {
+    static String getDocsetRoot(String docsetDir) {
         return docsetDir + DOCSET_SUFFIX;
     }
 }
