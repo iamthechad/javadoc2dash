@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/iamthechad/javadoc2dash/tree/HEAD)
+## [1.0.3](https://github.com/iamthechad/javadoc2dash/tree/1.0.3) (2015-05-05)
 
-[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.2...HEAD)
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.2...1.0.3)
 
 **Fixed bugs:**
 
