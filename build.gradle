@@ -1,4 +1,4 @@
-ext.projectVersion = '1.0.3'
+ext.projectVersion = '1.0.4'
 
 apply plugin: 'com.github.kt3k.coveralls'
 
@@ -80,7 +80,7 @@ project(":j2d-cli") {
     mainClassName = "com.megatome.j2d.Main"
 
     dependencies {
-        compile project(":j2d-api")
+        compile project(":javadoc2dash-api")
         compile 'net.sf.jopt-simple:jopt-simple:4.8'
     }
 }
@@ -95,7 +95,7 @@ project(":j2d-gradle") {
     dependencies {
         compile gradleApi()
         compile localGroovy()
-        compile project(":j2d-api")
+        compile project(":javadoc2dash-api")
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
         testCompile("org.spockframework:spock-core:1.0-groovy-2.3") {
@@ -126,7 +126,7 @@ project(":j2d-gradle") {
     }
 }
 
-project(":j2d-api") {
+project(":javadoc2dash-api") {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
