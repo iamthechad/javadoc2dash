@@ -1,4 +1,4 @@
-ext.projectVersion = '1.0.2'
+ext.projectVersion = '1.0.3'
 
 apply plugin: 'com.github.kt3k.coveralls'
 
@@ -213,6 +213,10 @@ project(":j2d-api") {
             licenses = ['Apache-2.0']
             labels = ['javadoc', 'dash', 'api']
             publicDownloadNumbers = true
+            version {
+                name = project.version
+                vcsTag = '1.0.3'
+            }
         }
     }
 

@@ -52,7 +52,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.2"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.3"
       }
     }
 
@@ -61,7 +61,7 @@ Build script snippet for use in all Gradle versions:
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.javadoc2dash" version "1.0.2"
+      id "com.megatome.javadoc2dash" version "1.0.3"
     }
 
 ## Specify settings
@@ -108,7 +108,7 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.2"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.3"
       }
     }
 
@@ -131,7 +131,7 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.2"
+      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.3"
     }
     
 For Maven:
