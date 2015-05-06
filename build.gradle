@@ -42,6 +42,20 @@ subprojects {
             html.enabled = true
         }
     }
+
+    apply plugin: 'findbugs'
+    findbugs {
+        toolVersion = "3.0.0"
+        // Don't worry about test classes
+        sourceSets = [sourceSets.main]
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
 }
 
 def publishedProjects = subprojects.findAll {

@@ -25,9 +25,9 @@ import static com.megatome.j2d.support.DBSupport.createIndex;
 import static com.megatome.j2d.support.DocSetSupport.*;
 import static com.megatome.j2d.support.JavadocSupport.findIndexFile;
 import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
-import static org.apache.commons.io.FileUtils.getFile;
+import static com.megatome.j2d.util.LogUtility.log;
+import static com.megatome.j2d.util.LogUtility.setLogger;
 import static org.apache.commons.io.FilenameUtils.concat;
-import static com.megatome.j2d.util.LogUtility.*;
 
 /**
  * Class responsible for creating the docset.
@@ -50,7 +50,7 @@ public class DocsetCreator {
         private String displayName;
         private String keyword;
         private File iconFilePath = null;
-        private File outputDirectory = getFile(".");
+        private File outputDirectory = new File(".");
 
         /**
          * Ctor
