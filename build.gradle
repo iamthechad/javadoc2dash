@@ -44,12 +44,16 @@ subprojects {
     }
 }
 
+def publishedProjects = subprojects.findAll {
+    !it.path.startsWith(':j2d-cli')
+}
+
 task jacocoRootReport(type: JacocoReport) {
     dependsOn = subprojects.test
-    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
+    additionalSourceDirs = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(publishedProjects.sourceSets.main.output)
+    executionData = files(publishedProjects.jacocoTestReport.executionData)
     reports {
         html.enabled = true
         xml.enabled = true
@@ -65,10 +69,6 @@ task jacocoRootReport(type: JacocoReport) {
     }
 }
 
-def publishedProjects = subprojects.findAll {
-    !it.path.startsWith(':j2d-cli')
-}
-
 coveralls {
     sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
@@ -82,6 +82,12 @@ project(":j2d-cli") {
     dependencies {
         compile project(":javadoc2dash-api")
         compile 'net.sf.jopt-simple:jopt-simple:4.8'
+    }
+
+    test {
+        jacoco {
+            excludes = ["com.megatome.j2d.Main"]
+        }
     }
 }
 
