@@ -1,5 +1,5 @@
-[![Build Status](http://img.shields.io/travis/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
-[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg?branch=master)](https://coveralls.io/r/iamthechad/javadoc2dash?branch=master)
+[![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg?branch=docsetfeed)](https://travis-ci.org/iamthechad/javadoc2dash)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg?branch=docsetfeed)](https://coveralls.io/r/iamthechad/javadoc2dash?branch=docsetfeed)
 [![Download](https://api.bintray.com/packages/iamthechad/maven/javadoc2dash-api/images/download.svg) ](https://bintray.com/iamthechad/maven/javadoc2dash-api/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
@@ -14,7 +14,9 @@
   - [Add the plugin to your project](#add-the-plugin-to-your-project)
   - [Specify settings](#specify-settings)
   - [Create the docset](#create-the-docset)
-  - [Example](#example)
+    - [Example](#example)
+  - [Creating the docset feed](#creating-the-docset-feed)
+    - [Example](#example-1)
 - [Using the API](#using-the-api)
   - [Add dependencies to your project](#add-dependencies-to-your-project)
   - [Use the API](#use-the-api)
@@ -52,7 +54,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.4"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
       }
     }
 
@@ -61,13 +63,13 @@ Build script snippet for use in all Gradle versions:
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.javadoc2dash" version "1.0.4"
+      id "com.megatome.javadoc2dash" version "1.0.5"
     }
 
 ## Specify settings
 
     javadoc2dash {
-      name = "My Cool Project"
+      displayName = "My Cool Project"
     }
     
 If no settings are provided, the plugin tries to use sensible defaults.
@@ -94,7 +96,7 @@ subprojects' documentation. The `java` plugin creates a `javadoc` task, so a dif
 
 Create the docset with the `javadoc2dash` task.
 
-## Example
+### Example
 
     apply plugin: 'java'
 
@@ -108,7 +110,7 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.4"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
       }
     }
 
@@ -119,6 +121,68 @@ Create the docset with the `javadoc2dash` task.
       displayName = "My Awesome Project"
       keyword = "mp"
     }
+    
+## Creating the docset feed
+
+If you want to host your own docsets, you need to create a feed per the [Dash instructions](https://kapeli.com/docsets#dashdocsetfeed).
+
+Creating feeds uses the `javadoc2dashfeed` task.
+
+    javadoc2dashfeed {
+      feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
+    }
+    
+If no settings are provided, the plugin tries to use sensible defaults.
+
+Setting Name | Type | Description | Default
+-------------|------|-------------|--------
+`feedName`   | String | File name to use for feed XML file | `project.name`
+`feedVersion`| String | Version to use in feed XML file | `project.version`
+`feedLocations` | List<String> | List of root URLs for hosting the docset | `null`
+
+### Example
+
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.5
+    version = '1.0'
+
+    buildscript {
+      repositories {
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+      }
+      dependencies {
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
+      }
+    }
+
+    apply plugin: "com.megatome.javadoc2dash"
+
+    javadoc2dash {
+      docsetName = "MyProject"
+      displayName = "My Awesome Project"
+      keyword = "mp"
+    }
+    
+    javadoc2dashfeed {
+      feedName = "myproject"
+      feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
+    }
+    
+This will generate a `feed` directory in the `javadoc2dash.outputLocation` directory. This directory will contain an XML file describing the feed
+(named `myproject.xml` in this case), and a compressed version of the docset (named `myproject.tgz` in this case).
+
+For this example, the XML file will look like this:
+
+    <entry>
+      <version>1.0</version>
+      <url>http://someserver.com/feeds/myproject.tgz</url>
+      <url>http://someotherserver.com/feeds/myproject.tgz</url>
+    </entry>
+    
+The XML file should be copied to a location where it can be [shared with Dash users](https://kapeli.com/docsets#sharedocsetfeed), and the `tgz` file copied to the locations specified in `feedLocations`.
 
 # Using the API
 
@@ -131,7 +195,7 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.4"
+      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.5"
     }
     
 For Maven:
@@ -139,7 +203,7 @@ For Maven:
     <dependency>
       <groupId>com.megatome.javadoc2dash</groupId>
       <artifactId>javadoc2dash-api</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
     </dependency>
     
 ## Use the API

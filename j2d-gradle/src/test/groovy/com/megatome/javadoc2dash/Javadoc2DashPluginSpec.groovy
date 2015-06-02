@@ -33,7 +33,7 @@ class Javadoc2DashPluginSpec extends Specification {
             j2dTask.displayName == project.name
             j2dTask.keyword == project.name
             j2dTask.javadocRoot == project.file("${project.docsDir}/javadoc")
-            j2dTask.outputLocation == project.file("${project.buildDir}")
+            j2dTask.outputLocation == project.file("${project.buildDir}/javadoc2dash")
             j2dTask.iconFile == null
     }
 
