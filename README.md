@@ -76,13 +76,13 @@ If no settings are provided, the plugin tries to use sensible defaults.
 
 Setting Name | Type | Description | Default
 -------------|------|-------------|--------
-`docsetName` | String | File name of the created docset | `project.name`
-`javadocRoot`| File | Location of the javadoc files | `${project.docsDir}/javadoc` 
-`outputLocation`| File | Location to create the docset | `${project.buildDir}`
-`displayName`| String | Name displayed in Dash | `project.name`
-`keyword` | String | Keyword used for the docset in Dash | `project.name`
-`iconFile` | File | File to be used as the docset icon | `null`
-`javadocTask` | String | Name of the javadoc task that the `javadoc2dash` task will depend on | `javadoc`
+`docsetName` | `String` | File name of the created docset | `project.name`
+`javadocRoot`| `File` | Location of the javadoc files | `${project.docsDir}/javadoc` 
+`outputLocation`| `File` | Location to create the docset | `${project.buildDir}`
+`displayName`| `String` | Name displayed in Dash | `project.name`
+`keyword` | `String` | Keyword used for the docset in Dash | `project.name`
+`iconFile` | `File` | File to be used as the docset icon | `null`
+`javadocTask` | `String` | Name of the javadoc task that the `javadoc2dash` task will depend on | `javadoc`
 
 **Some Caveats:**
 
@@ -136,9 +136,9 @@ If no settings are provided, the plugin tries to use sensible defaults.
 
 Setting Name | Type | Description | Default
 -------------|------|-------------|--------
-`feedName`   | String | File name to use for feed XML file | `project.name`
-`feedVersion`| String | Version to use in feed XML file | `project.version`
-`feedLocations` | List<String> | List of root URLs for hosting the docset | `null`
+`feedName`   | `String` | File name to use for feed XML file | `project.name`
+`feedVersion`| `String` | Version to use in feed XML file | `project.version`
+`feedLocations` | `List<String>` | List of root URLs for hosting the docset | `null`
 
 ### Example
 
