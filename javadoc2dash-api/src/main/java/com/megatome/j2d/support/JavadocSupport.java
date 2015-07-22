@@ -177,7 +177,7 @@ public final class JavadocSupport {
                 System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Context: %s)", text, lastContext));
                 continue;
             }
-            final String linkPath = e.attr("href");
+            final String linkPath = e.attr("href").replaceAll("\\.\\.\\/", "");
 
             values.add(new SearchIndexValue(text, type, linkPath));
         }
