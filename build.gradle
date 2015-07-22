@@ -1,4 +1,4 @@
-ext.projectVersion = '1.0.5'
+ext.projectVersion = '1.0.6'
 
 apply plugin: 'com.github.kt3k.coveralls'
 
