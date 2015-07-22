@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.*;
 
 import static org.apache.commons.io.FileUtils.getFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class JavadocSupportTest {
@@ -17,13 +20,20 @@ public class JavadocSupportTest {
     private static final String JAVADOC_DIR = "javadoc";
     private static final String JAVADOC_SPLIT_DIR = "javadoc-split";
     private static final String NOT_JAVADOC_DIR = "not-javadoc";
-    private static final Map<String, Integer> expectedTypes = new HashMap<>();
+    private static final Map<MatchType, Integer> expectedTypes = new HashMap<>();
+    private static int expectedEntryCount = 0;
 
     @BeforeClass
     public static void beforeClass() {
-        expectedTypes.put("Class", 8);
-        expectedTypes.put("Package", 4);
-        expectedTypes.put("Exception", 1);
+        expectedTypes.put(MatchType.CLASS, 8);
+        expectedTypes.put(MatchType.METHOD, 26);
+        expectedTypes.put(MatchType.CONSTRUCTOR, 5);
+        expectedTypes.put(MatchType.PACKAGE, 4);
+        expectedTypes.put(MatchType.EXCEPTION, 1);
+
+        for (final Integer count : expectedTypes.values()) {
+            expectedEntryCount += count;
+        }
     }
 
     @Test
@@ -78,24 +88,24 @@ public class JavadocSupportTest {
     private void verifyFoundIndexValues(final IndexData indexData) throws Exception {
         final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
-        assertEquals(13, indexValues.size());
-        final Map<String, Set<String>> valueMap = new HashMap<>();
+        assertThat(indexValues.size(), is(expectedEntryCount));
+        final Map<MatchType, Set<String>> valueMap = new HashMap<>();
         for (final SearchIndexValue value: indexValues) {
             Set<String> nameSet = valueMap.get(value.getType());
             if (nameSet == null) {
                 nameSet = new HashSet<>();
             }
-            assertFalse(nameSet.contains(value.getName()));
+            assertThat(nameSet, not(hasItem(value.getName())));
             nameSet.add(value.getName());
             valueMap.put(value.getType(), nameSet);
         }
 
-        assertEquals(3, valueMap.size());
-        for (final Map.Entry<String,Integer> expectedType: expectedTypes.entrySet()) {
-            assertTrue(valueMap.containsKey(expectedType.getKey()));
+        assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
+        for (final Map.Entry<MatchType,Integer> expectedType: expectedTypes.entrySet()) {
+            assertThat(valueMap, hasKey(expectedType.getKey()));
             final Set<String> namesForType = valueMap.get(expectedType.getKey());
             assertNotNull(namesForType);
-            assertEquals(expectedType.getValue().intValue(), namesForType.size());
+            assertThat("Wrong count for " + expectedType, namesForType.size(), is(expectedType.getValue()));
         }
     }
 }

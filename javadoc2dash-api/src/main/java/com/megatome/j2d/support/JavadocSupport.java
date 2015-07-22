@@ -27,18 +27,21 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.megatome.j2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
  * Utility class to support Javadoc related docset tasks.
  */
 public final class JavadocSupport {
     private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
+    private static final List<MatchType> extraIndexingTypes = Arrays.asList(MatchType.CLASS, MatchType.EXCEPTION, MatchType.ERROR);
 
     private JavadocSupport() {}
 
@@ -94,54 +97,110 @@ public final class JavadocSupport {
     public static List<SearchIndexValue> findSearchIndexValues(List<File> filesToIndex) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
         for (final File f : filesToIndex) {
-            values.addAll(indexFile(f));
+            final List<SearchIndexValue> indexValues = indexFile(f);
+            values.addAll(indexValues);
+            final File parentDir = f.getParentFile();
+            for (final SearchIndexValue searchIndexValue : indexValues) {
+                if (extraIndexingTypes.contains(searchIndexValue.getType())) {
+                    final File classFile = getFile(parentDir, searchIndexValue.getPath());
+                    values.addAll(indexClassFile(classFile));
+                }
+            }
         }
         return values;
     }
 
     private static List<SearchIndexValue> indexFile(File f) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
-        try {
-            final Document doc = Jsoup.parse(f, "UTF-8");
-            final Elements elements = doc.select("a");
-            for (final Element e : elements) {
-                Element parent = e.parent();
-                if (!parent.child(0).equals(e)) {
-                    continue;
-                }
-                final String parentTagName = parent.tagName();
-                if (parentPattern.matcher(parentTagName).matches()) {
-                    parent = parent.parent();
-                    if (!parent.child(0).equals(e.parent())) {
-                        continue;
-                    }
-                }
-                if (!containsIgnoreCase(parentTagName, "dt")) {
-                    continue;
-                }
-                final String text = parent.text();
-                final String name = e.text();
-                final String className = parent.className();
-
-                String type = null;
-                for (final MatchType matchType : MatchType.values()) {
-                    if (matchType.matches(text, className)) {
-                        type = matchType.getTypeName();
-                        break;
-                    }
-                }
-
-                if (null == type) {
-                    System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
-                    continue;
-                }
-                final String linkPath = e.attr("href");
-
-                values.add(new SearchIndexValue(name, type, linkPath));
+        final Elements elements = loadAndFindLinks(f);
+        for (final Element e : elements) {
+            Element parent = e.parent();
+            if (!parent.child(0).equals(e)) {
+                continue;
             }
-        } catch (IOException e) {
-            throw new BuilderException("Failed to index javadoc files", e);
+            final String parentTagName = parent.tagName();
+            if (parentPattern.matcher(parentTagName).matches()) {
+                parent = parent.parent();
+                if (!parent.child(0).equals(e.parent())) {
+                    continue;
+                }
+            }
+            if (!containsIgnoreCase(parentTagName, "dt")) {
+                continue;
+            }
+            final String text = parent.text();
+            final String name = e.text();
+            final String className = parent.className();
+
+            final MatchType type = getMatchingType(text, className);
+
+            if (null == type) {
+                System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
+                continue;
+            }
+            final String linkPath = e.attr("href");
+
+            values.add(new SearchIndexValue(name, type, linkPath));
         }
         return values;
     }
+
+    private static List<SearchIndexValue> indexClassFile(File f) throws BuilderException {
+        final List<SearchIndexValue> values = new ArrayList<>();
+        final Elements elements = loadAndFindLinks(f);
+        String lastContext = "";
+        for (final Element e : elements) {
+            Element parent = e.parent();
+            if (!parent.child(0).equals(e)) {
+                continue;
+            }
+            if (e.hasAttr("name")) {
+                lastContext = e.attr("name");
+            }
+            final String parentTagName = parent.tagName();
+            final String parentClassName = parent.className();
+            if (parentPattern.matcher(parentTagName).matches()) {
+                parent = parent.parent();
+                if (!parent.child(0).equals(e.parent())) {
+                    continue;
+                }
+            }
+
+            if (!containsIgnoreCase(parentTagName, "span") || !containsIgnoreCase(parentClassName, "memberNameLink") || equalsIgnoreCase("nested.class.summary", lastContext)) {
+                continue;
+            }
+            final String text = parent.text();
+
+            final MatchType type = getMatchingType(lastContext, null);
+
+            if (null == type) {
+                System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Context: %s)", text, lastContext));
+                continue;
+            }
+            final String linkPath = e.attr("href");
+
+            values.add(new SearchIndexValue(text, type, linkPath));
+        }
+        return values;
+    }
+
+    private static Elements loadAndFindLinks(final File f) throws BuilderException {
+        try {
+            final Document doc = Jsoup.parse(f, "UTF-8");
+            return doc.select("a");
+        } catch (IOException e) {
+            throw new BuilderException("Failed to index javadoc files", e);
+        }
+    }
+
+    private static MatchType getMatchingType(String text, String className) {
+        for (final MatchType matchType : MatchType.values()) {
+            if (matchType.matches(text, className)) {
+                return matchType;
+            }
+        }
+        return null;
+    }
 }
+
+

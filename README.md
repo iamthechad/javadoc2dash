@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
-[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg)](https://coveralls.io/r/iamthechad/javadoc2dash)
+[![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg?branch=v1.0.6)](https://travis-ci.org/iamthechad/javadoc2dash)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg?branch=v1.0.6)](https://coveralls.io/r/iamthechad/javadoc2dash?branch=v1.0.6)
 [![Download](https://api.bintray.com/packages/iamthechad/maven/javadoc2dash-api/images/download.svg) ](https://bintray.com/iamthechad/maven/javadoc2dash-api/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
@@ -54,7 +54,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
       }
     }
 
@@ -63,7 +63,7 @@ Build script snippet for use in all Gradle versions:
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.javadoc2dash" version "1.0.5"
+      id "com.megatome.javadoc2dash" version "1.0.6"
     }
 
 ## Specify settings
@@ -110,7 +110,7 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
       }
     }
 
@@ -154,7 +154,7 @@ Setting Name | Type | Description | Default
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.5"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
       }
     }
 
@@ -195,7 +195,7 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.5"
+      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.6"
     }
     
 For Maven:
@@ -203,7 +203,7 @@ For Maven:
     <dependency>
       <groupId>com.megatome.javadoc2dash</groupId>
       <artifactId>javadoc2dash-api</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
     
 ## Use the API

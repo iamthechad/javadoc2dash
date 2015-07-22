@@ -24,12 +24,12 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 /**
  * Enumeration for matching types from parsed Javadoc files
  */
-enum MatchType {
+public enum MatchType {
     CLASS("Class", "class", "Class in", "- class"),
     STATIC_METHOD("Method", "method", "Static method in"),
     FIELD("Field", "field", "Static variable in", "Field in"),
     CONSTRUCTOR("Constructor", "constructor", "Constructor"),
-    METHOD("Method", null, "Method in"),
+    METHOD("Method", null, "Method in", "method.summary"),
     VARIABLE("Field", null, "Variable in"),
     INTERFACE("Interface", "interface", "Interface in", "- interface"),
     EXCEPTION("Exception", "exception", "Exception in", "- exception"),

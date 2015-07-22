@@ -52,7 +52,7 @@ public final class DBSupport {
             try (final PreparedStatement pst = connection.prepareStatement(INSERT_INDEX_SQL)) {
                 for (final SearchIndexValue value : indexValues) {
                     pst.setString(1, value.getName());
-                    pst.setString(2, value.getType());
+                    pst.setString(2, value.getType().getTypeName());
                     pst.setString(3, value.getPath());
                     pst.execute();
                 }
