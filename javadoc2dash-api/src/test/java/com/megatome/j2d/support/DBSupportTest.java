@@ -34,15 +34,6 @@ public class DBSupportTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static final Map<String, Integer> expectedTypes = new HashMap<>();
-
-    @BeforeClass
-    public static void beforeClass() {
-        expectedTypes.put("Class", 8);
-        expectedTypes.put("Package", 4);
-        expectedTypes.put("Exception", 1);
-    }
-
     @Test
     public void testCreateIndexDB() throws Exception {
         final IndexData indexData = JavadocSupport.findIndexFile(getFile(resourcesRoot, JAVADOC_DIR));
@@ -55,11 +46,12 @@ public class DBSupportTest {
         final File dbFile = getFile(dbDir, "docSet.dsidx");
         assertTrue(dbFile.exists());
 
+        final Map<MatchType, Integer> expectedTypes = ExpectedDataUtil.getExpectedData().getExpectedTypes();
         try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
              final PreparedStatement stmt = connection.prepareStatement(QUERY)){
 
-            for (Map.Entry<String, Integer> expectedEntry : expectedTypes.entrySet()) {
-                stmt.setString(1, expectedEntry.getKey());
+            for (Map.Entry<MatchType, Integer> expectedEntry : expectedTypes.entrySet()) {
+                stmt.setString(1, expectedEntry.getKey().getTypeName());
                 try (final ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         final int count = rs.getInt(1);

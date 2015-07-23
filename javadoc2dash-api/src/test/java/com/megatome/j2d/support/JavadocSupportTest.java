@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.megatome.j2d.support.ExpectedDataUtil.*;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -23,25 +24,6 @@ public class JavadocSupportTest {
     private static final String JAVADOC_DIR = "javadoc";
     private static final String JAVADOC_SPLIT_DIR = "javadoc-split";
     private static final String NOT_JAVADOC_DIR = "not-javadoc";
-    private static final Map<MatchType, Integer> expectedTypes = new HashMap<>();
-    private static int expectedEntryCount = 0;
-
-    @BeforeClass
-    public static void beforeClass() {
-        expectedTypes.put(MatchType.CLASS, 1);
-        expectedTypes.put(MatchType.INTERFACE, 1);
-        expectedTypes.put(MatchType.CONSTRUCTOR, 5);
-        expectedTypes.put(MatchType.METHOD, 5);
-        expectedTypes.put(MatchType.PACKAGE, 5);
-        expectedTypes.put(MatchType.EXCEPTION, 1);
-        expectedTypes.put(MatchType.ERROR, 1);
-        expectedTypes.put(MatchType.FIELD, 1);
-        expectedTypes.put(MatchType.ENUM, 1);
-
-        for (final Integer count : expectedTypes.values()) {
-            expectedEntryCount += count;
-        }
-    }
 
     @Test
     public void testFindIndexFileNonSplit() throws Exception {
@@ -95,7 +77,7 @@ public class JavadocSupportTest {
     private void verifyFoundIndexValues(final IndexData indexData) throws Exception {
         final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
-        assertThat(indexValues.size(), is(expectedEntryCount));
+        assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
         final Map<MatchType, List<String>> valueMap = new HashMap<>();
         for (final SearchIndexValue value: indexValues) {
             List<String> nameSet = valueMap.get(value.getType());
@@ -107,6 +89,7 @@ public class JavadocSupportTest {
             valueMap.put(value.getType(), nameSet);
         }
 
+        final Map<MatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
         assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
         for (final Map.Entry<MatchType,Integer> expectedType: expectedTypes.entrySet()) {
             assertThat(valueMap, hasKey(expectedType.getKey()));
