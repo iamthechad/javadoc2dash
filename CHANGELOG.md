@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/iamthechad/javadoc2dash/tree/HEAD)
 
-[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.6...HEAD)
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.7...HEAD)
+
+## [1.0.7](https://github.com/iamthechad/javadoc2dash/tree/1.0.6) (2015-07-23)
+
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.6...1.0.7)
+
+**Fixed bugs:**
+
+- Fields are not supported [\#7](https://github.com/iamthechad/javadoc2dash/issues/7)
 
 ## [1.0.6](https://github.com/iamthechad/javadoc2dash/tree/1.0.6) (2015-07-23)
 

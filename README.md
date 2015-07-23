@@ -54,7 +54,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
       }
     }
 
@@ -63,7 +63,7 @@ Build script snippet for use in all Gradle versions:
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.javadoc2dash" version "1.0.6"
+      id "com.megatome.javadoc2dash" version "1.0.7"
     }
 
 ## Specify settings
@@ -110,7 +110,7 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
       }
     }
 
@@ -154,7 +154,7 @@ Setting Name | Type | Description | Default
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.6"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
       }
     }
 
@@ -195,7 +195,7 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.6"
+      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.7"
     }
     
 For Maven:
@@ -203,7 +203,7 @@ For Maven:
     <dependency>
       <groupId>com.megatome.javadoc2dash</groupId>
       <artifactId>javadoc2dash-api</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
     </dependency>
     
 ## Use the API
