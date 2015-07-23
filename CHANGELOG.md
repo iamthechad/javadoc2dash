@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/iamthechad/javadoc2dash/tree/HEAD)
 
-[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.5...HEAD)
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.6...HEAD)
+
+## [1.0.6](https://github.com/iamthechad/javadoc2dash/tree/1.0.6) (2015-07-23)
+
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.5...1.0.6)
+
+**Implemented enhancements:**
+
+- Support errors, fields, and methods [\#5](https://github.com/iamthechad/javadoc2dash/issues/5)
+
+**Fixed bugs:**
+
+- Incorrect documentation for CLI [\#6](https://github.com/iamthechad/javadoc2dash/issues/6)
 
 ## [1.0.5](https://github.com/iamthechad/javadoc2dash/tree/1.0.5) (2015-06-03)
 
