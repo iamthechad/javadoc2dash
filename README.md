@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg?branch=v1.0.6)](https://travis-ci.org/iamthechad/javadoc2dash)
-[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg?branch=v1.0.6)](https://coveralls.io/r/iamthechad/javadoc2dash?branch=v1.0.6)
+[![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/javadoc2dash/badge.svg)](https://coveralls.io/r/iamthechad/javadoc2dash)
 [![Download](https://api.bintray.com/packages/iamthechad/maven/javadoc2dash-api/images/download.svg) ](https://bintray.com/iamthechad/maven/javadoc2dash-api/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
