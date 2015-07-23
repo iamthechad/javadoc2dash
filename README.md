@@ -227,11 +227,7 @@ Clone the project or grab the [latest release](https://github.com/iamthechad/jav
 
 ### Running in a cloned repository
 
-* Open a terminal or command prompt, depending on your OS
-* Within the cloned project directory, run `./gradlew :j2d-cli:run` (for \*NIX/OSX), or `gradlew.bat :j2d-cli:run` (for Windows environments). 
-* The Gradle wrapper will bootstrap itself and you should see a usage message.
-
-Alternatively, run `gradlew :j2d-cli:distZip` to create a zip file containing everything needed to run. See the next step for more information.
+Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via `gradlew :j2d-cli:distZip` to create a zip file containing everything needed to run.
  
 ### Running a release zip
 
