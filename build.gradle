@@ -252,3 +252,9 @@ project(":javadoc2dash-api") {
         from javadoc.destinationDir
     }
 }
+
+project(":j2d-sample") {
+    javadoc {
+        options.splitIndex = true
+    }
+}

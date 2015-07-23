@@ -7,13 +7,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class JavadocSupportTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
@@ -25,11 +28,15 @@ public class JavadocSupportTest {
 
     @BeforeClass
     public static void beforeClass() {
-        expectedTypes.put(MatchType.CLASS, 8);
-        expectedTypes.put(MatchType.METHOD, 26);
+        expectedTypes.put(MatchType.CLASS, 1);
+        expectedTypes.put(MatchType.INTERFACE, 1);
         expectedTypes.put(MatchType.CONSTRUCTOR, 5);
-        expectedTypes.put(MatchType.PACKAGE, 4);
+        expectedTypes.put(MatchType.METHOD, 5);
+        expectedTypes.put(MatchType.PACKAGE, 5);
         expectedTypes.put(MatchType.EXCEPTION, 1);
+        expectedTypes.put(MatchType.ERROR, 1);
+        expectedTypes.put(MatchType.FIELD, 1);
+        expectedTypes.put(MatchType.ENUM, 1);
 
         for (final Integer count : expectedTypes.values()) {
             expectedEntryCount += count;
@@ -45,7 +52,7 @@ public class JavadocSupportTest {
 
     @Test
     public void testFindIndexFilesSplit() throws Exception {
-        getAndVerifyIndexFiles(15, JAVADOC_SPLIT_DIR);
+        getAndVerifyIndexFiles(6, JAVADOC_SPLIT_DIR);
     }
 
     @Test(expected = BuilderException.class)
@@ -70,7 +77,7 @@ public class JavadocSupportTest {
 
     @Test
     public void testBuildIndexDataSplit() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(15, JAVADOC_SPLIT_DIR));
+        verifyFoundIndexValues(getAndVerifyIndexFiles(6, JAVADOC_SPLIT_DIR));
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, String javadocPath) throws Exception {
@@ -89,11 +96,11 @@ public class JavadocSupportTest {
         final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
         assertThat(indexValues.size(), is(expectedEntryCount));
-        final Map<MatchType, Set<String>> valueMap = new HashMap<>();
+        final Map<MatchType, List<String>> valueMap = new HashMap<>();
         for (final SearchIndexValue value: indexValues) {
-            Set<String> nameSet = valueMap.get(value.getType());
+            List<String> nameSet = valueMap.get(value.getType());
             if (nameSet == null) {
-                nameSet = new HashSet<>();
+                nameSet = new ArrayList<>();
             }
             assertThat(nameSet, not(hasItem(value.getName())));
             nameSet.add(value.getName());
@@ -103,7 +110,7 @@ public class JavadocSupportTest {
         assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
         for (final Map.Entry<MatchType,Integer> expectedType: expectedTypes.entrySet()) {
             assertThat(valueMap, hasKey(expectedType.getKey()));
-            final Set<String> namesForType = valueMap.get(expectedType.getKey());
+            final List<String> namesForType = valueMap.get(expectedType.getKey());
             assertNotNull(namesForType);
             assertThat("Wrong count for " + expectedType, namesForType.size(), is(expectedType.getValue()));
         }

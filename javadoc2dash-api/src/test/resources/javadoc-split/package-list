@@ -1,4 +1,5 @@
-com.megatome.j2d
-com.megatome.j2d.exception
-com.megatome.j2d.support
-com.megatome.j2d.util
+com.megatome.j2d.sample.clazz
+com.megatome.j2d.sample.enums
+com.megatome.j2d.sample.error
+com.megatome.j2d.sample.exception
+com.megatome.j2d.sample.iface

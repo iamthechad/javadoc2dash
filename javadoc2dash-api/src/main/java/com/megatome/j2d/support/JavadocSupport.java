@@ -41,7 +41,7 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  */
 public final class JavadocSupport {
     private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
-    private static final List<MatchType> extraIndexingTypes = Arrays.asList(MatchType.CLASS, MatchType.EXCEPTION, MatchType.ERROR);
+    private static final List<MatchType> extraIndexingTypes = Arrays.asList(MatchType.CLASS, MatchType.INTERFACE, MatchType.ENUM, MatchType.EXCEPTION, MatchType.ERROR);
 
     private JavadocSupport() {}
 
@@ -166,7 +166,10 @@ public final class JavadocSupport {
                 }
             }
 
-            if (!containsIgnoreCase(parentTagName, "span") || !containsIgnoreCase(parentClassName, "memberNameLink") || equalsIgnoreCase("nested.class.summary", lastContext)) {
+            if (!containsIgnoreCase(parentTagName, "span")
+                    || !containsIgnoreCase(parentClassName, "memberNameLink")
+                    || equalsIgnoreCase("nested.class.summary", lastContext)
+                    || equalsIgnoreCase("enum.constant.summary", lastContext)) {
                 continue;
             }
             final String text = parent.text();

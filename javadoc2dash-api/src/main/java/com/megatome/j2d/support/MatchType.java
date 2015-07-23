@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 public enum MatchType {
     CLASS("Class", "class", "Class in", "- class"),
     STATIC_METHOD("Method", "method", "Static method in"),
-    FIELD("Field", "field", "Static variable in", "Field in"),
+    FIELD("Field", "field", "Static variable in", "Field in", "field.summary"),
     CONSTRUCTOR("Constructor", "constructor", "Constructor"),
     METHOD("Method", null, "Method in", "method.summary"),
     VARIABLE("Field", null, "Variable in"),
