@@ -1,4 +1,5 @@
 ext.projectVersion = '1.0.6'
+ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'
 
@@ -10,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
@@ -132,8 +133,8 @@ project(":j2d-gradle") {
     }
 
     pluginBundle {
-        website = 'https://github.com/iamthechad/javadoc2dash'
-        vcsUrl = 'https://github.com/iamthechad/javadoc2dash'
+        website = "$projectLocation"
+        vcsUrl = "$projectLocation"
         description = 'Create Dash docsets from Javadoc'
         tags = ['javadoc', 'dash']
 
@@ -178,11 +179,11 @@ project(":javadoc2dash-api") {
         scm {
             connection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
             developerConnection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
-            url "https://github.com/iamthechad/javadoc2dash"
+            url "$projectLocation"
         }
         issueManagement {
             system "Github Issue Tracker"
-            url "https://github.com/iamthechad/javadoc2dash/issues"
+            url "$projectLocation/issues"
         }
         licenses {
             license {
@@ -211,7 +212,7 @@ project(":javadoc2dash-api") {
                 pom.withXml {
                     def root = asNode()
                     root.appendNode('name', 'Javadoc to Dash API')
-                    root.appendNode('url', 'https://github.com/iamthechad/jaadoc2dash')
+                    root.appendNode('url', "$projectLocation")
                     root.appendNode('description', 'API for creating Dash docsets from Javadoc')
                     root.children().last() + pomConfig
                 }
@@ -229,9 +230,9 @@ project(":javadoc2dash-api") {
             repo = 'maven'
             name = 'javadoc2dash-api'
             desc = 'API for creating Dash docsets from Javadoc'
-            websiteUrl = 'https://github.com/iamthechad/javadoc2dash'
-            issueTrackerUrl = 'https://github.com/iamthechad/javadoc2dash/issues'
-            vcsUrl = 'https://github.com/iamthechad/javadoc2dash.git'
+            websiteUrl = "$projectLocation"
+            issueTrackerUrl = "$projectLocation/issues"
+            vcsUrl = projectLocation + ".git"
             licenses = ['Apache-2.0']
             labels = ['javadoc', 'dash', 'api']
             publicDownloadNumbers = true
