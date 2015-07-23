@@ -3,6 +3,8 @@ jdk:
 - oraclejdk8
 - oraclejdk7
 - openjdk7
+env:
+- TERM=dumb
 after_success:
 - ./gradlew jacocoRootReport coveralls
 notifications:
