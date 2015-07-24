@@ -255,6 +255,6 @@ project(":javadoc2dash-api") {
 
 project(":j2d-sample") {
     javadoc {
-        options.splitIndex = true
+        options.splitIndex = false
     }
 }

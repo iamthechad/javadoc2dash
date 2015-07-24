@@ -15,11 +15,12 @@ public class ExpectedDataUtil {
         EXPECTED_TYPES.put(MatchType.INTERFACE, 1);
         EXPECTED_TYPES.put(MatchType.CONSTRUCTOR, 5);
         EXPECTED_TYPES.put(MatchType.METHOD, 5);
-        EXPECTED_TYPES.put(MatchType.PACKAGE, 5);
+        EXPECTED_TYPES.put(MatchType.PACKAGE, 6);
         EXPECTED_TYPES.put(MatchType.EXCEPTION, 1);
         EXPECTED_TYPES.put(MatchType.ERROR, 1);
         EXPECTED_TYPES.put(MatchType.FIELD, 1);
         EXPECTED_TYPES.put(MatchType.ENUM, 1);
+        EXPECTED_TYPES.put(MatchType.NOTATION, 1);
 
         for (final Integer count : EXPECTED_TYPES.values()) {
             EXPECTED_ENTRY_COUNT += count;
