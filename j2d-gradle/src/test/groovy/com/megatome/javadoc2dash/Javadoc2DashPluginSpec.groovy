@@ -26,7 +26,8 @@ class Javadoc2DashPluginSpec extends Specification {
             project.apply plugin: PLUGIN_ID
         then:
             project.plugins.hasPlugin(JavaPlugin)
-            project.extensions.findByName(EXTENSION_NAME) != null
+            def baseExtension = project.extensions.findByName(EXTENSION_NAME)
+            baseExtension != null
             Task j2dTask = project.tasks.findByName(TASK_NAME)
             j2dTask != null
             j2dTask.docsetName == project.name
@@ -35,6 +36,7 @@ class Javadoc2DashPluginSpec extends Specification {
             j2dTask.javadocRoot == project.file("${project.docsDir}/javadoc")
             j2dTask.outputLocation == project.file("${project.buildDir}/javadoc2dash")
             j2dTask.iconFile == null
+            baseExtension.javadocTask == "javadoc"
     }
 
     def "Apply plugin and set all extension values"() {
@@ -50,10 +52,12 @@ class Javadoc2DashPluginSpec extends Specification {
                 javadocRoot = project.file("${project.docsDir}/docs")
                 outputLocation = project.file("${project.buildDir}/docsets")
                 iconFile = project.file("icon.png")
+                javadocTask = "allJavadoc"
             }
         then:
             project.plugins.hasPlugin(JavaPlugin)
-            project.extensions.findByName(EXTENSION_NAME) != null
+            def baseExtension = project.extensions.findByName(EXTENSION_NAME)
+            baseExtension != null
             Task j2dTask = project.tasks.findByName(TASK_NAME)
             j2dTask != null
             j2dTask.docsetName == "Project Name"
@@ -62,6 +66,7 @@ class Javadoc2DashPluginSpec extends Specification {
             j2dTask.javadocRoot == project.file("${project.docsDir}/docs")
             j2dTask.outputLocation == project.file("${project.buildDir}/docsets")
             j2dTask.iconFile == project.file("icon.png")
+            baseExtension.javadocTask == "allJavadoc"
     }
 
     def "Apply plugin and set some extension values"() {

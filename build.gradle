@@ -60,7 +60,7 @@ subprojects {
 }
 
 def publishedProjects = subprojects.findAll {
-    !it.path.startsWith(':j2d-cli')
+    !it.path.startsWith(':j2d-cli') && !it.path.startsWith(':j2d-sample')
 }
 
 task jacocoRootReport(type: JacocoReport) {
