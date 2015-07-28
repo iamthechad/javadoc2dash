@@ -21,21 +21,9 @@ import static org.junit.Assert.assertNotNull;
 
 public class JavadocSupportTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
-    private static final String JAVADOC_DIR = "javadoc";
-    private static final String JAVADOC_SPLIT_DIR = "javadoc-split";
+    private static final File regularJavadoc = getFile(System.getProperty("j2d-sample-javadoc"));
+    private static final File splitJavadoc = getFile(System.getProperty("j2d-sample-javadoc-split"));
     private static final String NOT_JAVADOC_DIR = "not-javadoc";
-
-    @Test
-    public void testFindIndexFileNonSplit() throws Exception {
-        final IndexData indexData = getAndVerifyIndexFiles(1, JAVADOC_DIR);
-        final File f = indexData.getFilesToIndex().get(0);
-        assertEquals("index-all.html", f.getName());
-    }
-
-    @Test
-    public void testFindIndexFilesSplit() throws Exception {
-        getAndVerifyIndexFiles(6, JAVADOC_SPLIT_DIR);
-    }
 
     @Test(expected = BuilderException.class)
     public void testMissingJavadocDir() throws Exception {
@@ -44,7 +32,7 @@ public class JavadocSupportTest {
 
     @Test(expected = BuilderException.class)
     public void testJavadocDirIsFile() throws Exception {
-        JavadocSupport.findIndexFile(getFile(resourcesRoot, JAVADOC_DIR, "index.html"));
+        JavadocSupport.findIndexFile(getFile(regularJavadoc, "index.html"));
     }
 
     @Test(expected = BuilderException.class)
@@ -54,23 +42,23 @@ public class JavadocSupportTest {
 
     @Test
     public void testBuildIndexDataNonSplit() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(1, JAVADOC_DIR));
+        verifyFoundIndexValues(getAndVerifyIndexFiles(1, regularJavadoc));
     }
 
     @Test
     public void testBuildIndexDataSplit() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(6, JAVADOC_SPLIT_DIR));
+        verifyFoundIndexValues(getAndVerifyIndexFiles(6, splitJavadoc));
     }
 
-    private IndexData getAndVerifyIndexFiles(int expectedFileCount, String javadocPath) throws Exception {
-        final IndexData indexData = JavadocSupport.findIndexFile(getFile(resourcesRoot, javadocPath));
+    private IndexData getAndVerifyIndexFiles(int expectedFileCount, File javadocDir) throws Exception {
+        final IndexData indexData = JavadocSupport.findIndexFile(javadocDir);
         assertNotNull(indexData);
         final String indexFile = indexData.getDocsetIndexFile();
         assertNotNull(indexFile);
-        assertEquals("overview-summary.html", indexFile);
+        assertThat("overview-summary.html", is(indexFile));
         final List<File> files = indexData.getFilesToIndex();
         assertNotNull(files);
-        assertEquals(expectedFileCount, files.size());
+        assertThat(expectedFileCount, is(files.size()));
         return indexData;
     }
 

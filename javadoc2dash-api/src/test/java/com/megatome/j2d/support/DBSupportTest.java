@@ -5,7 +5,6 @@ import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -16,8 +15,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DBSupportTest {
-    private static final File resourcesRoot = getFile("src", "test", "resources");
-    private static final String JAVADOC_DIR = "javadoc";
+    private static final File javadocLocation = getFile(System.getProperty("j2d-sample-javadoc"));
 
     private static final String QUERY = "SELECT COUNT(*) FROM searchIndex WHERE type = ?";
 
@@ -36,7 +32,7 @@ public class DBSupportTest {
 
     @Test
     public void testCreateIndexDB() throws Exception {
-        final IndexData indexData = JavadocSupport.findIndexFile(getFile(resourcesRoot, JAVADOC_DIR));
+        final IndexData indexData = JavadocSupport.findIndexFile(javadocLocation);
         final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         final String docFileRoot = FilenameUtils.concat(temporaryFolder.getRoot().getPath(), "Foo");
         final String dbDirName = DocSetSupport.getDBDir(docFileRoot);

@@ -167,6 +167,14 @@ project(":javadoc2dash-api") {
         testCompile 'com.googlecode.plist:dd-plist:1.16'
     }
 
+    tasks.withType(Test) { task ->
+        task.dependsOn ":j2d-sample:javadoc"
+        task.dependsOn ":j2d-sample:javadocSplit"
+        def sampleProject = findProject(":j2d-sample")
+        systemProperties['j2d-sample-javadoc'] = "${sampleProject.docsDir}/javadoc"
+        systemProperties['j2d-sample-javadoc-split'] = "${sampleProject.docsDir}/javadocSplit"
+    }
+
     uploadArchives {
         repositories {
             mavenDeployer {
@@ -256,5 +264,11 @@ project(":javadoc2dash-api") {
 project(":j2d-sample") {
     javadoc {
         options.splitIndex = false
+    }
+
+    task javadocSplit(type: Javadoc) {
+        source = sourceSets.main.allJava
+        destinationDir = file("${project.docsDir}/javadocSplit")
+        options.splitIndex = true
     }
 }

@@ -4,7 +4,6 @@ import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListParser;
 import com.megatome.j2d.exception.BuilderException;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,9 +15,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.megatome.j2d.support.DocSetSupport.*;
+import static org.apache.commons.io.FileUtils.*;
 import static org.junit.Assert.*;
 
 public class DocSetSupportTest {
+    private static final File javadocLocation = getFile(System.getProperty("j2d-sample-javadoc"));
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
@@ -31,8 +33,8 @@ public class DocSetSupportTest {
     public void overwriteExistingDocsetDir() throws Exception {
         final String docsetDir = getDocsetRoot(createAndVerifyDocsetStructure("TestDoc"));
 
-        final File testFile = FileUtils.getFile(docsetDir, "foo.txt");
-        FileUtils.write(testFile, "Test Data");
+        final File testFile = getFile(docsetDir, "foo.txt");
+        write(testFile, "Test Data");
         assertTrue(testFile.exists());
 
         createAndVerifyDocsetStructure("TestDoc");
@@ -43,10 +45,9 @@ public class DocSetSupportTest {
     public void testCopyFiles() throws Exception {
         final String docsetDir = createAndVerifyDocsetStructure("TestDoc");
 
-        final File sourceDir = FileUtils.getFile("src", "test", "resources", "javadoc");
-        final File destDir = FileUtils.getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS);
-        copyFiles(sourceDir, docsetDir);
-        final Collection<String> originalFiles = buildFileCollectionWithoutPath(sourceDir);
+        final File destDir = getFile(getDocsetRoot(docsetDir), CONTENTS, RESOURCES, DOCUMENTS);
+        copyFiles(javadocLocation, docsetDir);
+        final Collection<String> originalFiles = buildFileCollectionWithoutPath(javadocLocation);
         final Collection<String> copiedFiles = buildFileCollectionWithoutPath(destDir);
 
         assertEquals(originalFiles, copiedFiles);
@@ -54,7 +55,7 @@ public class DocSetSupportTest {
 
     @Test(expected = BuilderException.class)
     public void testCopyFilesError() throws Exception {
-        final File sourceDir = FileUtils.getFile("src", "test", "resources", "javadoc", "index.html");
+        final File sourceDir = getFile("src", "test", "resources", "javadoc", "index.html");
         final String fakeRoot = FilenameUtils.concat(temporaryFolder.getRoot().getPath(), "Foo");
         copyFiles(sourceDir, fakeRoot);
     }
@@ -63,7 +64,7 @@ public class DocSetSupportTest {
     public void testCreatePlist() throws Exception {
         final String docsetDir = createAndVerifyDocsetStructure("TestDoc");
         createPList("Identifier", "displayName", "keyword", "indexFile", docsetDir);
-        final File plist = FileUtils.getFile(getDocsetRoot(docsetDir), CONTENTS, "Info.plist");
+        final File plist = getFile(getDocsetRoot(docsetDir), CONTENTS, "Info.plist");
         assertNotNull(plist);
         assertTrue(plist.exists());
 
@@ -79,13 +80,13 @@ public class DocSetSupportTest {
     @Test
     public void testCopyIconFile() throws Exception {
         final String docsetDir = createAndVerifyDocsetStructure("TestDoc");
-        final File iconFile = FileUtils.getFile(getDocsetRoot(docsetDir), "icon.png");
+        final File iconFile = getFile(getDocsetRoot(docsetDir), "icon.png");
         copyIconFile(null, docsetDir);
         assertFalse(iconFile.exists());
-        final File expectedIconFile = FileUtils.getFile("src", "test", "resources", "blank.png");
+        final File expectedIconFile = getFile("src", "test", "resources", "blank.png");
         copyIconFile(expectedIconFile, docsetDir);
         assertTrue(iconFile.exists());
-        assertTrue(FileUtils.contentEquals(expectedIconFile, iconFile));
+        assertTrue(contentEquals(expectedIconFile, iconFile));
     }
 
     private void verifyPlistEntry(NSDictionary rootDict, String keyName, String expectedValue) {
@@ -104,7 +105,7 @@ public class DocSetSupportTest {
 
         File f = temporaryFolder.getRoot();
         for (final String dirName : docsetDirs) {
-            f = FileUtils.getFile(f, dirName);
+            f = getFile(f, dirName);
             assertTrue(f.exists());
             assertTrue(f.isDirectory());
         }
@@ -113,7 +114,7 @@ public class DocSetSupportTest {
 
     private Collection<String> buildFileCollectionWithoutPath(final File targetDir) {
         final Set<String> fileCollection = new HashSet<>();
-        for (final File f : FileUtils.listFiles(targetDir, null, true)) {
+        for (final File f : listFiles(targetDir, null, true)) {
             fileCollection.add(f.getPath().replaceFirst(targetDir.getPath(), ""));
         }
 
