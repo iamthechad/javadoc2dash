@@ -171,8 +171,8 @@ project(":javadoc2dash-api") {
         task.dependsOn ":j2d-sample:javadoc"
         task.dependsOn ":j2d-sample:javadocSplit"
         def sampleProject = findProject(":j2d-sample")
-        systemProperties['j2d-sample-javadoc'] = "${sampleProject.docsDir}/javadoc"
-        systemProperties['j2d-sample-javadoc-split'] = "${sampleProject.docsDir}/javadocSplit"
+        systemProperties 'j2d-sample-javadoc': "${sampleProject.docsDir}/javadoc"
+        systemProperties 'j2d-sample-javadoc-split': "${sampleProject.docsDir}/javadocSplit"
     }
 
     uploadArchives {

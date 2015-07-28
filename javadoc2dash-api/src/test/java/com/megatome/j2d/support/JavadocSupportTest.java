@@ -3,7 +3,6 @@ package com.megatome.j2d.support;
 import com.megatome.j2d.exception.BuilderException;
 import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -12,11 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.megatome.j2d.support.ExpectedDataUtil.*;
+import static com.megatome.j2d.support.ExpectedDataUtil.getExpectedData;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class JavadocSupportTest {

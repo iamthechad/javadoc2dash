@@ -21,6 +21,8 @@ import java.util.Map;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class DBSupportTest {
     private static final File javadocLocation = getFile(System.getProperty("j2d-sample-javadoc"));
@@ -32,6 +34,7 @@ public class DBSupportTest {
 
     @Test
     public void testCreateIndexDB() throws Exception {
+        assertThat(javadocLocation, notNullValue());
         final IndexData indexData = JavadocSupport.findIndexFile(javadocLocation);
         final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         final String docFileRoot = FilenameUtils.concat(temporaryFolder.getRoot().getPath(), "Foo");
@@ -40,7 +43,7 @@ public class DBSupportTest {
         FileUtils.forceMkdir(dbDir);
         DBSupport.createIndex(indexValues, dbDirName);
         final File dbFile = getFile(dbDir, "docSet.dsidx");
-        assertTrue(dbFile.exists());
+        assertTrue("DB file does not exist", dbFile.exists());
 
         final Map<MatchType, Integer> expectedTypes = ExpectedDataUtil.getExpectedData().getExpectedTypes();
         try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
@@ -51,7 +54,7 @@ public class DBSupportTest {
                 try (final ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         final int count = rs.getInt(1);
-                        assertEquals(expectedEntry.getValue().intValue(), count);
+                        assertThat(expectedEntry.getValue().intValue(), is(count));
                     }
                 }
             }
