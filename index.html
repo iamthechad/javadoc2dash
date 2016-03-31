@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Javadoc to Dash by iamthechad</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Javadoc to Dash</h1>
+        <h2></h2>
+        <a href="https://github.com/iamthechad/javadoc2dash" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+
+
+
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+
+<ul>
+<li><a href="#javadoc2dash---build-dash-docsets-from-javadoc">Javadoc2Dash - Build Dash docsets from Javadoc</a></li>
+<li>
+<a href="#gradle-plugin">Gradle plugin</a>
+
+<ul>
+<li><a href="#add-the-plugin-to-your-project">Add the plugin to your project</a></li>
+<li><a href="#specify-settings">Specify settings</a></li>
+<li>
+<a href="#create-the-docset">Create the docset</a>
+
+<ul>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+<li>
+<a href="#creating-the-docset-feed">Creating the docset feed</a>
+
+<ul>
+<li><a href="#example-1">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#using-the-api">Using the API</a>
+
+<ul>
+<li><a href="#add-dependencies-to-your-project">Add dependencies to your project</a></li>
+<li><a href="#use-the-api">Use the API</a></li>
+</ul>
+</li>
+<li>
+<a href="#using-the-cli">Using the CLI</a>
+
+<ul>
+<li>
+<a href="#download-the-cli">Download the CLI</a>
+
+<ul>
+<li><a href="#running-in-a-cloned-repository">Running in a cloned repository</a></li>
+<li><a href="#running-a-release-zip">Running a release zip</a></li>
+</ul>
+</li>
+<li>
+<a href="#creating-a-docset">Creating a docset</a>
+
+<ul>
+<li><a href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+<h1>
+<a id="javadoc2dash---build-dash-docsets-from-javadoc" class="anchor" href="#javadoc2dash---build-dash-docsets-from-javadoc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Javadoc2Dash - Build Dash docsets from Javadoc</h1>
+
+<p>This project is based off of <a href="https://github.com/Kapeli/javadocset">https://github.com/Kapeli/javadocset</a>. This is a Java-based solution so that Dash docsets
+can be easily created from many environments, not just those that run OS X.</p>
+
+<p>There are three ways to create Dash-compatible docsets from Javadoc using this project:</p>
+
+<ol>
+<li>Use the Gradle plugin</li>
+<li>Use the API</li>
+<li>Use the CLI</li>
+</ol>
+
+<h1>
+<a id="gradle-plugin" class="anchor" href="#gradle-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Gradle plugin</h1>
+
+<h2>
+<a id="add-the-plugin-to-your-project" class="anchor" href="#add-the-plugin-to-your-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add the plugin to your project</h2>
+
+<p>Build script snippet for use in all Gradle versions:</p>
+
+<pre><code>buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
+  }
+}
+
+apply plugin: "com.megatome.javadoc2dash"
+</code></pre>
+
+<p>Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:</p>
+
+<pre><code>plugins {
+  id "com.megatome.javadoc2dash" version "1.0.7"
+}
+</code></pre>
+
+<h2>
+<a id="specify-settings" class="anchor" href="#specify-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Specify settings</h2>
+
+<pre><code>javadoc2dash {
+  displayName = "My Cool Project"
+}
+</code></pre>
+
+<p>If no settings are provided, the plugin tries to use sensible defaults.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docsetName</code></td>
+<td><code>String</code></td>
+<td>File name of the created docset</td>
+<td><code>project.name</code></td>
+</tr>
+<tr>
+<td><code>javadocRoot</code></td>
+<td><code>File</code></td>
+<td>Location of the javadoc files</td>
+<td><code>${project.docsDir}/javadoc</code></td>
+</tr>
+<tr>
+<td><code>outputLocation</code></td>
+<td><code>File</code></td>
+<td>Location to create the docset</td>
+<td><code>${project.buildDir}</code></td>
+</tr>
+<tr>
+<td><code>displayName</code></td>
+<td><code>String</code></td>
+<td>Name displayed in Dash</td>
+<td><code>project.name</code></td>
+</tr>
+<tr>
+<td><code>keyword</code></td>
+<td><code>String</code></td>
+<td>Keyword used for the docset in Dash</td>
+<td><code>project.name</code></td>
+</tr>
+<tr>
+<td><code>iconFile</code></td>
+<td><code>File</code></td>
+<td>File to be used as the docset icon</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>javadocTask</code></td>
+<td><code>String</code></td>
+<td>Name of the javadoc task that the <code>javadoc2dash</code> task will depend on</td>
+<td><code>javadoc</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Some Caveats:</strong></p>
+
+<ul>
+<li>The <code>iconFile</code> should be a 32x32 PNG file, but the plugin does <strong>not</strong> verify this.</li>
+<li>You should only need to set the <code>javadocTask</code> property when the task you use to create Javadoc is non-standard. For example, there may be a task called <code>allJavadoc</code> in a multi-module
+project to create an aggregated Javadoc. In this instance, <code>javadocTask</code> should be set to <code>allJavadoc</code> to ensure that the correct documentation is built before creating the docset.</li>
+<li>This plugin applies the <code>java</code> plugin to the project it's run under. This means that in a multi-module project, a top level task named <code>javadoc</code> cannot be created to aggregate the
+subprojects' documentation. The <code>java</code> plugin creates a <code>javadoc</code> task, so a different name is required - perhaps <code>allJavadoc</code>.</li>
+</ul>
+
+<h2>
+<a id="create-the-docset" class="anchor" href="#create-the-docset" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create the docset</h2>
+
+<p>Create the docset with the <code>javadoc2dash</code> task.</p>
+
+<h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h3>
+
+<pre><code>apply plugin: 'java'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
+  }
+}
+
+apply plugin: "com.megatome.javadoc2dash"
+
+javadoc2dash {
+  docsetName = "MyProject"
+  displayName = "My Awesome Project"
+  keyword = "mp"
+}
+</code></pre>
+
+<h2>
+<a id="creating-the-docset-feed" class="anchor" href="#creating-the-docset-feed" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating the docset feed</h2>
+
+<p>If you want to host your own docsets, you need to create a feed per the <a href="https://kapeli.com/docsets#dashdocsetfeed">Dash instructions</a>.</p>
+
+<p>Creating feeds uses the <code>javadoc2dashfeed</code> task.</p>
+
+<pre><code>javadoc2dashfeed {
+  feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
+}
+</code></pre>
+
+<p>If no settings are provided, the plugin tries to use sensible defaults.</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feedName</code></td>
+<td><code>String</code></td>
+<td>File name to use for feed XML file</td>
+<td><code>project.name</code></td>
+</tr>
+<tr>
+<td><code>feedVersion</code></td>
+<td><code>String</code></td>
+<td>Version to use in feed XML file</td>
+<td><code>project.version</code></td>
+</tr>
+<tr>
+<td><code>feedLocations</code></td>
+<td><code>List&lt;String&gt;</code></td>
+<td>List of root URLs for hosting the docset</td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h3>
+
+<pre><code>apply plugin: 'java'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.0.7"
+  }
+}
+
+apply plugin: "com.megatome.javadoc2dash"
+
+javadoc2dash {
+  docsetName = "MyProject"
+  displayName = "My Awesome Project"
+  keyword = "mp"
+}
+
+javadoc2dashfeed {
+  feedName = "myproject"
+  feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
+}
+</code></pre>
+
+<p>This will generate a <code>feed</code> directory in the <code>javadoc2dash.outputLocation</code> directory. This directory will contain an XML file describing the feed
+(named <code>myproject.xml</code> in this case), and a compressed version of the docset (named <code>myproject.tgz</code> in this case).</p>
+
+<p>For this example, the XML file will look like this:</p>
+
+<pre><code>&lt;entry&gt;
+  &lt;version&gt;1.0&lt;/version&gt;
+  &lt;url&gt;http://someserver.com/feeds/myproject.tgz&lt;/url&gt;
+  &lt;url&gt;http://someotherserver.com/feeds/myproject.tgz&lt;/url&gt;
+&lt;/entry&gt;
+</code></pre>
+
+<p>The XML file should be copied to a location where it can be <a href="https://kapeli.com/docsets#sharedocsetfeed">shared with Dash users</a>, and the <code>tgz</code> file copied to the locations specified in <code>feedLocations</code>.</p>
+
+<h1>
+<a id="using-the-api" class="anchor" href="#using-the-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using the API</h1>
+
+<h2>
+<a id="add-dependencies-to-your-project" class="anchor" href="#add-dependencies-to-your-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add dependencies to your project</h2>
+
+<p>For Gradle:</p>
+
+<pre><code>repositories {
+  jcenter()
+}
+
+dependencies {
+  compile "com.megatome.javadoc2dash:javadoc2dash-api:1.0.7"
+}
+</code></pre>
+
+<p>For Maven:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;com.megatome.javadoc2dash&lt;/groupId&gt;
+  &lt;artifactId&gt;javadoc2dash-api&lt;/artifactId&gt;
+  &lt;version&gt;1.0.7&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2>
+<a id="use-the-api" class="anchor" href="#use-the-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Use the API</h2>
+
+<pre><code>DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocLocation);
+// Optionally -
+builder.displayName("Some Name").keyword("keyword");
+DocsetCreator creator = builder.build();
+
+try {
+  creator.makeDocset();
+} catch (BuilderException e) {
+  // Something failed!
+}
+</code></pre>
+
+<h1>
+<a id="using-the-cli" class="anchor" href="#using-the-cli" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using the CLI</h1>
+
+<h2>
+<a id="download-the-cli" class="anchor" href="#download-the-cli" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download the CLI</h2>
+
+<p>Clone the project or grab the <a href="https://github.com/iamthechad/javadoc2dash/releases">latest release</a>. Running the utility will vary a bit depending on how you retrieve the project.</p>
+
+<h3>
+<a id="running-in-a-cloned-repository" class="anchor" href="#running-in-a-cloned-repository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running in a cloned repository</h3>
+
+<p>Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via <code>gradlew :j2d-cli:distZip</code> to create a zip file containing everything needed to run.</p>
+
+<h3>
+<a id="running-a-release-zip" class="anchor" href="#running-a-release-zip" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running a release zip</h3>
+
+<ul>
+<li>Either download a release or create a distribution zip as outlined above. </li>
+<li>Unzip the archive to a desired location.</li>
+<li>Open a terminal or command prompt and navigate to the unzipped directory.</li>
+<li>Navigate to the <code>bin</code> directory and run <code>./j2d-cli</code> (for *NIX/OSX) or <code>j2d-cli.bat</code> (for Windows environments).</li>
+<li>You should see a usage message.</li>
+</ul>
+
+<h2>
+<a id="creating-a-docset" class="anchor" href="#creating-a-docset" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating a docset</h2>
+
+<p>Docset creation requires at minimum two options: the name of the docset and the location of the Javadoc files to include in the docset.</p>
+
+<pre><code>./j2d-cli --name Sample --javadoc /some/path/to/apidoc
+</code></pre>
+
+<p>This will create a docset named Sample in the current directory. Docset creation can be customized with optional arguments:</p>
+
+<ul>
+<li>
+<code>--displayName</code>: Will set the name as shown in Dash. This is handy if you create a docset with name <code>SampleProject</code> but display name <code>Sample Project</code> instead.
+
+<ul>
+<li>This setting will default to the value of <code>--name</code> if omitted.</li>
+</ul>
+</li>
+<li>
+<code>--keyword</code>: Will set the keyword used to search in Dash. You could set the keyword for <code>SampleProject</code> to <code>sp</code>, for example.
+
+<ul>
+<li>This setting will default to the value of <code>--name</code> if omitted.</li>
+</ul>
+</li>
+<li>
+<code>--icon</code>: Specify an icon to be used for the docset. Should be a 32x32 PNG, but this tool <strong>does not verify the file's content</strong>.
+
+<ul>
+<li>No icon will be used if this is omitted.</li>
+</ul>
+</li>
+<li>
+<code>--out</code>: Specify a directory to create the docset in.
+
+<ul>
+<li>The docset will be created in the current directory if omitted.</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h3>
+
+<p>Bare minimum: <code>j2d-cli --name Sample --javadoc /path/to/apidoc</code></p>
+
+<p>Full options: <code>j2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output</code></p>
+
+<p>Abbreviated options. Most command-line options can be abbreviated. <code>j2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output</code></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/iamthechad/javadoc2dash/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/iamthechad/javadoc2dash/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/iamthechad/javadoc2dash"></a> is maintained by <a href="https://github.com/iamthechad">iamthechad</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
