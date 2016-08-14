@@ -26,6 +26,8 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -138,9 +140,13 @@ public final class JavadocSupport {
                 System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
                 continue;
             }
-            final String linkPath = e.attr("href");
+            try {
+                final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8");
 
-            values.add(new SearchIndexValue(name, type, linkPath));
+                values.add(new SearchIndexValue(name, type, linkPath));
+            } catch (UnsupportedEncodingException ex) {
+                throw new BuilderException("Error decoding a link", ex);
+            }
         }
         return values;
     }
@@ -180,9 +186,13 @@ public final class JavadocSupport {
                 System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Context: %s)", text, lastContext));
                 continue;
             }
-            final String linkPath = e.attr("href").replaceAll("\\.\\.\\/", "");
+            try {
+                final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8").replaceAll("\\.\\.\\/", "");
 
-            values.add(new SearchIndexValue(text, type, linkPath));
+                values.add(new SearchIndexValue(text, type, linkPath));
+            } catch (UnsupportedEncodingException ex) {
+                throw new BuilderException("Error decoding a link", ex);
+            }
         }
         return values;
     }
@@ -205,5 +215,3 @@ public final class JavadocSupport {
         return null;
     }
 }
-
-
