@@ -1,4 +1,4 @@
-ext.projectVersion = '1.0.7'
+ext.projectVersion = '1.0.8'
 ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'
@@ -11,9 +11,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.5"
     }
 }
 
