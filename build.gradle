@@ -1,8 +1,6 @@
 ext.projectVersion = '1.0.8'
 ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
 
-apply plugin: 'com.github.kt3k.coveralls'
-
 buildscript {
     repositories {
         jcenter()
@@ -11,7 +9,6 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.5"
     }
@@ -82,11 +79,6 @@ task jacocoRootReport(type: JacocoReport) {
             it.exists()
         })
     }
-}
-
-coveralls {
-    sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 project(":j2d-cli") {
