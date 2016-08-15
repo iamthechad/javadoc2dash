@@ -4,7 +4,7 @@ jdk:
 env:
 - TERM=dumb
 after_success:
-- ./gradlew jacocoRootReport coveralls
+- bash <(curl -s https://codecov.io/bash)
 notifications:
   slack:
     secure: alp5GJJqdBSH11BZ8jR9BB1TtYBi+p+F9UFHltLpGBJHv+AEHf+pBmY4vM0tulNeZpvOhDRkJ014RQpm7bLjvnoxyt60zCVDSpKLp3Pp7IrrgsgQ4oycwEwSExCzfehHxurP+eIi3I3RkdYvnxXkVobvaCzbGgikRM0qNTRPYEE=
