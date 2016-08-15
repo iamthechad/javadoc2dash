@@ -4,6 +4,7 @@ jdk:
 env:
 - TERM=dumb
 after_success:
+- ./gradlew jacocoRootReport
 - bash <(curl -s https://codecov.io/bash)
 notifications:
   slack:
