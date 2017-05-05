@@ -137,6 +137,14 @@ public final class JavadocSupport {
             try {
                 final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8");
 
+                if (name.isEmpty() || linkPath.isEmpty()) {
+                    System.err.println(String.format("Something went wrong with parsing a link, possibly unescaped tags in Javadoc. (Name: %s, Type: %s, Link: %s)", name, type, linkPath));
+                    if (values.size() > 0) {
+                        final SearchIndexValue last = values.get(values.size() - 1);
+                        System.err.println(String.format("Most recently parsed value was: (Name: %s, Type: %s, Path: %s)", last.getName(), last.getType(), last.getPath()));
+                    }
+                    continue;
+                }
                 values.add(new SearchIndexValue(name, type, linkPath));
             } catch (UnsupportedEncodingException ex) {
                 throw new BuilderException("Error decoding a link", ex);
