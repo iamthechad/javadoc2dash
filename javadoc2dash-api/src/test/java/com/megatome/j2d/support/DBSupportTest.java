@@ -45,12 +45,12 @@ public class DBSupportTest {
         final File dbFile = getFile(dbDir, "docSet.dsidx");
         assertTrue("DB file does not exist", dbFile.exists());
 
-        final Map<MatchType, Integer> expectedTypes = ExpectedDataUtil.getExpectedData().getExpectedTypes();
+        final Map<String, Integer> expectedTypes = ExpectedDataUtil.getExpectedData().getExpectedDataBaseTypes();
         try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
              final PreparedStatement stmt = connection.prepareStatement(QUERY)){
 
-            for (Map.Entry<MatchType, Integer> expectedEntry : expectedTypes.entrySet()) {
-                stmt.setString(1, expectedEntry.getKey().getTypeName());
+            for (Map.Entry<String, Integer> expectedEntry : expectedTypes.entrySet()) {
+                stmt.setString(1, expectedEntry.getKey());
                 try (final ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         final int count = rs.getInt(1);

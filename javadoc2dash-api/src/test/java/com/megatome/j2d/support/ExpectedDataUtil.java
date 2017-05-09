@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class ExpectedDataUtil {
     private final Map<MatchType, Integer> EXPECTED_TYPES = new HashMap<>();
+    private final Map<String, Integer> EXPECTED_DATABASE_TYPES = new HashMap<>();
     private int EXPECTED_ENTRY_COUNT = 0;
 
     private static final ExpectedDataUtil INSTANCE = new ExpectedDataUtil();
@@ -26,6 +27,15 @@ public class ExpectedDataUtil {
         for (final Integer count : EXPECTED_TYPES.values()) {
             EXPECTED_ENTRY_COUNT += count;
         }
+
+        for (final Map.Entry<MatchType, Integer> entry : EXPECTED_TYPES.entrySet()) {
+            final String dbColumnName = entry.getKey().getTypeName();
+            int count = entry.getValue();
+            if (EXPECTED_DATABASE_TYPES.containsKey(dbColumnName)) {
+                count += EXPECTED_DATABASE_TYPES.get(dbColumnName);
+            }
+            EXPECTED_DATABASE_TYPES.put(dbColumnName, count);
+        }
     }
 
     public static ExpectedDataUtil getExpectedData() {
@@ -34,6 +44,10 @@ public class ExpectedDataUtil {
 
     public Map<MatchType, Integer> getExpectedTypes() {
         return Collections.unmodifiableMap(EXPECTED_TYPES);
+    }
+
+    public Map<String, Integer> getExpectedDataBaseTypes() {
+        return Collections.unmodifiableMap(EXPECTED_DATABASE_TYPES);
     }
 
     public int getExpectedEntryCount() {
