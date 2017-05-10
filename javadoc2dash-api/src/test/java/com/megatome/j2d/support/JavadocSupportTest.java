@@ -5,8 +5,12 @@ import com.megatome.j2d.util.IndexData;
 import com.megatome.j2d.util.SearchIndexValue;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,7 @@ public class JavadocSupportTest {
     private static final File regularJavadoc = getFile(System.getProperty("j2d-sample-javadoc"));
     private static final File splitJavadoc = getFile(System.getProperty("j2d-sample-javadoc-split"));
     private static final String NOT_JAVADOC_DIR = "not-javadoc";
+    private static final String INDEX_ALL_BAD_TAG_HTML = "index-all-bad-tag.html";
 
     @Test(expected = BuilderException.class)
     public void testMissingJavadocDir() throws Exception {
@@ -46,6 +51,28 @@ public class JavadocSupportTest {
     @Test
     public void testBuildIndexDataSplit() throws Exception {
         verifyFoundIndexValues(getAndVerifyIndexFiles(6, splitJavadoc));
+    }
+
+    @Test
+    public void testWarnsOfStrayTags() throws Exception {
+        final URI uri = this.getClass().getResource(INDEX_ALL_BAD_TAG_HTML).toURI();
+        final List<File> filesToIndex = Arrays.asList(new File(uri));
+
+        final ByteArrayOutputStream errStream = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(errStream));
+        try {
+            JavadocSupport.findSearchIndexValues(filesToIndex);
+        }
+        finally {
+            System.setErr(null);
+        }
+
+        final String err = errStream.toString();
+
+        assertThat(err, containsString("Something went wrong with parsing a link, possibly unescaped tags" +
+                                       " in Javadoc. (Name: , Type: CONSTRUCTOR, Link: )"));
+        assertThat(err, containsString("Most recently parsed value was: (Name: SampleClass, Type: CLASS,"
+                                       + " Path: ./com/megatome/j2d/sample/clazz/SampleClass.html)"));
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, File javadocDir) throws Exception {
