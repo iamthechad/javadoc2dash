@@ -101,13 +101,6 @@ public final class JavadocSupport {
         for (final File f : filesToIndex) {
             final List<SearchIndexValue> indexValues = indexFile(f);
             values.addAll(indexValues);
-            final File parentDir = f.getParentFile();
-            for (final SearchIndexValue searchIndexValue : indexValues) {
-                if (extraIndexingTypes.contains(searchIndexValue.getType())) {
-                    final File classFile = getFile(parentDir, searchIndexValue.getPath());
-                    values.addAll(indexClassFile(classFile));
-                }
-            }
         }
         return values;
     }
@@ -120,9 +113,10 @@ public final class JavadocSupport {
             if (!parent.child(0).equals(e)) {
                 continue;
             }
-            final String parentTagName = parent.tagName();
+            String parentTagName = parent.tagName();
             if (parentPattern.matcher(parentTagName).matches()) {
                 parent = parent.parent();
+                parentTagName = parent.tagName();
                 if (!parent.child(0).equals(e.parent())) {
                     continue;
                 }
@@ -144,52 +138,6 @@ public final class JavadocSupport {
                 final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8");
 
                 values.add(new SearchIndexValue(name, type, linkPath));
-            } catch (UnsupportedEncodingException ex) {
-                throw new BuilderException("Error decoding a link", ex);
-            }
-        }
-        return values;
-    }
-
-    private static List<SearchIndexValue> indexClassFile(File f) throws BuilderException {
-        final List<SearchIndexValue> values = new ArrayList<>();
-        final Elements elements = loadAndFindLinks(f);
-        String lastContext = "";
-        for (final Element e : elements) {
-            Element parent = e.parent();
-            if (!parent.child(0).equals(e)) {
-                continue;
-            }
-            if (e.hasAttr("name")) {
-                lastContext = e.attr("name");
-            }
-            final String parentTagName = parent.tagName();
-            final String parentClassName = parent.className();
-            if (parentPattern.matcher(parentTagName).matches()) {
-                parent = parent.parent();
-                if (!parent.child(0).equals(e.parent())) {
-                    continue;
-                }
-            }
-
-            if (!containsIgnoreCase(parentTagName, "span")
-                    || !containsIgnoreCase(parentClassName, "memberNameLink")
-                    || equalsIgnoreCase("nested.class.summary", lastContext)
-                    || equalsIgnoreCase("enum.constant.summary", lastContext)) {
-                continue;
-            }
-            final String text = parent.text();
-
-            final MatchType type = getMatchingType(lastContext, null);
-
-            if (null == type) {
-                System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Context: %s)", text, lastContext));
-                continue;
-            }
-            try {
-                final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8").replaceAll("\\.\\.\\/", "");
-
-                values.add(new SearchIndexValue(text, type, linkPath));
             } catch (UnsupportedEncodingException ex) {
                 throw new BuilderException("Error decoding a link", ex);
             }
