@@ -9,11 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.megatome.j2d.support.ExpectedDataUtil.getExpectedData;
 import static org.apache.commons.io.FileUtils.getFile;
@@ -56,7 +52,7 @@ public class JavadocSupportTest {
     @Test
     public void testWarnsOfStrayTags() throws Exception {
         final URI uri = this.getClass().getResource(INDEX_ALL_BAD_TAG_HTML).toURI();
-        final List<File> filesToIndex = Arrays.asList(new File(uri));
+        final List<File> filesToIndex = Collections.singletonList(new File(uri));
 
         final ByteArrayOutputStream errStream = new ByteArrayOutputStream();
         System.setErr(new PrintStream(errStream));
