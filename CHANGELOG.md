@@ -1,18 +1,23 @@
 # Change Log
 
+## [1.1.0](https://github.com/iamthechad/javadoc2dash/tree/1.1.0) (2017-05-11)
+[Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.8...1.1.0)
+
+**Implemented enhancements:**
+
+- Improve parsing [\#11](https://github.com/iamthechad/javadoc2dash/pull/11) ([datalogics-kam](https://github.com/datalogics-kam))
+
+**Fixed bugs:**
+
+- Better report bad tagging [\#10](https://github.com/iamthechad/javadoc2dash/pull/10) ([datalogics-kam](https://github.com/datalogics-kam))
+
 ## [1.0.8](https://github.com/iamthechad/javadoc2dash/tree/1.0.8) (2016-08-16)
 [Full Changelog](https://github.com/iamthechad/javadoc2dash/compare/1.0.7...1.0.8)
 
 **Fixed bugs:**
 
-- Fields are not supported [\#7](https://github.com/iamthechad/javadoc2dash/issues/7)
-
-**Closed issues:**
-
 - Failed to create docset: Failed to index javadoc files [\#8](https://github.com/iamthechad/javadoc2dash/issues/8)
-
-**Merged pull requests:**
-
+- Fields are not supported [\#7](https://github.com/iamthechad/javadoc2dash/issues/7)
 - fix bug \#8: function properly even if some java classes use unicode class names [\#9](https://github.com/iamthechad/javadoc2dash/pull/9) ([emmanueltouzery](https://github.com/emmanueltouzery))
 
 ## [1.0.7](https://github.com/iamthechad/javadoc2dash/tree/1.0.7) (2015-07-23)
