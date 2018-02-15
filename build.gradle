@@ -1,4 +1,4 @@
-ext.projectVersion = '1.1.0'
+ext.projectVersion = '1.2.0'
 ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'

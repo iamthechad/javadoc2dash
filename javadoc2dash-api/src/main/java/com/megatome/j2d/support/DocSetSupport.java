@@ -15,14 +15,19 @@
  */
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.exception.BuilderException;
+import static com.megatome.j2d.util.LogUtility.logVerbose;
+import static org.apache.commons.io.FileUtils.copyDirectory;
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.apache.commons.io.FileUtils.forceMkdir;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.io.FileUtils.write;
+import static org.apache.commons.io.FilenameUtils.concat;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.apache.commons.io.FileUtils.*;
-import static org.apache.commons.io.FilenameUtils.concat;
-import static com.megatome.j2d.util.LogUtility.*;
+import com.megatome.j2d.exception.BuilderException;
 
 /**
  * Utility class for operations on the docset.
@@ -41,7 +46,7 @@ public class DocSetSupport {
     /**
      * Create the docset package. Will delete an existing docset if one already exists at the specified location.
      * @param docsetDir Location of the docset to create
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void createDocSetStructure(String docsetDir) throws BuilderException {
         final File docsetRootDir = getFile(getDocsetRoot(docsetDir));
@@ -68,7 +73,7 @@ public class DocSetSupport {
      * Copy an icon file to the docset. If the file path is not specified, no error happens.
      * @param iconFile File to copy as the docset icon.
      * @param docsetDir Directory of the docset
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void copyIconFile(File iconFile, String docsetDir) throws BuilderException {
         if (null == iconFile) {
@@ -87,7 +92,7 @@ public class DocSetSupport {
      * Copy all files and folders from a source location into the docset.
      * @param sourceDir Source directory to copy from
      * @param docsetDir Directory of the docset
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void copyFiles(final String sourceDir, String docsetDir) throws BuilderException {
         copyFiles(getFile(sourceDir), docsetDir);
@@ -97,7 +102,7 @@ public class DocSetSupport {
      * Copy all files and folders from a source location into the docset.
      * @param sourceDir Source directory to copy from
      * @param docsetDir Directory of the docset
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void copyFiles(final File sourceDir, String docsetDir) throws BuilderException {
         try {
@@ -115,7 +120,7 @@ public class DocSetSupport {
      * @param keyword Keyword used for the docset in Dash
      * @param indexFile The file to be used as the docset index
      * @param docsetDir Directory of the docset
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void createPList(String bundleIdentifier, String displayName, String keyword, String indexFile, String docsetDir) throws BuilderException {
         final String plist = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict><key>CFBundleIdentifier</key><string>%s</string><key>CFBundleName</key><string>%s</string><key>DocSetPlatformFamily</key><string>%s</string><key>dashIndexFilePath</key><string>%s</string><key>DashDocSetFamily</key><string>java</string><key>isDashDocset</key><true/></dict></plist>",

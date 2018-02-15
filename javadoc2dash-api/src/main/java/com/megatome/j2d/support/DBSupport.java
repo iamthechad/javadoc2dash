@@ -15,14 +15,18 @@
  */
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.exception.BuilderException;
-import com.megatome.j2d.util.SearchIndexValue;
-
-import java.sql.*;
-import java.util.List;
-
 import static com.megatome.j2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FilenameUtils.concat;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.SearchIndexValue;
 
 /**
  * Utility class for SQLite DB manipulation of the docset.
@@ -39,7 +43,7 @@ public final class DBSupport {
      * Create a new DB file, and insert all of the specified index values.
      * @param indexValues Index values to insert into the DB
      * @param dbFileDir Directory to create the DB file in.
-     * @throws BuilderException
+     * @throws BuilderException in case of errors
      */
     public static void createIndex(List<SearchIndexValue> indexValues, String dbFileDir) throws BuilderException {
 

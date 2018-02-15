@@ -15,19 +15,24 @@
  */
 package com.megatome.j2d;
 
-import com.megatome.j2d.exception.BuilderException;
-import com.megatome.j2d.util.IndexData;
-import org.slf4j.Logger;
-
-import java.io.File;
-
 import static com.megatome.j2d.support.DBSupport.createIndex;
-import static com.megatome.j2d.support.DocSetSupport.*;
-import static com.megatome.j2d.support.JavadocSupport.findIndexFile;
-import static com.megatome.j2d.support.JavadocSupport.findSearchIndexValues;
+import static com.megatome.j2d.support.DocSetSupport.copyFiles;
+import static com.megatome.j2d.support.DocSetSupport.copyIconFile;
+import static com.megatome.j2d.support.DocSetSupport.createDocSetStructure;
+import static com.megatome.j2d.support.DocSetSupport.createPList;
+import static com.megatome.j2d.support.DocSetSupport.getDBDir;
 import static com.megatome.j2d.util.LogUtility.log;
 import static com.megatome.j2d.util.LogUtility.setLogger;
 import static org.apache.commons.io.FilenameUtils.concat;
+
+import java.io.File;
+
+import org.slf4j.Logger;
+
+import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.support.DocSetParserInterface;
+import com.megatome.j2d.support.JavadocSupport;
+import com.megatome.j2d.util.IndexData;
 
 /**
  * Class responsible for creating the docset.
@@ -39,6 +44,7 @@ public class DocsetCreator {
     private final File iconFilePath;
     private final File javadocRoot;
     private final File outputDirectory;
+    private final DocSetParserInterface implementation;
 
     /**
      * Builder for specifying options used in docset creation
@@ -51,6 +57,7 @@ public class DocsetCreator {
         private String keyword;
         private File iconFilePath = null;
         private File outputDirectory = new File(".");
+        private DocSetParserInterface implementation = new JavadocSupport();
 
         /**
          * Ctor
@@ -107,13 +114,25 @@ public class DocsetCreator {
         }
 
         /**
-         * Specify the iconf ile
+         * Specify the icon file
          * @param iconFile Path to an icon to include in the docset. Should be a 32x32 PNG. No icon will be used if this is unspecified.
          * @return Builder instance
          */
         public Builder iconFile(File iconFile) {
             if (null != iconFile) {
                 this.iconFilePath = iconFile;
+            }
+            return this;
+        }
+
+        /**
+         * Specify the parser implementation
+         * @param implementation of the DocSetParserInterface
+         * @return Builder instance
+         */
+        public Builder implementation(DocSetParserInterface implementation) {
+            if (null != implementation) {
+                this.implementation = implementation;
             }
             return this;
         }
@@ -130,6 +149,7 @@ public class DocsetCreator {
         this.iconFilePath = builder.iconFilePath;
         this.javadocRoot = builder.javadocRoot;
         this.outputDirectory = builder.outputDirectory;
+        this.implementation = builder.implementation;
     }
 
     /**
@@ -143,10 +163,10 @@ public class DocsetCreator {
         final String docsetRoot = concat(outputDirectory.getAbsolutePath(), docsetName);
         createDocSetStructure(docsetRoot);
         copyIconFile(iconFilePath, docsetRoot);
-        final IndexData indexData = findIndexFile(javadocRoot);
+        final IndexData indexData = implementation.findIndexFile(javadocRoot);
         copyFiles(javadocRoot, docsetRoot);
         createPList(docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
-        createIndex(findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
+        createIndex(implementation.findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
         log("Finished creating docset: {}", docsetRoot);
     }
 

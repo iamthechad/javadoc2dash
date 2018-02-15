@@ -15,46 +15,41 @@
  */
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.exception.BuilderException;
-import com.megatome.j2d.util.IndexData;
-import com.megatome.j2d.util.SearchIndexValue;
-import org.apache.commons.io.FileUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import static com.megatome.j2d.util.LogUtility.logVerbose;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.megatome.j2d.util.LogUtility.logVerbose;
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.IndexData;
+import com.megatome.j2d.util.SearchIndexValue;
 
 /**
  * Utility class to support Javadoc related docset tasks.
  */
-public final class JavadocSupport {
+public final class JavadocSupport implements DocSetParserInterface {
     private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
-    private static final List<MatchType> extraIndexingTypes = Arrays.asList(MatchType.CLASS, MatchType.INTERFACE, MatchType.ENUM, MatchType.EXCEPTION, MatchType.ERROR);
 
-    private JavadocSupport() {}
+    public JavadocSupport() {}
 
     /**
-     * Find the file to be used as the docset index and locate all Javadoc files to be indexed.
-     * @param javadocDir Directory where the Javadoc is located
-     * @return IndexData object
-     * @throws BuilderException
-     * @see IndexData
+     * {@inheritDoc}
      */
-    public static IndexData findIndexFile(File javadocDir) throws BuilderException {
+    @Override
+    public IndexData findIndexFile(File javadocDir) throws BuilderException {
         final IndexData indexData = new IndexData();
         if (!javadocDir.exists() || !javadocDir.isDirectory()) {
             throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
@@ -91,12 +86,10 @@ public final class JavadocSupport {
     }
 
     /**
-     * Find all values to be indexed within the specified list of files.
-     * @param filesToIndex List of Javadoc files to parse
-     * @return List of relevant values to be indexed in the docset
-     * @throws BuilderException
+     * {@inheritDoc}
      */
-    public static List<SearchIndexValue> findSearchIndexValues(List<File> filesToIndex) throws BuilderException {
+    @Override
+    public List<SearchIndexValue> findSearchIndexValues(List<File> filesToIndex) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
         for (final File f : filesToIndex) {
             final List<SearchIndexValue> indexValues = indexFile(f);
