@@ -96,7 +96,7 @@ public class JavadocSupportTest {
         final List<SearchIndexValue> indexValues = (new JavadocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
         assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
-        final Map<MatchType, List<String>> valueMap = new HashMap<>();
+        final Map<MatchTypeInterface, List<String>> valueMap = new HashMap<>();
         for (final SearchIndexValue value: indexValues) {
             List<String> nameSet = valueMap.get(value.getType());
             if (nameSet == null) {
