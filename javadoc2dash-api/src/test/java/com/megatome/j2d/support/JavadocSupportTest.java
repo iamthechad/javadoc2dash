@@ -1,21 +1,30 @@
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.exception.BuilderException;
-import com.megatome.j2d.util.IndexData;
-import com.megatome.j2d.util.SearchIndexValue;
-import org.junit.Test;
+import static com.megatome.j2d.support.ExpectedDataUtil.getExpectedData;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.megatome.j2d.support.ExpectedDataUtil.getExpectedData;
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+
+import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.IndexData;
+import com.megatome.j2d.util.SearchIndexValue;
 
 public class JavadocSupportTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
@@ -26,17 +35,17 @@ public class JavadocSupportTest {
 
     @Test(expected = BuilderException.class)
     public void testMissingJavadocDir() throws Exception {
-        JavadocSupport.findIndexFile(getFile(resourcesRoot, "FOO"));
+        (new JavadocSupport()).findIndexFile(getFile(resourcesRoot, "FOO"));
     }
 
     @Test(expected = BuilderException.class)
     public void testJavadocDirIsFile() throws Exception {
-        JavadocSupport.findIndexFile(getFile(regularJavadoc, "index.html"));
+        (new JavadocSupport()).findIndexFile(getFile(regularJavadoc, "index.html"));
     }
 
     @Test(expected = BuilderException.class)
     public void testNonJavadocDir() throws Exception {
-        JavadocSupport.findIndexFile(getFile(resourcesRoot, NOT_JAVADOC_DIR));
+        (new JavadocSupport()).findIndexFile(getFile(resourcesRoot, NOT_JAVADOC_DIR));
     }
 
     @Test
@@ -57,7 +66,7 @@ public class JavadocSupportTest {
         final ByteArrayOutputStream errStream = new ByteArrayOutputStream();
         System.setErr(new PrintStream(errStream));
         try {
-            JavadocSupport.findSearchIndexValues(filesToIndex);
+            (new JavadocSupport()).findSearchIndexValues(filesToIndex);
         }
         finally {
             System.setErr(null);
@@ -72,7 +81,7 @@ public class JavadocSupportTest {
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, File javadocDir) throws Exception {
-        final IndexData indexData = JavadocSupport.findIndexFile(javadocDir);
+        final IndexData indexData = (new JavadocSupport()).findIndexFile(javadocDir);
         assertNotNull(indexData);
         final String indexFile = indexData.getDocsetIndexFile();
         assertNotNull(indexFile);
@@ -84,7 +93,7 @@ public class JavadocSupportTest {
     }
 
     private void verifyFoundIndexValues(final IndexData indexData) throws Exception {
-        final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
+        final List<SearchIndexValue> indexValues = (new JavadocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
         assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
         final Map<MatchType, List<String>> valueMap = new HashMap<>();
@@ -95,7 +104,7 @@ public class JavadocSupportTest {
             }
             assertThat(nameSet, not(hasItem(value.getName())));
             nameSet.add(value.getName());
-            valueMap.put(value.getType(), nameSet);
+            valueMap.put((MatchType)value.getType(), nameSet);
         }
 
         final Map<MatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();

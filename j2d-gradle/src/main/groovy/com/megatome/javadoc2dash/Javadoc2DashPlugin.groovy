@@ -2,6 +2,7 @@ package com.megatome.javadoc2dash
 
 import com.megatome.javadoc2dash.tasks.Javadoc2DashFeedTask
 import com.megatome.javadoc2dash.tasks.Javadoc2DashTask
+import com.megatome.j2d.support.DocSetParserInterface
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -31,6 +32,7 @@ class Javadoc2DashPlugin implements Plugin<Project> {
             conventionMapping.javadocRoot = { baseExtension.javadocRoot }
             conventionMapping.outputLocation = { baseExtension.outputLocation }
             conventionMapping.iconFile = { baseExtension.iconFile }
+            conventionMapping.implementation = { baseExtension.implementation }
         }
 
         def feedExtension = project.extensions.findByName(FEED_EXTENSION_NAME)
@@ -69,6 +71,7 @@ class Javadoc2DashPluginExtension {
     String keyword
     File iconFile
     String javadocTask
+    DocSetParserInterface implementation
 
     Javadoc2DashPluginExtension(Project project) {
         docsetName = project.name
@@ -77,6 +80,7 @@ class Javadoc2DashPluginExtension {
         javadocRoot = project.file("${project.docsDir}/javadoc")
         outputLocation = project.file("${project.buildDir}/javadoc2dash")
         iconFile = null
+        implementation = null
         javadocTask = "javadoc"
     }
 }

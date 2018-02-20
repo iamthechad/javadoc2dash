@@ -261,3 +261,9 @@ Bare minimum: `j2d-cli --name Sample --javadoc /path/to/apidoc`
 Full options: `j2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
 
 Abbreviated options. Most command-line options can be abbreviated. `j2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
+
+# Custom HTML to DashDocset generation
+
+The plugin supports the implementation of a custom Dash Docset where the search properties can be generated at will. The default JavaDoc DashDocset is basically a specific implementation. To create a custom docset out of any HTML you need to implement the DocSetParserInterface and the MatchTypeInterface.
+
+An example for JSDoc3 can be found at [https://github.com/i-net-software/jsdoc-dash-docset](https://github.com/i-net-software/jsdoc-dash-docset)

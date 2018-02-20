@@ -15,16 +15,16 @@
  */
 package com.megatome.j2d.support;
 
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-
 /**
  * Enumeration for matching types from parsed Javadoc files
  */
-public enum MatchType {
+public enum MatchType implements MatchTypeInterface {
     CLASS("Class", "class", "Class in", "- class"),
     STATIC_METHOD("Method", "method", "Static method in"),
     FIELD("Field", "field", "Static variable in", "Field in", "field.summary"),
@@ -49,6 +49,7 @@ public enum MatchType {
         this.classSuffix = classSuffix;
     }
 
+    @Override
     public String getTypeName() {
         return typeName;
     }

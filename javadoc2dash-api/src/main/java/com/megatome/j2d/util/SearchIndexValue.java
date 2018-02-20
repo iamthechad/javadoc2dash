@@ -15,14 +15,14 @@
  */
 package com.megatome.j2d.util;
 
-import com.megatome.j2d.support.MatchType;
+import com.megatome.j2d.support.MatchTypeInterface;
 
 /**
  * Represents information that needs to be saved to the docset index.
  */
 public class SearchIndexValue {
     private final String name;
-    private final MatchType type;
+    private final MatchTypeInterface type;
     private final String path;
 
     /**
@@ -31,7 +31,7 @@ public class SearchIndexValue {
      * @param type Entry type
      * @param path Path to the entry
      */
-    public SearchIndexValue(String name, MatchType type, String path) {
+    public SearchIndexValue(String name, MatchTypeInterface type, String path) {
         this.name = name;
         this.type = type;
         this.path = path;
@@ -49,7 +49,7 @@ public class SearchIndexValue {
      * Get the entry type
      * @return Type
      */
-    public MatchType getType() {
+    public MatchTypeInterface getType() {
         return type;
     }
 

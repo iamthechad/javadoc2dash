@@ -1,13 +1,10 @@
 package com.megatome.j2d.support;
 
-import com.megatome.j2d.exception.BuilderException;
-import com.megatome.j2d.util.IndexData;
-import com.megatome.j2d.util.SearchIndexValue;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.sql.Connection;
@@ -18,11 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import com.megatome.j2d.exception.BuilderException;
+import com.megatome.j2d.util.IndexData;
+import com.megatome.j2d.util.SearchIndexValue;
 
 public class DBSupportTest {
     private static final File javadocLocation = getFile(System.getProperty("j2d-sample-javadoc"));
@@ -34,9 +35,11 @@ public class DBSupportTest {
 
     @Test
     public void testCreateIndexDB() throws Exception {
+        JavadocSupport javadocSupport = new JavadocSupport();
         assertThat(javadocLocation, notNullValue());
-        final IndexData indexData = JavadocSupport.findIndexFile(javadocLocation);
-        final List<SearchIndexValue> indexValues = JavadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
+
+        final IndexData indexData = javadocSupport.findIndexFile(javadocLocation);
+        final List<SearchIndexValue> indexValues = javadocSupport.findSearchIndexValues(indexData.getFilesToIndex());
         final String docFileRoot = FilenameUtils.concat(temporaryFolder.getRoot().getPath(), "Foo");
         final String dbDirName = DocSetSupport.getDBDir(docFileRoot);
         final File dbDir = getFile(dbDirName);
