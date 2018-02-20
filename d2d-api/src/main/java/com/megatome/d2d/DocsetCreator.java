@@ -30,8 +30,8 @@ import java.io.File;
 import org.slf4j.Logger;
 
 import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.flavor.javadoc.JavadocSupport;
 import com.megatome.d2d.support.DocSetParserInterface;
-import com.megatome.d2d.support.JavadocSupport;
 import com.megatome.d2d.util.IndexData;
 
 /**

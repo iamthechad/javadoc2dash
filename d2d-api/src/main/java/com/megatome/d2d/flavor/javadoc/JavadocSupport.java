@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.megatome.d2d.support;
+package com.megatome.d2d.flavor.javadoc;
 
 import static com.megatome.d2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FileUtils.getFile;
@@ -34,6 +34,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.support.DocSetParserInterface;
 import com.megatome.d2d.util.IndexData;
 import com.megatome.d2d.util.SearchIndexValue;
 
@@ -121,7 +122,7 @@ public final class JavadocSupport implements DocSetParserInterface {
             final String name = e.text();
             final String className = parent.className();
 
-            final MatchType type = getMatchingType(text, className);
+            final JavadocMatchType type = getMatchingType(text, className);
 
             if (null == type) {
                 System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
@@ -155,8 +156,8 @@ public final class JavadocSupport implements DocSetParserInterface {
         }
     }
 
-    private static MatchType getMatchingType(String text, String className) {
-        for (final MatchType matchType : MatchType.values()) {
+    private static JavadocMatchType getMatchingType(String text, String className) {
+        for (final JavadocMatchType matchType : JavadocMatchType.values()) {
             if (matchType.matches(text, className)) {
                 return matchType;
             }

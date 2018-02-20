@@ -17,6 +17,8 @@ buildscript {
     }
 }
 
+def LIB_GROOVY = "org.spockframework:spock-core:1.0-groovy-2.4"
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -119,7 +121,7 @@ project(":d2d-gradle") {
         compile project(":d2d-api")
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
-        testCompile("org.spockframework:spock-core:1.0-groovy-2.4" ) {
+        testCompile( LIB_GROOVY ) {
             exclude group: "org.codehaus.groovy"
         }
     }
@@ -161,6 +163,7 @@ project(":d2d-api") {
         compile 'org.jsoup:jsoup:1.8.2'
         compile "org.slf4j:slf4j-api:1.7.12"
         compile "org.slf4j:slf4j-simple:1.7.12"
+        compile LIB_GROOVY
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
         testCompile 'org.hamcrest:hamcrest-all:1.3'

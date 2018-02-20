@@ -23,8 +23,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.JavadocSupport;
-import com.megatome.d2d.support.MatchType;
+import com.megatome.d2d.flavor.javadoc.JavadocSupport;
+import com.megatome.d2d.flavor.javadoc.JavadocMatchType;
 import com.megatome.d2d.util.IndexData;
 import com.megatome.d2d.util.SearchIndexValue;
 
@@ -98,7 +98,7 @@ public class JavadocSupportTest {
         final List<SearchIndexValue> indexValues = (new JavadocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
         assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
-        final Map<MatchType, List<String>> valueMap = new HashMap<>();
+        final Map<JavadocMatchType, List<String>> valueMap = new HashMap<>();
         for (final SearchIndexValue value: indexValues) {
             List<String> nameSet = valueMap.get(value.getType());
             if (nameSet == null) {
@@ -106,12 +106,12 @@ public class JavadocSupportTest {
             }
             assertThat(nameSet, not(hasItem(value.getName())));
             nameSet.add(value.getName());
-            valueMap.put((MatchType)value.getType(), nameSet);
+            valueMap.put((JavadocMatchType)value.getType(), nameSet);
         }
 
-        final Map<MatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
+        final Map<JavadocMatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
         assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
-        for (final Map.Entry<MatchType,Integer> expectedType: expectedTypes.entrySet()) {
+        for (final Map.Entry<JavadocMatchType,Integer> expectedType: expectedTypes.entrySet()) {
             assertThat(valueMap, hasKey(expectedType.getKey()));
             final List<String> namesForType = valueMap.get(expectedType.getKey());
             assertNotNull(namesForType);

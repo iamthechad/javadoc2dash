@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.megatome.d2d.support;
+package com.megatome.d2d.flavor.javadoc;
 
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.megatome.d2d.support.MatchTypeInterface;
+
 /**
  * Enumeration for matching types from parsed Javadoc files
  */
-public enum MatchType implements MatchTypeInterface {
+public enum JavadocMatchType implements MatchTypeInterface {
     CLASS("Class", "class", "Class in", "- class"),
     STATIC_METHOD("Method", "method", "Static method in"),
     FIELD("Field", "field", "Static variable in", "Field in", "field.summary"),
@@ -43,7 +45,7 @@ public enum MatchType implements MatchTypeInterface {
     private List<String> matchingText = new ArrayList<>();
     private String classSuffix;
 
-    MatchType(String typeName, String classSuffix, String... textMatches) {
+    JavadocMatchType(String typeName, String classSuffix, String... textMatches) {
         this.typeName = typeName;
         Collections.addAll(this.matchingText, textMatches);
         this.classSuffix = classSuffix;

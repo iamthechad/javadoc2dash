@@ -22,9 +22,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.flavor.javadoc.JavadocSupport;
 import com.megatome.d2d.support.DBSupport;
 import com.megatome.d2d.support.DocSetSupport;
-import com.megatome.d2d.support.JavadocSupport;
 import com.megatome.d2d.util.IndexData;
 import com.megatome.d2d.util.SearchIndexValue;
 
