@@ -1,0 +1,17 @@
+{
+    "functions": [
+        {
+            "name": "test1",
+            "access": "",
+            "virtual": false,
+            "description": "Description for test1 function.",
+            "parameters": [],
+            "examples": [],
+            "link": "global.html#test1",
+            "returns": {
+                "type": "Boolean",
+                "description": "True whenever we damn well feel like it"
+            }
+        }
+    ]
+}
