@@ -23,8 +23,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.flavor.javadoc.JavadocSupport;
-import com.megatome.d2d.flavor.javadoc.JavadocMatchType;
+import com.megatome.d2d.support.javadoc.JavadocMatchType;
+import com.megatome.d2d.support.javadoc.JavadocSupport;
 import com.megatome.d2d.util.IndexData;
 import com.megatome.d2d.util.SearchIndexValue;
 
