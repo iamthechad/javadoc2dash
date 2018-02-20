@@ -9,7 +9,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Javadoc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
+- [Doc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
 - [Gradle plugin](#gradle-plugin)
   - [Add the plugin to your project](#add-the-plugin-to-your-project)
   - [Specify settings](#specify-settings)
@@ -29,7 +29,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Javadoc2Dash - Build Dash docsets from Javadoc
+# Doc2Dash - Build Dash docsets from Javadoc
  
 This project is based off of https://github.com/Kapeli/javadocset. This is a Java-based solution so that Dash docsets
 can be easily created from many environments, not just those that run OS X.
@@ -54,7 +54,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:d2d-gradle:1.1.0"
       }
     }
 
@@ -110,7 +110,7 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:d2d-gradle:1.1.0"
       }
     }
 
@@ -154,7 +154,7 @@ Setting Name | Type | Description | Default
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.javadoc2dash:d2d-gradle:1.1.0"
       }
     }
 
@@ -227,21 +227,21 @@ Clone the project or grab the [latest release](https://github.com/iamthechad/jav
 
 ### Running in a cloned repository
 
-Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via `gradlew :j2d-cli:distZip` to create a zip file containing everything needed to run.
+Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via `gradlew :d2d-cli:distZip` to create a zip file containing everything needed to run.
  
 ### Running a release zip
 
 * Either download a release or create a distribution zip as outlined above. 
 * Unzip the archive to a desired location.
 * Open a terminal or command prompt and navigate to the unzipped directory.
-* Navigate to the `bin` directory and run `./j2d-cli` (for \*NIX/OSX) or `j2d-cli.bat` (for Windows environments).
+* Navigate to the `bin` directory and run `./d2d-cli` (for \*NIX/OSX) or `d2d-cli.bat` (for Windows environments).
 * You should see a usage message.
 
 ## Creating a docset
 
 Docset creation requires at minimum two options: the name of the docset and the location of the Javadoc files to include in the docset.
   
-    ./j2d-cli --name Sample --javadoc /some/path/to/apidoc
+    ./d2d-cli --name Sample --javadoc /some/path/to/apidoc
     
 This will create a docset named Sample in the current directory. Docset creation can be customized with optional arguments:
 
@@ -256,11 +256,11 @@ This will create a docset named Sample in the current directory. Docset creation
     
 ### Examples
 
-Bare minimum: `j2d-cli --name Sample --javadoc /path/to/apidoc`
+Bare minimum: `d2d-cli --name Sample --javadoc /path/to/apidoc`
 
-Full options: `j2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
+Full options: `d2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
 
-Abbreviated options. Most command-line options can be abbreviated. `j2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
+Abbreviated options. Most command-line options can be abbreviated. `d2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
 
 # Custom HTML to DashDocset generation
 
