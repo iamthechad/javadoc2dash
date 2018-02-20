@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.megatome.d2d.flavor.javadoc;
+package com.megatome.d2d.support.javadoc;
 
 import static com.megatome.d2d.util.LogUtility.logVerbose;
 import static org.apache.commons.io.FileUtils.getFile;
