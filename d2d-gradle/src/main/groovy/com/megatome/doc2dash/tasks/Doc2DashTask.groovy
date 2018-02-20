@@ -23,6 +23,10 @@ class Doc2DashTask extends DefaultTask {
     @Optional
     DocSetParserInterface implementation
 
+    @Input
+    @Optional
+    String type
+
     Doc2DashTask() {
         this.description = 'Create a Dash docset from Javadoc';
         group = 'Doc2Dash'
@@ -31,11 +35,13 @@ class Doc2DashTask extends DefaultTask {
     @TaskAction
     void start() {
         withExceptionHandling {
+
             DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocRoot)
                 .displayName(displayName)
                 .keyword(keyword)
                 .outputDirectory(outputLocation)
                 .iconFile(iconFile)
+                .implementation(type)
                 .implementation(implementation)
             DocsetCreator creator = builder.build()
             creator.makeDocset()

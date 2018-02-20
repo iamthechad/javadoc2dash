@@ -15,21 +15,21 @@
  */
 package com.megatome.d2d;
 
-import joptsimple.OptionException;
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import org.apache.commons.io.FileUtils;
-
-import com.megatome.d2d.DocsetCreator;
-import com.megatome.d2d.exception.BuilderException;
-
 import static com.megatome.d2d.util.LogUtility.log;
 import static com.megatome.d2d.util.LogUtility.setVerbose;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+
+import org.apache.commons.io.FileUtils;
+
+import com.megatome.d2d.exception.BuilderException;
+
+import joptsimple.OptionException;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 
 public class Main {
     public static void main(String... args) {
@@ -40,6 +40,7 @@ public class Main {
         final OptionSpec<String> displayName = parser.accepts("displayName", "Name to show for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<String> keyword = parser.accepts("keyword", "Keyword to use for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<File> iconFile = parser.accepts("icon", "Icon file to use for the docset. No icon will be used if not specified.").withRequiredArg().ofType(File.class).describedAs("32x32 PNG");
+        final OptionSpec< String> implementationType = parser.accepts("type", "Converter type to be used. Supports 'javadoc' and 'jsdoc'. Defaults to 'javadoc' ").withRequiredArg().ofType(String.class);
         final OptionSpec<Void> verbose = parser.accepts("verbose", "Show more information");
         final OptionSpec<Void> help = parser.acceptsAll( Arrays.asList("h", "?"), "Show help" ).forHelp();
 
@@ -60,7 +61,8 @@ public class Main {
             .displayName(options.valueOf(displayName))
             .displayName(options.valueOf(keyword))
             .iconFile(options.valueOf(iconFile))
-            .outputDirectory(options.valueOf(outputLocation));
+            .outputDirectory(options.valueOf(outputLocation))
+            .implementation( options.valueOf( implementationType ) );
         final DocsetCreator docsetCreator = builder.build();
         try {
             docsetCreator.makeDocset();

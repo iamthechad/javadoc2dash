@@ -19,6 +19,8 @@ import groovy.json.JsonSlurper;
 
 public class JSDocSupport implements DocSetParserInterface {
 
+    public static final String JSDOC_IMPLEMENTATION = "jsdoc";
+
     @Override
     public IndexData findIndexFile(File javadocDir) throws BuilderException {
         final IndexData indexData = new IndexData();

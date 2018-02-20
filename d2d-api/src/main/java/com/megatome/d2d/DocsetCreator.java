@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import com.megatome.d2d.exception.BuilderException;
 import com.megatome.d2d.support.DocSetParserInterface;
 import com.megatome.d2d.support.javadoc.JavadocSupport;
+import com.megatome.d2d.support.jsdoc.JSDocSupport;
 import com.megatome.d2d.util.IndexData;
 
 /**
@@ -133,6 +134,18 @@ public class DocsetCreator {
         public Builder implementation(DocSetParserInterface implementation) {
             if (null != implementation) {
                 this.implementation = implementation;
+            }
+            return this;
+        }
+
+        /**
+         * Specify the parser implementation
+         * @param input string of the type of the implementation
+         * @return Builder instance
+         */
+        public Builder implementation( String input ) {
+            if ( input.equalsIgnoreCase( JSDocSupport.JSDOC_IMPLEMENTATION ) ) {
+                this.implementation = new JSDocSupport();
             }
             return this;
         }
