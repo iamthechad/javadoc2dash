@@ -1,4 +1,4 @@
-package com.megatome.d2d.support;
+package com.megatome.d2d.support.javadoc;
 
 import java.util.Collections;
 import java.util.HashMap;

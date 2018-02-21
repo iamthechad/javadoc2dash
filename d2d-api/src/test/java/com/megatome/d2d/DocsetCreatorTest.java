@@ -1,16 +1,18 @@
 package com.megatome.d2d;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.megatome.d2d.DocsetCreator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.megatome.d2d.support.javadoc.JavadocSupport;
+import com.megatome.d2d.support.jsdoc.JSDocSupport;
 
 public class DocsetCreatorTest {
     private static final File CURRENT_DIR = FileUtils.getFile(".");
@@ -21,6 +23,7 @@ public class DocsetCreatorTest {
     private static final String KEYWORD = "KEYWORD";
     private static final String OUTPUT_DIR = "OUTPUT_DIR";
     private static final String ICON_FILE = "ICON_FILE";
+    private static final String IMPLEMENTATION_TYPE = "IMPLEMENTATION_TYPE";
 
     @Before
     public void setup() {
@@ -31,6 +34,7 @@ public class DocsetCreatorTest {
         expectedValues.put(KEYWORD, "Foo");
         expectedValues.put(OUTPUT_DIR, CURRENT_DIR);
         expectedValues.put(ICON_FILE, null);
+        expectedValues.put(IMPLEMENTATION_TYPE, JavadocSupport.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -109,6 +113,26 @@ public class DocsetCreatorTest {
         verifyCreatorValues(builder.build());
     }
 
+    @Test
+    public void testBuildWithImplementationType() throws Exception {
+        final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
+        builder.implementation((String)null);
+        expectedValues.put(IMPLEMENTATION_TYPE, JavadocSupport.class);
+        verifyCreatorValues(builder.build());
+
+        builder.implementation( JSDocSupport.JSDOC_IMPLEMENTATION );
+        expectedValues.put(IMPLEMENTATION_TYPE, JSDocSupport.class);
+        verifyCreatorValues(builder.build());
+
+        builder.implementation("javadoc");
+        expectedValues.put(IMPLEMENTATION_TYPE, JavadocSupport.class);
+        verifyCreatorValues(builder.build());
+
+        builder.implementation(new JSDocSupport());
+        expectedValues.put(IMPLEMENTATION_TYPE, JSDocSupport.class);
+        verifyCreatorValues(builder.build());
+    }
+
     private void verifyCreatorValues(final DocsetCreator creator) {
         verifyCreatorValues(expectedValues, creator);
     }
@@ -121,5 +145,6 @@ public class DocsetCreatorTest {
         assertEquals(expectedValueMap.get(KEYWORD), creator.getKeyword());
         assertEquals(expectedValueMap.get(OUTPUT_DIR), creator.getOutputDirectory());
         assertEquals(expectedValueMap.get(ICON_FILE), creator.getIconFilePath());
+        assertEquals(creator.getImplementation().getClass(), expectedValueMap.get(IMPLEMENTATION_TYPE) );
     }
 }

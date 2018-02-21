@@ -1,6 +1,6 @@
-package com.megatome.d2d.support;
+package com.megatome.d2d.support.javadoc;
 
-import static com.megatome.d2d.support.ExpectedDataUtil.getExpectedData;
+import static com.megatome.d2d.support.javadoc.ExpectedDataUtil.getExpectedData;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;

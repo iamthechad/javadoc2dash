@@ -175,6 +175,7 @@ project(":d2d-api") {
         def sampleProject = findProject(":d2d-sample")
         systemProperties 'd2d-sample-javadoc': "${sampleProject.docsDir}/javadoc"
         systemProperties 'd2d-sample-javadoc-split': "${sampleProject.docsDir}/javadocSplit"
+        systemProperties 'd2d-sample-jsdoc': "${sampleProject.projectDir}/src/test/JSDoc"
     }
 
     uploadArchives {

@@ -42,47 +42,51 @@ import com.megatome.d2d.util.SearchIndexValue;
  * Utility class to support Javadoc related docset tasks.
  */
 public final class JavadocSupport implements DocSetParserInterface {
-    private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
 
-    public JavadocSupport() {}
+    public static final String  JAVADOC_IMPLEMENTATION = "javadoc";
+
+    private static final Pattern parentPattern          = Pattern.compile( "span|code|i|b", Pattern.CASE_INSENSITIVE );
+
+    public JavadocSupport() {
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public IndexData findIndexFile(File javadocDir) throws BuilderException {
+    public IndexData findIndexFile( File javadocDir ) throws BuilderException {
         final IndexData indexData = new IndexData();
-        if (!javadocDir.exists() || !javadocDir.isDirectory()) {
-            throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
+        if( !javadocDir.exists() || !javadocDir.isDirectory() ) {
+            throw new BuilderException( String.format( "%s does not exist, or is not a directory", javadocDir.getAbsolutePath() ) );
         }
 
-        logVerbose("Looking for javadoc files");
+        logVerbose( "Looking for javadoc files" );
 
         String docsetIndexFile = "overview-summary.html";
 
-        if (!getFile(javadocDir, docsetIndexFile).exists()) {
+        if( !getFile( javadocDir, docsetIndexFile ).exists() ) {
             docsetIndexFile = null;
         }
 
-        final File indexFilesDir = getFile(javadocDir, "index-files");
-        if (indexFilesDir.exists() && indexFilesDir.isDirectory()) {
+        final File indexFilesDir = getFile( javadocDir, "index-files" );
+        if( indexFilesDir.exists() && indexFilesDir.isDirectory() ) {
             docsetIndexFile = (docsetIndexFile != null) ? docsetIndexFile : "index-1.html";
-            for (File f : FileUtils.listFiles(indexFilesDir, new String[]{"html"}, false)) {
-                if (f.getName().startsWith("index-")) {
-                    indexData.addFileToIndex(f);
+            for( File f : FileUtils.listFiles( indexFilesDir, new String[] { "html" }, false ) ) {
+                if( f.getName().startsWith( "index-" ) ) {
+                    indexData.addFileToIndex( f );
                 }
             }
-        } else if (getFile(javadocDir, "index-all.html").exists()){
+        } else if( getFile( javadocDir, "index-all.html" ).exists() ) {
             docsetIndexFile = (docsetIndexFile != null) ? docsetIndexFile : "index-all.html";
-            indexData.addFileToIndex(getFile(javadocDir, "index-all.html"));
+            indexData.addFileToIndex( getFile( javadocDir, "index-all.html" ) );
         }
 
-        if (!indexData.hasFilesToIndex()) {
-            throw new BuilderException(String.format("Did not find any javadoc files. Make sure that %s is a directory containing javadoc", javadocDir.getAbsolutePath()));
+        if( !indexData.hasFilesToIndex() ) {
+            throw new BuilderException( String.format( "Did not find any javadoc files. Make sure that %s is a directory containing javadoc", javadocDir.getAbsolutePath() ) );
         }
 
-        indexData.setDocsetIndexFile(docsetIndexFile);
-        logVerbose("Found javadoc files");
+        indexData.setDocsetIndexFile( docsetIndexFile );
+        logVerbose( "Found javadoc files" );
         return indexData;
     }
 
@@ -90,75 +94,75 @@ public final class JavadocSupport implements DocSetParserInterface {
      * {@inheritDoc}
      */
     @Override
-    public List<SearchIndexValue> findSearchIndexValues(List<File> filesToIndex) throws BuilderException {
+    public List<SearchIndexValue> findSearchIndexValues( List<File> filesToIndex ) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
-        for (final File f : filesToIndex) {
-            final List<SearchIndexValue> indexValues = indexFile(f);
-            values.addAll(indexValues);
+        for( final File f : filesToIndex ) {
+            final List<SearchIndexValue> indexValues = indexFile( f );
+            values.addAll( indexValues );
         }
         return values;
     }
 
-    private static List<SearchIndexValue> indexFile(File f) throws BuilderException {
+    private static List<SearchIndexValue> indexFile( File f ) throws BuilderException {
         final List<SearchIndexValue> values = new ArrayList<>();
-        final Elements elements = loadAndFindLinks(f);
-        for (final Element e : elements) {
+        final Elements elements = loadAndFindLinks( f );
+        for( final Element e : elements ) {
             Element parent = e.parent();
-            if (!parent.child(0).equals(e)) {
+            if( !parent.child( 0 ).equals( e ) ) {
                 continue;
             }
             String parentTagName = parent.tagName();
-            if (parentPattern.matcher(parentTagName).matches()) {
+            if( parentPattern.matcher( parentTagName ).matches() ) {
                 parent = parent.parent();
                 parentTagName = parent.tagName();
-                if (!parent.child(0).equals(e.parent())) {
+                if( !parent.child( 0 ).equals( e.parent() ) ) {
                     continue;
                 }
             }
-            if (!containsIgnoreCase(parentTagName, "dt")) {
+            if( !containsIgnoreCase( parentTagName, "dt" ) ) {
                 continue;
             }
             final String text = parent.text();
             final String name = e.text();
             final String className = parent.className();
 
-            final JavadocMatchType type = getMatchingType(text, className);
+            final JavadocMatchType type = getMatchingType( text, className );
 
-            if (null == type) {
-                System.err.println(String.format("Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className));
+            if( null == type ) {
+                System.err.println( String.format( "Unknown type found. Please submit a bug report. (Text: %s, Name: %s, className: %s)", text, name, className ) );
                 continue;
             }
             try {
-                final String linkPath = URLDecoder.decode(e.attr("href"), "UTF-8");
+                final String linkPath = URLDecoder.decode( e.attr( "href" ), "UTF-8" );
 
-                if (name.isEmpty() || linkPath.isEmpty()) {
-                    System.err.println(String.format("Something went wrong with parsing a link, possibly unescaped tags in Javadoc. (Name: %s, Type: %s, Link: %s)", name, type, linkPath));
-                    if (values.size() > 0) {
-                        final SearchIndexValue last = values.get(values.size() - 1);
-                        System.err.println(String.format("Most recently parsed value was: (Name: %s, Type: %s, Path: %s)", last.getName(), last.getType(), last.getPath()));
+                if( name.isEmpty() || linkPath.isEmpty() ) {
+                    System.err.println( String.format( "Something went wrong with parsing a link, possibly unescaped tags in Javadoc. (Name: %s, Type: %s, Link: %s)", name, type, linkPath ) );
+                    if( values.size() > 0 ) {
+                        final SearchIndexValue last = values.get( values.size() - 1 );
+                        System.err.println( String.format( "Most recently parsed value was: (Name: %s, Type: %s, Path: %s)", last.getName(), last.getType(), last.getPath() ) );
                     }
                     continue;
                 }
-                values.add(new SearchIndexValue(name, type, linkPath));
-            } catch (UnsupportedEncodingException ex) {
-                throw new BuilderException("Error decoding a link", ex);
+                values.add( new SearchIndexValue( name, type, linkPath ) );
+            } catch( UnsupportedEncodingException ex ) {
+                throw new BuilderException( "Error decoding a link", ex );
             }
         }
         return values;
     }
 
-    private static Elements loadAndFindLinks(final File f) throws BuilderException {
+    private static Elements loadAndFindLinks( final File f ) throws BuilderException {
         try {
-            final Document doc = Jsoup.parse(f, "UTF-8");
-            return doc.select("a");
-        } catch (IOException e) {
-            throw new BuilderException("Failed to index javadoc files", e);
+            final Document doc = Jsoup.parse( f, "UTF-8" );
+            return doc.select( "a" );
+        } catch( IOException e ) {
+            throw new BuilderException( "Failed to index javadoc files", e );
         }
     }
 
-    private static JavadocMatchType getMatchingType(String text, String className) {
-        for (final JavadocMatchType matchType : JavadocMatchType.values()) {
-            if (matchType.matches(text, className)) {
+    private static JavadocMatchType getMatchingType( String text, String className ) {
+        for( final JavadocMatchType matchType : JavadocMatchType.values() ) {
+            if( matchType.matches( text, className ) ) {
                 return matchType;
             }
         }
