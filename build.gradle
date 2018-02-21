@@ -46,9 +46,10 @@ subprojects {
 
     apply plugin: 'findbugs'
     findbugs {
-        toolVersion = "3.0.0"
+        toolVersion = "3.0.1"
         // Don't worry about test classes
         sourceSets = [sourceSets.main]
+        excludeFilter file("${projectDir}/../.findbugs.xml")
     }
 
     tasks.withType(FindBugs) {
