@@ -173,6 +173,8 @@ public class DocsetCreator {
                 case JavadocSupport.JAVADOC_IMPLEMENTATION:
                     this.implementation = new JavadocSupport();
                     break;
+                default:
+                    // leave the way it was.
             }
 
             return this;
