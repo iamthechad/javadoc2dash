@@ -29,6 +29,7 @@ public class IndexData {
 
     /**
      * Set the docset index file
+     *
      * @param docsetIndexFile Index file
      */
     public void setDocsetIndexFile(String docsetIndexFile) {
@@ -37,6 +38,7 @@ public class IndexData {
 
     /**
      * Get the docset index file
+     *
      * @return Index file
      */
     public String getDocsetIndexFile() {
@@ -45,6 +47,7 @@ public class IndexData {
 
     /**
      * Add a file to be indexed
+     *
      * @param fileToIndex File
      */
     public void addFileToIndex(File fileToIndex) {
@@ -55,6 +58,7 @@ public class IndexData {
 
     /**
      * Get the list of files to index
+     *
      * @return List of files
      */
     public List<File> getFilesToIndex() {
@@ -63,6 +67,7 @@ public class IndexData {
 
     /**
      * Determine if there are any files to index
+     *
      * @return True if one or more files have been added to index
      */
     public boolean hasFilesToIndex() {

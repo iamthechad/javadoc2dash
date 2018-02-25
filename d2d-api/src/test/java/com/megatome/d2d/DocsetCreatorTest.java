@@ -15,19 +15,18 @@
  */
 package com.megatome.d2d;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.megatome.d2d.support.javadoc.JavadocSupport;
+import com.megatome.d2d.support.jsdoc.JSDocSupport;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.megatome.d2d.support.javadoc.JavadocSupport;
-import com.megatome.d2d.support.jsdoc.JSDocSupport;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DocsetCreatorTest {
     private static final File CURRENT_DIR = FileUtils.getFile(".");
@@ -71,13 +70,13 @@ public class DocsetCreatorTest {
     }
 
     @Test
-    public void testCreateMinimalBuilder() throws Exception {
+    public void testCreateMinimalBuilder() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
         verifyCreatorValues(builder.build());
     }
 
     @Test
-    public void testBuildWithDisplayName() throws Exception {
+    public void testBuildWithDisplayName() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
         builder.displayName(null);
         verifyCreatorValues(builder.build());
@@ -91,7 +90,7 @@ public class DocsetCreatorTest {
     }
 
     @Test
-    public void testBuildWithKeyword() throws Exception {
+    public void testBuildWithKeyword() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
         builder.keyword(null);
         verifyCreatorValues(builder.build());
@@ -105,7 +104,7 @@ public class DocsetCreatorTest {
     }
 
     @Test
-    public void testBuildWithOutputDirectory() throws Exception {
+    public void testBuildWithOutputDirectory() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
         builder.outputDirectory(null);
         verifyCreatorValues(builder.build());
@@ -117,7 +116,7 @@ public class DocsetCreatorTest {
     }
 
     @Test
-    public void testBuildWithIconFile() throws Exception {
+    public void testBuildWithIconFile() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
         builder.iconFile(null);
         verifyCreatorValues(builder.build());
@@ -129,13 +128,13 @@ public class DocsetCreatorTest {
     }
 
     @Test
-    public void testBuildWithImplementationType() throws Exception {
+    public void testBuildWithImplementationType() {
         final DocsetCreator.Builder builder = new DocsetCreator.Builder("Foo", CURRENT_DIR);
-        builder.implementation((String)null);
+        builder.implementation((String) null);
         expectedValues.put(IMPLEMENTATION_TYPE, JavadocSupport.class);
         verifyCreatorValues(builder.build());
 
-        builder.implementation( JSDocSupport.JSDOC_IMPLEMENTATION );
+        builder.implementation(JSDocSupport.JSDOC_IMPLEMENTATION);
         expectedValues.put(IMPLEMENTATION_TYPE, JSDocSupport.class);
         verifyCreatorValues(builder.build());
 
@@ -160,6 +159,6 @@ public class DocsetCreatorTest {
         assertEquals(expectedValueMap.get(KEYWORD), creator.getKeyword());
         assertEquals(expectedValueMap.get(OUTPUT_DIR), creator.getOutputDirectory());
         assertEquals(expectedValueMap.get(ICON_FILE), creator.getIconFilePath());
-        assertEquals(creator.getImplementation().getClass(), expectedValueMap.get(IMPLEMENTATION_TYPE) );
+        assertEquals(creator.getImplementation().getClass(), expectedValueMap.get(IMPLEMENTATION_TYPE));
     }
 }

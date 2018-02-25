@@ -15,33 +15,23 @@
  */
 package com.megatome.d2d.support.javadoc;
 
-import static com.megatome.d2d.support.javadoc.ExpectedDataUtil.getExpectedData;
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNotNull;
+import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.support.MatchTypeInterface;
+import com.megatome.d2d.util.IndexData;
+import com.megatome.d2d.util.SearchIndexValue;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.junit.Test;
-
-import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.javadoc.JavadocMatchType;
-import com.megatome.d2d.support.javadoc.JavadocSupport;
-import com.megatome.d2d.util.IndexData;
-import com.megatome.d2d.util.SearchIndexValue;
+import static com.megatome.d2d.support.javadoc.ExpectedDataUtil.getExpectedData;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertNotNull;
 
 public class JavadocSupportTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
@@ -84,17 +74,14 @@ public class JavadocSupportTest {
         System.setErr(new PrintStream(errStream));
         try {
             (new JavadocSupport()).findSearchIndexValues(filesToIndex);
-        }
-        finally {
+        } finally {
             System.setErr(null);
         }
 
         final String err = errStream.toString();
 
-        assertThat(err, containsString("Something went wrong with parsing a link, possibly unescaped tags" +
-                                       " in Javadoc. (Name: , Type: CONSTRUCTOR, Link: )"));
-        assertThat(err, containsString("Most recently parsed value was: (Name: SampleClass, Type: CLASS,"
-                                       + " Path: ./com/megatome/d2d/sample/clazz/SampleClass.html)"));
+        assertThat(err, containsString("Something went wrong with parsing a link, possibly unescaped tags" + " in Javadoc. (Name: , Type: CONSTRUCTOR, Link: )"));
+        assertThat(err, containsString("Most recently parsed value was: (Name: SampleClass, Type: CLASS," + " Path: ./com/megatome/d2d/sample/clazz/SampleClass.html)"));
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, File javadocDir) throws Exception {
@@ -113,20 +100,20 @@ public class JavadocSupportTest {
         final List<SearchIndexValue> indexValues = (new JavadocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
         assertNotNull(indexValues);
         assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
-        final Map<JavadocMatchType, List<String>> valueMap = new HashMap<>();
-        for (final SearchIndexValue value: indexValues) {
+        final Map<MatchTypeInterface, List<String>> valueMap = new HashMap<>();
+        for (final SearchIndexValue value : indexValues) {
             List<String> nameSet = valueMap.get(value.getType());
             if (nameSet == null) {
                 nameSet = new ArrayList<>();
             }
             assertThat(nameSet, not(hasItem(value.getName())));
             nameSet.add(value.getName());
-            valueMap.put((JavadocMatchType)value.getType(), nameSet);
+            valueMap.put(value.getType(), nameSet);
         }
 
         final Map<JavadocMatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
         assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
-        for (final Map.Entry<JavadocMatchType,Integer> expectedType: expectedTypes.entrySet()) {
+        for (final Map.Entry<JavadocMatchType, Integer> expectedType : expectedTypes.entrySet()) {
             assertThat(valueMap, hasKey(expectedType.getKey()));
             final List<String> namesForType = valueMap.get(expectedType.getKey());
             assertNotNull(namesForType);
