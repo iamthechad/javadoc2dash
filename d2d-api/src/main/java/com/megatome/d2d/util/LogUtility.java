@@ -27,6 +27,7 @@ public class LogUtility {
 
     /**
      * Specify a logger to use. Log messages will go to System.out if no logger is specified.
+     *
      * @param logger Logger instance to use
      */
     public static void setLogger(final Logger logger) {
@@ -37,6 +38,7 @@ public class LogUtility {
 
     /**
      * Specify if messages that are more verbose should be shown.
+     *
      * @param verbose True to set a higher verbosity
      */
     public static void setVerbose(boolean verbose) {
@@ -46,7 +48,8 @@ public class LogUtility {
     /**
      * Log a message. If a logger has been specified, log the message at INFO level. Otherwise the message is logged
      * to System.out.
-     * @param format Message, formatted per SLF4J requirements
+     *
+     * @param format    Message, formatted per SLF4J requirements
      * @param arguments Arguments to substitute into the message before logging
      */
     public static void log(String format, Object... arguments) {
@@ -60,7 +63,8 @@ public class LogUtility {
     /**
      * Log a message only if the verbose flag has been set. If a logger has been specified, log the message at INFO level. Otherwise the message is logged
      * to System.out.
-     * @param format Message, formatted per SLF4J requirements
+     *
+     * @param format    Message, formatted per SLF4J requirements
      * @param arguments Arguments to substitute into the message before logging
      */
     public static void logVerbose(String format, Object... arguments) {

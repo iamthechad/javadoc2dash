@@ -37,15 +37,20 @@ public enum JSDocMatchType implements MatchTypeInterface {
 
     /**
      * Return the MatchType depending on the input string
+     *
      * @param module the type
      * @return the MatchType
      */
     public static JSDocMatchType type(String module) {
-        switch(module) {
-            case "functions": return FUNCTION;
-            case "namespaces": return NAMESPACE;
-            case "properties": return PROPERTY;
-            case "classes": return CLASS;
+        switch (module) {
+            case "functions":
+                return FUNCTION;
+            case "namespaces":
+                return NAMESPACE;
+            case "properties":
+                return PROPERTY;
+            case "classes":
+                return CLASS;
         }
         return VALUE;
     }

@@ -15,11 +15,16 @@
  */
 package com.megatome.d2d.support;
 
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertTrue;
+import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.support.javadoc.ExpectedDataUtil;
+import com.megatome.d2d.support.javadoc.JavadocSupport;
+import com.megatome.d2d.util.IndexData;
+import com.megatome.d2d.util.SearchIndexValue;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.sql.Connection;
@@ -30,17 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.javadoc.ExpectedDataUtil;
-import com.megatome.d2d.support.javadoc.JavadocSupport;
-import com.megatome.d2d.util.IndexData;
-import com.megatome.d2d.util.SearchIndexValue;
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 public class DBSupportTest {
     private static final File javadocLocation = getFile(System.getProperty("d2d-sample-javadoc"));
@@ -66,15 +65,14 @@ public class DBSupportTest {
         assertTrue("DB file does not exist", dbFile.exists());
 
         final Map<String, Integer> expectedTypes = ExpectedDataUtil.getExpectedData().getExpectedDataBaseTypes();
-        try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-             final PreparedStatement stmt = connection.prepareStatement(QUERY)){
+        try (final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile); final PreparedStatement stmt = connection.prepareStatement(QUERY)) {
 
             for (Map.Entry<String, Integer> expectedEntry : expectedTypes.entrySet()) {
                 stmt.setString(1, expectedEntry.getKey());
                 try (final ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         final int count = rs.getInt(1);
-                        assertThat(expectedEntry.getValue().intValue(), is(count));
+                        assertThat(expectedEntry.getValue(), is(count));
                     }
                 }
             }

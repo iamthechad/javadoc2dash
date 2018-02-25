@@ -22,7 +22,8 @@ public interface MatchTypeInterface {
 
     /**
      * The name of the type corresponding to: https://kapeli.com/docsets#supportedentrytypes
+     *
      * @return The name of the type
      */
-    public String getTypeName();
+    String getTypeName();
 }

@@ -15,74 +15,57 @@
  */
 package com.megatome.d2d;
 
-import static com.megatome.d2d.support.DBSupport.createIndex;
-import static com.megatome.d2d.support.DocSetSupport.copyFiles;
-import static com.megatome.d2d.support.DocSetSupport.copyIconFile;
-import static com.megatome.d2d.support.DocSetSupport.createDocSetStructure;
-import static com.megatome.d2d.support.DocSetSupport.createPList;
-import static com.megatome.d2d.support.DocSetSupport.getDBDir;
-import static com.megatome.d2d.util.LogUtility.log;
-import static com.megatome.d2d.util.LogUtility.setLogger;
-import static org.apache.commons.io.FilenameUtils.concat;
-
-import java.io.File;
-
-import org.slf4j.Logger;
-
 import com.megatome.d2d.exception.BuilderException;
 import com.megatome.d2d.support.DocSetParserInterface;
 import com.megatome.d2d.support.javadoc.JavadocSupport;
 import com.megatome.d2d.support.jsdoc.JSDocSupport;
 import com.megatome.d2d.util.IndexData;
+import org.slf4j.Logger;
+
+import java.io.File;
+
+import static com.megatome.d2d.support.DBSupport.createIndex;
+import static com.megatome.d2d.support.DocSetSupport.*;
+import static com.megatome.d2d.util.LogUtility.log;
+import static com.megatome.d2d.util.LogUtility.setLogger;
+import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
  * Class responsible for creating the docset.
  */
 public class DocsetCreator {
-    private final String                docsetName;
-
-    private final String                displayName;
-
-    private final String                keyword;
-
-    private final File                  iconFilePath;
-
-    private final File                  javadocRoot;
-
-    private final File                  outputDirectory;
-
+    private final String docsetName;
+    private final String displayName;
+    private final String keyword;
+    private final File iconFilePath;
+    private final File javadocRoot;
+    private final File outputDirectory;
     private final DocSetParserInterface implementation;
 
     /**
      * Builder for specifying options used in docset creation
      */
     public static class Builder {
-        private final String          docsetName;
-
-        private final File            javadocRoot;
-
-        private String                displayName;
-
-        private String                keyword;
-
-        private File                  iconFilePath    = null;
-
-        private File                  outputDirectory = new File( "." );
-
-        private DocSetParserInterface implementation  = new JavadocSupport();
+        private final String docsetName;
+        private final File javadocRoot;
+        private String displayName;
+        private String keyword;
+        private File iconFilePath = null;
+        private File outputDirectory = new File(".");
+        private DocSetParserInterface implementation = new JavadocSupport();
 
         /**
          * Ctor
          *
-         * @param docsetName File name of docset to create
+         * @param docsetName  File name of docset to create
          * @param javadocRoot Root directory of the Javadoc to create the docset from
          */
-        public Builder( String docsetName, File javadocRoot ) {
-            if( null == docsetName || docsetName.isEmpty() ) {
-                throw new IllegalArgumentException( "The docsetName must be specified" );
+        public Builder(String docsetName, File javadocRoot) {
+            if (null == docsetName || docsetName.isEmpty()) {
+                throw new IllegalArgumentException("The docsetName must be specified");
             }
-            if( null == javadocRoot ) {
-                throw new IllegalArgumentException( "The javadocRoot must be specified" );
+            if (null == javadocRoot) {
+                throw new IllegalArgumentException("The javadocRoot must be specified");
             }
             this.docsetName = docsetName;
             this.javadocRoot = javadocRoot;
@@ -96,8 +79,8 @@ public class DocsetCreator {
          * @param displayName Name to display in Dash. Defaults to <code>docsetName</code> if unspecified
          * @return Builder instance
          */
-        public Builder displayName( String displayName ) {
-            if( null != displayName && !displayName.isEmpty() ) {
+        public Builder displayName(String displayName) {
+            if (null != displayName && !displayName.isEmpty()) {
                 this.displayName = displayName;
             }
             return this;
@@ -109,8 +92,8 @@ public class DocsetCreator {
          * @param keyword Keyword to associate this docset with. Defaults to <code>docsetName</code> is unspecified
          * @return Builder instance
          */
-        public Builder keyword( String keyword ) {
-            if( null != keyword && !keyword.isEmpty() ) {
+        public Builder keyword(String keyword) {
+            if (null != keyword && !keyword.isEmpty()) {
                 this.keyword = keyword;
             }
             return this;
@@ -122,8 +105,8 @@ public class DocsetCreator {
          * @param outputDirectory Location for the created docset
          * @return Builder instance
          */
-        public Builder outputDirectory( File outputDirectory ) {
-            if( null != outputDirectory ) {
+        public Builder outputDirectory(File outputDirectory) {
+            if (null != outputDirectory) {
                 this.outputDirectory = outputDirectory;
             }
             return this;
@@ -135,8 +118,8 @@ public class DocsetCreator {
          * @param iconFile Path to an icon to include in the docset. Should be a 32x32 PNG. No icon will be used if this is unspecified.
          * @return Builder instance
          */
-        public Builder iconFile( File iconFile ) {
-            if( null != iconFile ) {
+        public Builder iconFile(File iconFile) {
+            if (null != iconFile) {
                 this.iconFilePath = iconFile;
             }
             return this;
@@ -148,8 +131,8 @@ public class DocsetCreator {
          * @param implementation of the DocSetParserInterface
          * @return Builder instance
          */
-        public Builder implementation( DocSetParserInterface implementation ) {
-            if( null != implementation ) {
+        public Builder implementation(DocSetParserInterface implementation) {
+            if (null != implementation) {
                 this.implementation = implementation;
             }
             return this;
@@ -161,11 +144,11 @@ public class DocsetCreator {
          * @param input string of the type of the implementation
          * @return Builder instance
          */
-        public Builder implementation( String input ) {
-            if( null == input ) {
+        public Builder implementation(String input) {
+            if (null == input) {
                 return this;
             }
-            switch( input ) {
+            switch (input) {
                 case JSDocSupport.JSDOC_IMPLEMENTATION:
                     this.implementation = new JSDocSupport();
                     break;
@@ -181,11 +164,11 @@ public class DocsetCreator {
         }
 
         public DocsetCreator build() {
-            return new DocsetCreator( this );
+            return new DocsetCreator(this);
         }
     }
 
-    private DocsetCreator( Builder builder ) {
+    private DocsetCreator(Builder builder) {
         this.docsetName = builder.docsetName;
         this.displayName = builder.displayName;
         this.keyword = builder.keyword;
@@ -199,19 +182,19 @@ public class DocsetCreator {
      * Build the docset.
      *
      * @param logger Optional logger to be used during docset creation. If not specified all messages will be directed
-     *            to the console.
+     *               to the console.
      * @throws BuilderException If an error occurs creating the docset
      */
-    public void makeDocset( Logger logger ) throws BuilderException {
-        setLogger( logger );
-        final String docsetRoot = concat( outputDirectory.getAbsolutePath(), docsetName );
-        createDocSetStructure( docsetRoot );
-        copyIconFile( iconFilePath, docsetRoot );
-        final IndexData indexData = implementation.findIndexFile( javadocRoot );
-        copyFiles( javadocRoot, docsetRoot );
-        createPList( docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot );
-        createIndex( implementation.findSearchIndexValues( indexData.getFilesToIndex() ), getDBDir( docsetRoot ) );
-        log( "Finished creating docset: {}", docsetRoot );
+    public void makeDocset(Logger logger) throws BuilderException {
+        setLogger(logger);
+        final String docsetRoot = concat(outputDirectory.getAbsolutePath(), docsetName);
+        createDocSetStructure(docsetRoot);
+        copyIconFile(iconFilePath, docsetRoot);
+        final IndexData indexData = implementation.findIndexFile(javadocRoot);
+        copyFiles(javadocRoot, docsetRoot);
+        createPList(docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
+        createIndex(implementation.findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
+        log("Finished creating docset: {}", docsetRoot);
     }
 
     /**
@@ -220,7 +203,7 @@ public class DocsetCreator {
      * @throws BuilderException If an error occurs creating the docset
      */
     public void makeDocset() throws BuilderException {
-        makeDocset( null );
+        makeDocset(null);
     }
 
     /**

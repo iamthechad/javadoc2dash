@@ -27,6 +27,7 @@ public class SearchIndexValue {
 
     /**
      * Ctor.
+     *
      * @param name Entry name
      * @param type Entry type
      * @param path Path to the entry
@@ -39,6 +40,7 @@ public class SearchIndexValue {
 
     /**
      * Get the entry name
+     *
      * @return Name
      */
     public String getName() {
@@ -47,6 +49,7 @@ public class SearchIndexValue {
 
     /**
      * Get the entry type
+     *
      * @return Type
      */
     public MatchTypeInterface getType() {
@@ -55,6 +58,7 @@ public class SearchIndexValue {
 
     /**
      * Get the entry path
+     *
      * @return Path
      */
     public String getPath() {

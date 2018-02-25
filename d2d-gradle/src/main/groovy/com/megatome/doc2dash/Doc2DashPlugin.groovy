@@ -15,9 +15,9 @@
  */
 package com.megatome.doc2dash
 
+import com.megatome.d2d.support.DocSetParserInterface
 import com.megatome.doc2dash.tasks.Doc2DashFeedTask
 import com.megatome.doc2dash.tasks.Doc2DashTask
-import com.megatome.d2d.support.DocSetParserInterface
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
