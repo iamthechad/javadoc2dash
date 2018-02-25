@@ -15,13 +15,13 @@
  */
 package com.megatome.d2d.support.javadoc;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+import com.megatome.d2d.support.MatchTypeInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.megatome.d2d.support.MatchTypeInterface;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 /**
  * Enumeration for matching types from parsed Javadoc files

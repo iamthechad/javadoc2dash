@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.megatome.d2d.support.javadoc.JavadocMatchType;
-
 public class ExpectedDataUtil {
     private final Map<JavadocMatchType, Integer> EXPECTED_TYPES = new HashMap<>();
     private final Map<String, Integer> EXPECTED_DATABASE_TYPES = new HashMap<>();

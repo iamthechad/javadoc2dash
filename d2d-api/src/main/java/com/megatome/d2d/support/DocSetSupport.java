@@ -15,19 +15,14 @@
  */
 package com.megatome.d2d.support;
 
-import static com.megatome.d2d.util.LogUtility.logVerbose;
-import static org.apache.commons.io.FileUtils.copyDirectory;
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.apache.commons.io.FileUtils.forceMkdir;
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.io.FileUtils.write;
-import static org.apache.commons.io.FilenameUtils.concat;
+import com.megatome.d2d.exception.BuilderException;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.megatome.d2d.exception.BuilderException;
+import static com.megatome.d2d.util.LogUtility.logVerbose;
+import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FilenameUtils.concat;
 
 /**
  * Utility class for operations on the docset.
@@ -45,6 +40,7 @@ public class DocSetSupport {
 
     /**
      * Create the docset package. Will delete an existing docset if one already exists at the specified location.
+     *
      * @param docsetDir Location of the docset to create
      * @throws BuilderException in case of errors
      */
@@ -71,7 +67,8 @@ public class DocSetSupport {
 
     /**
      * Copy an icon file to the docset. If the file path is not specified, no error happens.
-     * @param iconFile File to copy as the docset icon.
+     *
+     * @param iconFile  File to copy as the docset icon.
      * @param docsetDir Directory of the docset
      * @throws BuilderException in case of errors
      */
@@ -90,6 +87,7 @@ public class DocSetSupport {
 
     /**
      * Copy all files and folders from a source location into the docset.
+     *
      * @param sourceDir Source directory to copy from
      * @param docsetDir Directory of the docset
      * @throws BuilderException in case of errors
@@ -100,6 +98,7 @@ public class DocSetSupport {
 
     /**
      * Copy all files and folders from a source location into the docset.
+     *
      * @param sourceDir Source directory to copy from
      * @param docsetDir Directory of the docset
      * @throws BuilderException in case of errors
@@ -115,16 +114,16 @@ public class DocSetSupport {
 
     /**
      * Create the plist file in the docset.
+     *
      * @param bundleIdentifier Bundle identifier of the docset
-     * @param displayName Name used to display the docset in Dash
-     * @param keyword Keyword used for the docset in Dash
-     * @param indexFile The file to be used as the docset index
-     * @param docsetDir Directory of the docset
+     * @param displayName      Name used to display the docset in Dash
+     * @param keyword          Keyword used for the docset in Dash
+     * @param indexFile        The file to be used as the docset index
+     * @param docsetDir        Directory of the docset
      * @throws BuilderException in case of errors
      */
     public static void createPList(String bundleIdentifier, String displayName, String keyword, String indexFile, String docsetDir) throws BuilderException {
-        final String plist = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict><key>CFBundleIdentifier</key><string>%s</string><key>CFBundleName</key><string>%s</string><key>DocSetPlatformFamily</key><string>%s</string><key>dashIndexFilePath</key><string>%s</string><key>DashDocSetFamily</key><string>java</string><key>isDashDocset</key><true/></dict></plist>",
-                bundleIdentifier, displayName, keyword, indexFile);
+        final String plist = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict><key>CFBundleIdentifier</key><string>%s</string><key>CFBundleName</key><string>%s</string><key>DocSetPlatformFamily</key><string>%s</string><key>dashIndexFilePath</key><string>%s</string><key>DashDocSetFamily</key><string>java</string><key>isDashDocset</key><true/></dict></plist>", bundleIdentifier, displayName, keyword, indexFile);
         // CFBundleIdentifier = ?
         // CFBundleName = Display Name
         // DocSetPlatformFamily = keyword
@@ -138,6 +137,7 @@ public class DocSetSupport {
 
     /**
      * Get the directory within the docset that holds the SQLite DB.
+     *
      * @param docsetDir Directory of the docset
      * @return Directory
      */

@@ -19,8 +19,6 @@ import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListParser;
 import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.DocSetSupport;
-
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
