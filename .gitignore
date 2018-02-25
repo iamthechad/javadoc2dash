@@ -4,5 +4,5 @@
 build
 *.iml
 bin
-/.project
-/.settings
+.classpath
+.settings

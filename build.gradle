@@ -1,17 +1,18 @@
-ext.projectVersion = '1.2.0'
-ext.projectLocation = "https://github.com/i-net-software/doc2dash"
+ext.projectVersion = '2.0.0'
+ext.projectLocation = "https://github.com/iamthechad/doc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'
 
 buildscript {
     repositories {
+        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.5"
     }
 }
@@ -21,14 +22,14 @@ allprojects {
     apply plugin: 'jacoco'
 
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
 subprojects {
-    sourceCompatibility = 1.7
+    sourceCompatibility = 1.8
     version = "$projectVersion"
-    group = "com.megatome.javadoc2dash"
+    group = "com.megatome.doc2dash"
 
     def javaApiUrl = 'http://docs.oracle.com/javase/1.7.0/docs/api/'
     def groovyApiUrl = 'http://groovy-lang.org/gapi/'
@@ -45,9 +46,10 @@ subprojects {
 
     apply plugin: 'findbugs'
     findbugs {
-        toolVersion = "3.0.0"
+        toolVersion = "3.0.1"
         // Don't worry about test classes
         sourceSets = [sourceSets.main]
+        excludeFilter file("${projectDir}/../.findbugs.xml")
     }
 
     tasks.withType(FindBugs) {
@@ -59,7 +61,7 @@ subprojects {
 }
 
 def publishedProjects = subprojects.findAll {
-    !it.path.startsWith(':j2d-cli') && !it.path.startsWith(':j2d-sample')
+    !it.path.startsWith(':d2d-cli') && !it.path.startsWith(':d2d-sample')
 }
 
 task jacocoRootReport(type: JacocoReport) {
@@ -88,37 +90,37 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
-project(":j2d-cli") {
+project(":d2d-cli") {
     apply plugin:'application'
 
-    mainClassName = "com.megatome.j2d.Main"
+    mainClassName = "com.megatome.d2d.Main"
 
     dependencies {
-        compile project(":javadoc2dash-api")
+        compile project(":d2d-api")
         compile 'net.sf.jopt-simple:jopt-simple:4.8'
     }
 
     test {
         jacoco {
-            excludes = ["com.megatome.j2d.Main"]
+            excludes = ["com.megatome.d2d.Main"]
         }
     }
 }
 
-project(":j2d-gradle") {
+project(":d2d-gradle") {
     apply plugin: 'groovy'
     apply plugin: 'maven'
     apply plugin: "com.gradle.plugin-publish"
 
-    archivesBaseName = 'javadoc2dash-plugin'
+    archivesBaseName = 'doc2dash-plugin'
 
     dependencies {
         compile gradleApi()
         compile localGroovy()
-        compile project(":javadoc2dash-api")
+        compile project(":d2d-api")
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
-        testCompile("org.spockframework:spock-core:1.0-groovy-2.3") {
+        testCompile( "org.spockframework:spock-core:1.0-groovy-2.4" ) {
             exclude group: "org.codehaus.groovy"
         }
     }
@@ -138,20 +140,20 @@ project(":j2d-gradle") {
         tags = ['javadoc', 'dash']
 
         plugins {
-            javadoc2dashPlugin {
-                id = 'com.megatome.javadoc2dash'
+            doc2dashPlugin {
+                id = 'com.megatome.doc2dash'
                 displayName = 'Javadoc to Dash'
             }
         }
     }
 }
 
-project(":javadoc2dash-api") {
+project(":d2d-api") {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    archivesBaseName = 'javadoc2dash-api'
+    archivesBaseName = 'doc2dash-api'
 
     dependencies {
         compile 'commons-io:commons-io:2.4'
@@ -160,6 +162,7 @@ project(":javadoc2dash-api") {
         compile 'org.jsoup:jsoup:1.8.2'
         compile "org.slf4j:slf4j-api:1.7.12"
         compile "org.slf4j:slf4j-simple:1.7.12"
+        compile localGroovy()
 
         testCompile group: 'junit', name: 'junit', version: '4.11'
         testCompile 'org.hamcrest:hamcrest-all:1.3'
@@ -167,11 +170,12 @@ project(":javadoc2dash-api") {
     }
 
     tasks.withType(Test) { task ->
-        task.dependsOn ":j2d-sample:javadoc"
-        task.dependsOn ":j2d-sample:javadocSplit"
-        def sampleProject = findProject(":j2d-sample")
-        systemProperties 'j2d-sample-javadoc': "${sampleProject.docsDir}/javadoc"
-        systemProperties 'j2d-sample-javadoc-split': "${sampleProject.docsDir}/javadocSplit"
+        task.dependsOn ":d2d-sample:javadoc"
+        task.dependsOn ":d2d-sample:javadocSplit"
+        def sampleProject = findProject(":d2d-sample")
+        systemProperties 'd2d-sample-javadoc': "${sampleProject.docsDir}/javadoc"
+        systemProperties 'd2d-sample-javadoc-split': "${sampleProject.docsDir}/javadocSplit"
+        systemProperties 'd2d-sample-jsdoc': "${sampleProject.projectDir}/src/test/JSDoc"
     }
 
     uploadArchives {
@@ -184,8 +188,8 @@ project(":javadoc2dash-api") {
 
     def pomConfig = {
         scm {
-            connection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
-            developerConnection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
+            connection "scm:git:git@github.com:iamthechad/doc2dash.git"
+            developerConnection "scm:git:git@github.com:iamthechad/doc2dash.git"
             url "$projectLocation"
         }
         issueManagement {
@@ -205,6 +209,12 @@ project(":javadoc2dash-api") {
                 name "Chad Johnston"
                 email "cjohnston@megatome.com"
             }
+            developer {
+                id "gamma"
+                name "Gerry Weißbach"
+                email "gerry.w@gammaproduction.de"
+            }
+
         }
     }
 
@@ -235,13 +245,13 @@ project(":javadoc2dash-api") {
         publish = false
         pkg {
             repo = 'maven'
-            name = 'javadoc2dash-api'
+            name = 'doc2dash-api'
             desc = 'API for creating Dash docsets from Javadoc'
             websiteUrl = "$projectLocation"
             issueTrackerUrl = "$projectLocation/issues"
             vcsUrl = projectLocation + ".git"
             licenses = ['Apache-2.0']
-            labels = ['javadoc', 'dash', 'api']
+            labels = ['javadoc', 'jsdoc', 'documentation', 'html', 'dash', 'api']
             publicDownloadNumbers = true
             version {
                 name = project.version
@@ -260,7 +270,7 @@ project(":javadoc2dash-api") {
     }
 }
 
-project(":j2d-sample") {
+project(":d2d-sample") {
     javadoc {
         options.splitIndex = false
     }
