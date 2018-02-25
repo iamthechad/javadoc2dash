@@ -9,7 +9,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Javadoc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
+- [Doc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
 - [Gradle plugin](#gradle-plugin)
   - [Add the plugin to your project](#add-the-plugin-to-your-project)
   - [Specify settings](#specify-settings)
@@ -29,12 +29,12 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Javadoc2Dash - Build Dash docsets from Javadoc
+# Doc2Dash - Build Dash docsets from Javadoc (or any HTML)
  
 This project is based off of https://github.com/Kapeli/javadocset. This is a Java-based solution so that Dash docsets
 can be easily created from many environments, not just those that run OS X.
 
-There are three ways to create Dash-compatible docsets from Javadoc using this project:
+There are three ways to create Dash-compatible docsets from Javadoc, or just about any other HTML documentation) using this project:
 
 1. Use the Gradle plugin
 1. Use the API
@@ -54,24 +54,24 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
       }
     }
 
-    apply plugin: "com.megatome.javadoc2dash"
-    
+    apply plugin: "com.megatome.doc2dash"
+
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.javadoc2dash" version "1.1.0"
+      id "com.megatome.doc2dash" version "1.1.0"
     }
 
 ## Specify settings
 
-    javadoc2dash {
+    doc2dash {
       displayName = "My Cool Project"
     }
-    
+
 If no settings are provided, the plugin tries to use sensible defaults.
 
 Setting Name | Type | Description | Default
@@ -83,6 +83,8 @@ Setting Name | Type | Description | Default
 `keyword` | `String` | Keyword used for the docset in Dash | `project.name`
 `iconFile` | `File` | File to be used as the docset icon | `null`
 `javadocTask` | `String` | Name of the javadoc task that the `javadoc2dash` task will depend on | `javadoc`
+`type` | `String` | 'javadoc' or 'jsdoc' | `javadoc`
+`implementation` | `DocSetParserInterface` | A custom implementation of the interface | instance of `JavadocSupport`
 
 **Some Caveats:**
 
@@ -94,7 +96,7 @@ subprojects' documentation. The `java` plugin creates a `javadoc` task, so a dif
 
 ## Create the docset
 
-Create the docset with the `javadoc2dash` task.
+Create the docset with the `doc2dash` task.
 
 ### Example
 
@@ -110,28 +112,28 @@ Create the docset with the `javadoc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
       }
     }
 
-    apply plugin: "com.megatome.javadoc2dash"
+    apply plugin: "com.megatome.doc2dash"
 
-    javadoc2dash {
+    doc2dash {
       docsetName = "MyProject"
       displayName = "My Awesome Project"
       keyword = "mp"
     }
-    
+
 ## Creating the docset feed
 
 If you want to host your own docsets, you need to create a feed per the [Dash instructions](https://kapeli.com/docsets#dashdocsetfeed).
 
-Creating feeds uses the `javadoc2dashfeed` task.
+Creating feeds uses the `doc2dashfeed` task.
 
-    javadoc2dashfeed {
+    doc2dashfeed {
       feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
     }
-    
+
 If no settings are provided, the plugin tries to use sensible defaults.
 
 Setting Name | Type | Description | Default
@@ -154,24 +156,24 @@ Setting Name | Type | Description | Default
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.javadoc2dash:j2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
       }
     }
 
-    apply plugin: "com.megatome.javadoc2dash"
+    apply plugin: "com.megatome.doc2dash"
 
-    javadoc2dash {
+    doc2dash {
       docsetName = "MyProject"
       displayName = "My Awesome Project"
       keyword = "mp"
     }
-    
-    javadoc2dashfeed {
+
+    doc2dashfeed {
       feedName = "myproject"
       feedLocations = [ "http://someserver.com/feeds", "http://someotherserver.com/feeds" ]
     }
-    
-This will generate a `feed` directory in the `javadoc2dash.outputLocation` directory. This directory will contain an XML file describing the feed
+
+This will generate a `feed` directory in the `doc2dash.outputLocation` directory. This directory will contain an XML file describing the feed
 (named `myproject.xml` in this case), and a compressed version of the docset (named `myproject.tgz` in this case).
 
 For this example, the XML file will look like this:
@@ -181,7 +183,7 @@ For this example, the XML file will look like this:
       <url>http://someserver.com/feeds/myproject.tgz</url>
       <url>http://someotherserver.com/feeds/myproject.tgz</url>
     </entry>
-    
+
 The XML file should be copied to a location where it can be [shared with Dash users](https://kapeli.com/docsets#sharedocsetfeed), and the `tgz` file copied to the locations specified in `feedLocations`.
 
 # Using the API
@@ -195,30 +197,30 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:javadoc2dash-api:1.1.0"
+      compile "com.megatome.javadoc2dash:doc2dash-api:1.1.0"
     }
-    
+
 For Maven:
 
     <dependency>
-      <groupId>com.megatome.javadoc2dash</groupId>
-      <artifactId>javadoc2dash-api</artifactId>
-      <version>1.1.0</version>
+      <groupId>com.megatome.doc2dash</groupId>
+      <artifactId>doc2dash-api</artifactId>
+      <version>2.0.0</version>
     </dependency>
-    
+
 ## Use the API
 
     DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocLocation);
     // Optionally -
     builder.displayName("Some Name").keyword("keyword");
     DocsetCreator creator = builder.build();
-    
+
     try {
       creator.makeDocset();
     } catch (BuilderException e) {
       // Something failed!
     }
-    
+
 # Using the CLI
 
 ## Download the CLI
@@ -227,22 +229,22 @@ Clone the project or grab the [latest release](https://github.com/iamthechad/jav
 
 ### Running in a cloned repository
 
-Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via `gradlew :j2d-cli:distZip` to create a zip file containing everything needed to run.
+Running the CLI directly from a Gradle task is not currently supported. A distribution must be created via `gradlew :d2d-cli:distZip` to create a zip file containing everything needed to run.
  
 ### Running a release zip
 
 * Either download a release or create a distribution zip as outlined above. 
 * Unzip the archive to a desired location.
 * Open a terminal or command prompt and navigate to the unzipped directory.
-* Navigate to the `bin` directory and run `./j2d-cli` (for \*NIX/OSX) or `j2d-cli.bat` (for Windows environments).
+* Navigate to the `bin` directory and run `./d2d-cli` (for \*NIX/OSX) or `d2d-cli.bat` (for Windows environments).
 * You should see a usage message.
 
 ## Creating a docset
 
 Docset creation requires at minimum two options: the name of the docset and the location of the Javadoc files to include in the docset.
-  
-    ./j2d-cli --name Sample --javadoc /some/path/to/apidoc
-    
+
+    ./d2d-cli --name Sample --javadoc /some/path/to/apidoc
+
 This will create a docset named Sample in the current directory. Docset creation can be customized with optional arguments:
 
 * `--displayName`: Will set the name as shown in Dash. This is handy if you create a docset with name `SampleProject` but display name `Sample Project` instead.
@@ -253,11 +255,21 @@ This will create a docset named Sample in the current directory. Docset creation
     * No icon will be used if this is omitted.
 * `--out`: Specify a directory to create the docset in.
     * The docset will be created in the current directory if omitted.
-    
+* `--type`: Specify the type of the documentation
+    * Values: 'javadoc' (default) or 'jsdoc'
+
 ### Examples
 
-Bare minimum: `j2d-cli --name Sample --javadoc /path/to/apidoc`
+Bare minimum: `d2d-cli --name Sample --javadoc /path/to/apidoc`
 
-Full options: `j2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
+Full options: `d2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
 
-Abbreviated options. Most command-line options can be abbreviated. `j2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
+Abbreviated options. Most command-line options can be abbreviated. `d2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
+
+# Custom HTML to DashDocset generation
+
+The plugin supports the implementation of a custom Dash Docset where the search properties can be generated at will. The default JavaDoc DashDocset is basically a specific implementation. To create a custom docset out of any HTML you need to implement the DocSetParserInterface and the MatchTypeInterface.
+
+The plugin also supports JSDoc3 as a first class citizen.
+
+An example for JSDoc3 can be found at [https://github.com/i-net-software/jsdoc-dash-docset](https://github.com/i-net-software/jsdoc-dash-docset)

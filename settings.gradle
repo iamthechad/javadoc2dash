@@ -1,3 +1,2 @@
-include "javadoc2dash-api", "j2d-cli", "j2d-gradle", "j2d-sample"
-rootProject.name = 'javadoc2dash'
-
+include "d2d-api", "d2d-cli", "d2d-gradle", "d2d-sample"
+rootProject.name = 'doc2dash'
