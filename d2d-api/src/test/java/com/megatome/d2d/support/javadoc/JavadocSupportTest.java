@@ -16,24 +16,24 @@
 package com.megatome.d2d.support.javadoc;
 
 import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.MatchTypeInterface;
+import com.megatome.d2d.support.DocSetParserBaseTest;
 import com.megatome.d2d.util.IndexData;
-import com.megatome.d2d.util.SearchIndexValue;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
-import static com.megatome.d2d.support.javadoc.ExpectedDataUtil.getExpectedData;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 
-public class JavadocSupportTest {
+public class JavadocSupportTest extends DocSetParserBaseTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
     private static final File regularJavadoc = getFile(System.getProperty("d2d-sample-javadoc"));
     private static final File splitJavadoc = getFile(System.getProperty("d2d-sample-javadoc-split"));
@@ -57,12 +57,12 @@ public class JavadocSupportTest {
 
     @Test
     public void testBuildIndexDataNonSplit() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(1, regularJavadoc));
+        verifyFoundIndexValues(new JavadocSupport(), getAndVerifyIndexFiles(1, regularJavadoc), ExpectedJavaDocDataUtil.getExpectedData());
     }
 
     @Test
     public void testBuildIndexDataSplit() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(6, splitJavadoc));
+        verifyFoundIndexValues(new JavadocSupport(), getAndVerifyIndexFiles(6, splitJavadoc), ExpectedJavaDocDataUtil.getExpectedData());
     }
 
     @Test
@@ -94,31 +94,6 @@ public class JavadocSupportTest {
         assertNotNull(files);
         assertThat(expectedFileCount, is(files.size()));
         return indexData;
-    }
-
-    private void verifyFoundIndexValues(final IndexData indexData) throws Exception {
-        final List<SearchIndexValue> indexValues = (new JavadocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
-        assertNotNull(indexValues);
-        assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
-        final Map<MatchTypeInterface, List<String>> valueMap = new HashMap<>();
-        for (final SearchIndexValue value : indexValues) {
-            List<String> nameSet = valueMap.get(value.getType());
-            if (nameSet == null) {
-                nameSet = new ArrayList<>();
-            }
-            assertThat(nameSet, not(hasItem(value.getName())));
-            nameSet.add(value.getName());
-            valueMap.put(value.getType(), nameSet);
-        }
-
-        final Map<JavadocMatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
-        assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
-        for (final Map.Entry<JavadocMatchType, Integer> expectedType : expectedTypes.entrySet()) {
-            assertThat(valueMap, hasKey(expectedType.getKey()));
-            final List<String> namesForType = valueMap.get(expectedType.getKey());
-            assertNotNull(namesForType);
-            assertThat("Wrong count for " + expectedType, namesForType.size(), is(expectedType.getValue()));
-        }
     }
 }
 

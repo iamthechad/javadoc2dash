@@ -40,7 +40,7 @@ class Doc2DashTaskSpec extends Specification{
             project.apply plugin: PLUGIN_ID
             project.doc2dash {
                 docsetName = null
-                javadocRoot = null
+                docRoot = null
             }
             Task d2dTask = project.tasks.findByName(TASK_NAME)
             d2dTask.start()

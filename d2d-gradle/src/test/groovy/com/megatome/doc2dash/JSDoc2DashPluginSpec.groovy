@@ -44,10 +44,10 @@ class JSDoc2DashPluginSpec extends Specification {
                 docsetName = "Project Name"
                 displayName = "Display Name"
                 keyword = "Keyword"
-                javadocRoot = project.file("src/test/resources/JSDoc")
+                docRoot = project.file("src/test/resources/JSDoc")
                 outputLocation = project.file("${project.buildDir}/docsets")
                 iconFile = project.file("icon.png")
-                javadocTask = "jsdoc"
+                docTask = "jsdoc"
                 type = "jsdoc"
             }
         then:
@@ -59,10 +59,10 @@ class JSDoc2DashPluginSpec extends Specification {
             d2dTask.docsetName == "Project Name"
             d2dTask.displayName == "Display Name"
             d2dTask.keyword == "Keyword"
-            d2dTask.javadocRoot == project.file("src/test/resources/JSDoc")
+            d2dTask.docRoot == project.file("src/test/resources/JSDoc")
             d2dTask.outputLocation == project.file("${project.buildDir}/docsets")
             d2dTask.iconFile == project.file("icon.png")
-            baseExtension.javadocTask == "jsdoc"
+            baseExtension.docTask == "jsdoc"
             d2dTask.type == "jsdoc"
     }
 }

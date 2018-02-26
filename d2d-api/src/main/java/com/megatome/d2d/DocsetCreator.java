@@ -16,6 +16,7 @@
 package com.megatome.d2d;
 
 import com.megatome.d2d.exception.BuilderException;
+import com.megatome.d2d.support.BuilderImplementation;
 import com.megatome.d2d.support.DocSetParserInterface;
 import com.megatome.d2d.support.javadoc.JavadocSupport;
 import com.megatome.d2d.support.jsdoc.JSDocSupport;
@@ -38,7 +39,7 @@ public class DocsetCreator {
     private final String displayName;
     private final String keyword;
     private final File iconFilePath;
-    private final File javadocRoot;
+    private final File docRoot;
     private final File outputDirectory;
     private final DocSetParserInterface implementation;
 
@@ -47,7 +48,7 @@ public class DocsetCreator {
      */
     public static class Builder {
         private final String docsetName;
-        private final File javadocRoot;
+        private final File docRoot;
         private String displayName;
         private String keyword;
         private File iconFilePath = null;
@@ -58,17 +59,17 @@ public class DocsetCreator {
          * Ctor
          *
          * @param docsetName  File name of docset to create
-         * @param javadocRoot Root directory of the Javadoc to create the docset from
+         * @param docRoot Root directory of the documentation to create the docset from
          */
-        public Builder(String docsetName, File javadocRoot) {
+        public Builder(String docsetName, File docRoot) {
             if (null == docsetName || docsetName.isEmpty()) {
                 throw new IllegalArgumentException("The docsetName must be specified");
             }
-            if (null == javadocRoot) {
-                throw new IllegalArgumentException("The javadocRoot must be specified");
+            if (null == docRoot) {
+                throw new IllegalArgumentException("The docRoot must be specified");
             }
             this.docsetName = docsetName;
-            this.javadocRoot = javadocRoot;
+            this.docRoot = docRoot;
             this.displayName = docsetName;
             this.keyword = docsetName;
         }
@@ -145,19 +146,23 @@ public class DocsetCreator {
          * @return Builder instance
          */
         public Builder implementation(String input) {
-            if (null == input) {
-                return this;
-            }
-            switch (input) {
-                case JSDocSupport.JSDOC_IMPLEMENTATION:
-                    this.implementation = new JSDocSupport();
-                    break;
+            BuilderImplementation.fromString(input).ifPresent(this::implementation);
+            return this;
+        }
 
-                case JavadocSupport.JAVADOC_IMPLEMENTATION:
+        /**
+         * Specify the parser implementation
+         * @param implementationType Desired implementation type
+         * @return Builder instance
+         */
+        public Builder implementation(BuilderImplementation implementationType) {
+            switch (implementationType) {
+                case JAVADOC:
                     this.implementation = new JavadocSupport();
                     break;
-                default:
-                    // leave the way it was.
+                case JSDOC:
+                    this.implementation = new JSDocSupport();
+                    break;
             }
 
             return this;
@@ -173,7 +178,7 @@ public class DocsetCreator {
         this.displayName = builder.displayName;
         this.keyword = builder.keyword;
         this.iconFilePath = builder.iconFilePath;
-        this.javadocRoot = builder.javadocRoot;
+        this.docRoot = builder.docRoot;
         this.outputDirectory = builder.outputDirectory;
         this.implementation = builder.implementation;
     }
@@ -190,8 +195,8 @@ public class DocsetCreator {
         final String docsetRoot = concat(outputDirectory.getAbsolutePath(), docsetName);
         createDocSetStructure(docsetRoot);
         copyIconFile(iconFilePath, docsetRoot);
-        final IndexData indexData = implementation.findIndexFile(javadocRoot);
-        copyFiles(javadocRoot, docsetRoot);
+        final IndexData indexData = implementation.findIndexFile(docRoot);
+        copyFiles(docRoot, docsetRoot);
         createPList(docsetName, displayName, keyword, indexData.getDocsetIndexFile(), docsetRoot);
         createIndex(implementation.findSearchIndexValues(indexData.getFilesToIndex()), getDBDir(docsetRoot));
         log("Finished creating docset: {}", docsetRoot);
@@ -243,12 +248,12 @@ public class DocsetCreator {
     }
 
     /**
-     * Get the Javadoc root directory
+     * Get the documentation root directory
      *
-     * @return Javadoc directory
+     * @return Documentation directory
      */
-    public File getJavadocRoot() {
-        return javadocRoot;
+    public File getDocRoot() {
+        return docRoot;
     }
 
     /**

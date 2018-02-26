@@ -33,29 +33,27 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 
 public class JSDocSupport implements DocSetParserInterface {
 
-    public static final String JSDOC_IMPLEMENTATION = "jsdoc";
-
     @Override
-    public IndexData findIndexFile(File javadocDir) throws BuilderException {
+    public IndexData findIndexFile(File docDir) throws BuilderException {
         final IndexData indexData = new IndexData();
 
-        if (!javadocDir.exists() || !javadocDir.isDirectory()) {
-            throw new BuilderException(String.format("%s does not exist, or is not a directory", javadocDir.getAbsolutePath()));
+        if (!docDir.exists() || !docDir.isDirectory()) {
+            throw new BuilderException(String.format("%s does not exist, or is not a directory", docDir.getAbsolutePath()));
         }
 
         logVerbose("Looking for index.json file");
 
-        File indexJson = new File(javadocDir, "index.json");
+        File indexJson = new File(docDir, "index.json");
         if (indexJson.exists()) {
-            indexData.addFileToIndex(new File(javadocDir, "index.json"));
+            indexData.addFileToIndex(new File(docDir, "index.json"));
         }
 
-        if (new File(javadocDir, "index.html").exists()) {
+        if (new File(docDir, "index.html").exists()) {
             indexData.setDocsetIndexFile("index.html");
         }
 
         if (!indexData.hasFilesToIndex()) {
-            throw new BuilderException(String.format("Did not find any jsdoc files. Make sure that %s is a directory containing jsodc", javadocDir.getAbsolutePath()));
+            throw new BuilderException(String.format("Did not find any jsdoc files. Make sure that %s is a directory containing jsodc", docDir.getAbsolutePath()));
         }
 
         logVerbose("Found jsdoc files");
