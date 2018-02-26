@@ -42,8 +42,6 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
  */
 public final class JavadocSupport implements DocSetParserInterface {
 
-    public static final String JAVADOC_IMPLEMENTATION = "javadoc";
-
     private static final Pattern parentPattern = Pattern.compile("span|code|i|b", Pattern.CASE_INSENSITIVE);
 
     /**

@@ -1,5 +1,5 @@
 ext.projectVersion = '2.0.0'
-ext.projectLocation = "https://github.com/iamthechad/doc2dash"
+ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'
 
@@ -31,7 +31,7 @@ subprojects {
     version = "$projectVersion"
     group = "com.megatome.doc2dash"
 
-    def javaApiUrl = 'http://docs.oracle.com/javase/1.7.0/docs/api/'
+    def javaApiUrl = 'https://docs.oracle.com/javase/8/docs/api/'
     def groovyApiUrl = 'http://groovy-lang.org/gapi/'
     tasks.withType(Javadoc) {
         options.links(javaApiUrl, groovyApiUrl)
@@ -136,13 +136,13 @@ project(":d2d-gradle") {
     pluginBundle {
         website = "$projectLocation"
         vcsUrl = "$projectLocation"
-        description = 'Create Dash docsets from Javadoc'
-        tags = ['javadoc', 'dash']
+        description = 'Create Dash docsets from Javadoc and HTML'
+        tags = ['javadoc', 'dash', 'jsdoc', 'documentation', 'html', 'api']
 
         plugins {
             doc2dashPlugin {
                 id = 'com.megatome.doc2dash'
-                displayName = 'Javadoc to Dash'
+                displayName = 'Javadoc and HTML to Dash'
             }
         }
     }
@@ -188,8 +188,8 @@ project(":d2d-api") {
 
     def pomConfig = {
         scm {
-            connection "scm:git:git@github.com:iamthechad/doc2dash.git"
-            developerConnection "scm:git:git@github.com:iamthechad/doc2dash.git"
+            connection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
+            developerConnection "scm:git:git@github.com:iamthechad/javadoc2dash.git"
             url "$projectLocation"
         }
         issueManagement {
@@ -228,9 +228,9 @@ project(":d2d-api") {
 
                 pom.withXml {
                     def root = asNode()
-                    root.appendNode('name', 'Javadoc to Dash API')
+                    root.appendNode('name', 'Doc to Dash API')
                     root.appendNode('url', "$projectLocation")
-                    root.appendNode('description', 'API for creating Dash docsets from Javadoc')
+                    root.appendNode('description', 'API for creating Dash docsets from Javadoc and HTML')
                     root.children().last() + pomConfig
                 }
             }
@@ -246,7 +246,7 @@ project(":d2d-api") {
         pkg {
             repo = 'maven'
             name = 'doc2dash-api'
-            desc = 'API for creating Dash docsets from Javadoc'
+            desc = 'API for creating Dash docsets from Javadoc and HTML'
             websiteUrl = "$projectLocation"
             issueTrackerUrl = "$projectLocation/issues"
             vcsUrl = projectLocation + ".git"

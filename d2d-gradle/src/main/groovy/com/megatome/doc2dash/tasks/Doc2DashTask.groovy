@@ -25,7 +25,7 @@ import org.gradle.api.tasks.TaskAction
 
 class Doc2DashTask extends DefaultTask {
     @Input String docsetName
-    @Input File javadocRoot
+    @Input File docRoot
     @Input File outputLocation
     @Input String displayName
     @Input String keyword
@@ -51,7 +51,7 @@ class Doc2DashTask extends DefaultTask {
     void start() {
         withExceptionHandling {
 
-            DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocRoot)
+            DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, docRoot)
                 .displayName(displayName)
                 .keyword(keyword)
                 .outputDirectory(outputLocation)
