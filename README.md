@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/iamthechad/javadoc2dash.svg)](https://travis-ci.org/iamthechad/javadoc2dash)
-[![Coverage Status](https://coveralls.io/repos/github/iamthechad/javadoc2dash/badge.svg?branch=master)](https://coveralls.io/github/iamthechad/javadoc2dash?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/iamthechad/javadoc2dash/badge.svg?branch=v2.0.0)](https://coveralls.io/github/iamthechad/javadoc2dash?branch=v2.0.0)
 [![Download](https://api.bintray.com/packages/iamthechad/maven/javadoc2dash-api/images/download.svg) ](https://bintray.com/iamthechad/maven/javadoc2dash-api/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/javadoc2dash.png?label=ready&title=Ready)](http://waffle.io/iamthechad/javadoc2dash)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
@@ -9,7 +9,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Doc2Dash - Build Dash docsets from Javadoc](#javadoc2dash---build-dash-docsets-from-javadoc)
+- [Doc2Dash - Build Dash docsets from Javadoc (or any HTML)](#doc2dash---build-dash-docsets-from-javadoc-or-any-html)
 - [Gradle plugin](#gradle-plugin)
   - [Add the plugin to your project](#add-the-plugin-to-your-project)
   - [Specify settings](#specify-settings)
@@ -26,6 +26,7 @@
     - [Running a release zip](#running-a-release-zip)
   - [Creating a docset](#creating-a-docset)
     - [Examples](#examples)
+- [Custom HTML to DashDocset generation](#custom-html-to-dashdocset-generation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -34,7 +35,7 @@
 This project is based off of https://github.com/Kapeli/javadocset. This is a Java-based solution so that Dash docsets
 can be easily created from many environments, not just those that run OS X.
 
-There are three ways to create Dash-compatible docsets from Javadoc, or just about any other HTML documentation) using this project:
+There are three ways to create Dash-compatible docsets from Javadoc, (or just about any other HTML documentation) using this project:
 
 1. Use the Gradle plugin
 1. Use the API
@@ -54,7 +55,7 @@ Build script snippet for use in all Gradle versions:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:2.0.0"
       }
     }
 
@@ -63,7 +64,7 @@ Build script snippet for use in all Gradle versions:
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "com.megatome.doc2dash" version "1.1.0"
+      id "com.megatome.doc2dash" version "2.0.0"
     }
 
 ## Specify settings
@@ -77,20 +78,20 @@ If no settings are provided, the plugin tries to use sensible defaults.
 Setting Name | Type | Description | Default
 -------------|------|-------------|--------
 `docsetName` | `String` | File name of the created docset | `project.name`
-`javadocRoot`| `File` | Location of the javadoc files | `${project.docsDir}/javadoc` 
+`docRoot`| `File` | Location of the documentation files | `${project.docsDir}/javadoc`
 `outputLocation`| `File` | Location to create the docset | `${project.buildDir}`
 `displayName`| `String` | Name displayed in Dash | `project.name`
 `keyword` | `String` | Keyword used for the docset in Dash | `project.name`
 `iconFile` | `File` | File to be used as the docset icon | `null`
-`javadocTask` | `String` | Name of the javadoc task that the `javadoc2dash` task will depend on | `javadoc`
+`docTask` | `String` | Name of the task that the `doc2dash` task will depend on | `javadoc`
 `type` | `String` | 'javadoc' or 'jsdoc' | `javadoc`
 `implementation` | `DocSetParserInterface` | A custom implementation of the interface | instance of `JavadocSupport`
 
 **Some Caveats:**
 
 * The `iconFile` should be a 32x32 PNG file, but the plugin does **not** verify this.
-* You should only need to set the `javadocTask` property when the task you use to create Javadoc is non-standard. For example, there may be a task called `allJavadoc` in a multi-module
-project to create an aggregated Javadoc. In this instance, `javadocTask` should be set to `allJavadoc` to ensure that the correct documentation is built before creating the docset.
+* You should only need to set the `docTask` property when the task you use to create Javadoc is non-standard. For example, there may be a task called `allJavadoc` in a multi-module
+project to create an aggregated Javadoc. In this instance, `docTask` should be set to `allJavadoc` to ensure that the correct documentation is built before creating the docset.
 * This plugin applies the `java` plugin to the project it's run under. This means that in a multi-module project, a top level task named `javadoc` cannot be created to aggregate the
 subprojects' documentation. The `java` plugin creates a `javadoc` task, so a different name is required - perhaps `allJavadoc`.
 
@@ -102,7 +103,7 @@ Create the docset with the `doc2dash` task.
 
     apply plugin: 'java'
 
-    sourceCompatibility = 1.5
+    sourceCompatibility = 1.8
     version = '1.0'
 
     buildscript {
@@ -112,7 +113,7 @@ Create the docset with the `doc2dash` task.
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:2.0.0"
       }
     }
 
@@ -146,7 +147,7 @@ Setting Name | Type | Description | Default
 
     apply plugin: 'java'
 
-    sourceCompatibility = 1.5
+    sourceCompatibility = 1.8
     version = '1.0'
 
     buildscript {
@@ -156,7 +157,7 @@ Setting Name | Type | Description | Default
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:1.1.0"
+        classpath "gradle.plugin.com.megatome.doc2dash:d2d-gradle:2.0.0"
       }
     }
 
@@ -197,7 +198,7 @@ For Gradle:
     }
 
     dependencies {
-      compile "com.megatome.javadoc2dash:doc2dash-api:1.1.0"
+      compile "com.megatome.javadoc2dash:doc2dash-api:2.0.0"
     }
 
 For Maven:
@@ -210,7 +211,7 @@ For Maven:
 
 ## Use the API
 
-    DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, javadocLocation);
+    DocsetCreator.Builder builder = new DocsetCreator.Builder(docsetName, docLocation);
     // Optionally -
     builder.displayName("Some Name").keyword("keyword");
     DocsetCreator creator = builder.build();
@@ -243,7 +244,7 @@ Running the CLI directly from a Gradle task is not currently supported. A distri
 
 Docset creation requires at minimum two options: the name of the docset and the location of the Javadoc files to include in the docset.
 
-    ./d2d-cli --name Sample --javadoc /some/path/to/apidoc
+    ./d2d-cli --name Sample --doc /some/path/to/apidoc
 
 This will create a docset named Sample in the current directory. Docset creation can be customized with optional arguments:
 
@@ -260,15 +261,15 @@ This will create a docset named Sample in the current directory. Docset creation
 
 ### Examples
 
-Bare minimum: `d2d-cli --name Sample --javadoc /path/to/apidoc`
+Bare minimum: `d2d-cli --name Sample --doc /path/to/apidoc`
 
-Full options: `d2d-cli --name Sample --javadoc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
+Full options: `d2d-cli --name Sample --doc /path/to/apidoc --displayName "Awesome Sample API" --keyword asa --iconFile /path/to/icon.png --out /path/to/output`
 
-Abbreviated options. Most command-line options can be abbreviated. `d2d-cli -n Sample -j /path/to/apidoc -d "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
+Abbreviated options. Most command-line options can be abbreviated. `d2d-cli -n Sample --doc /path/to/apidoc --displayName "Awesome Sample API" -k asa -i /path/to/icon.png -o /path/to/output`
 
 # Custom HTML to DashDocset generation
 
-The plugin supports the implementation of a custom Dash Docset where the search properties can be generated at will. The default JavaDoc DashDocset is basically a specific implementation. To create a custom docset out of any HTML you need to implement the DocSetParserInterface and the MatchTypeInterface.
+The plugin supports the implementation of a custom Dash Docset where the search properties can be generated at will. The default JavaDoc DashDocset is basically a specific implementation. To create a custom docset out of any HTML you need to implement the `DocSetParserInterface` and the `MatchTypeInterface`.
 
 The plugin also supports JSDoc3 as a first class citizen.
 

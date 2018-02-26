@@ -44,7 +44,7 @@ class Doc2DashPlugin implements Plugin<Project> {
             conventionMapping.docsetName = { baseExtension.docsetName }
             conventionMapping.displayName = { baseExtension.displayName }
             conventionMapping.keyword = { baseExtension.keyword }
-            conventionMapping.javadocRoot = { baseExtension.javadocRoot }
+            conventionMapping.docRoot = { baseExtension.docRoot }
             conventionMapping.outputLocation = { baseExtension.outputLocation }
             conventionMapping.iconFile = { baseExtension.iconFile }
             conventionMapping.type = { baseExtension.type }
@@ -81,12 +81,12 @@ class Doc2DashPlugin implements Plugin<Project> {
 
 class Doc2DashPluginExtension {
     String docsetName
-    File javadocRoot
+    File docRoot
     File outputLocation
     String displayName
     String keyword
     File iconFile
-    String javadocTask
+    String docTask
     DocSetParserInterface implementation
     String type
 
@@ -94,12 +94,12 @@ class Doc2DashPluginExtension {
         docsetName = project.name
         displayName = project.name
         keyword = project.name
-        javadocRoot = project.file("${project.docsDir}/javadoc")
+        docRoot = project.file("${project.docsDir}/javadoc")
         outputLocation = project.file("${project.buildDir}/doc2dash")
         iconFile = null
         type = null
         implementation = null
-        javadocTask = "javadoc"
+        docTask = "javadoc"
     }
 }
 

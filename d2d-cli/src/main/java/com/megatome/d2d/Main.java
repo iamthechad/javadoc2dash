@@ -33,7 +33,7 @@ public class Main {
     public static void main(String... args) {
         final OptionParser parser = new OptionParser();
         final OptionSpec<String> docsetName = parser.accepts("name", "Name of the generated docset").withRequiredArg().ofType(String.class).required();
-        final OptionSpec<File> javadocRoot = parser.accepts("javadoc", "Directory containing Javadoc to bundle in the docset.").withRequiredArg().ofType(File.class).required();
+        final OptionSpec<File> docRoot = parser.accepts("doc", "Directory containing documentation to bundle in the docset.").withRequiredArg().ofType(File.class).required();
         final OptionSpec<File> outputLocation = parser.accepts("out", "Directory where the docset will be created.").withRequiredArg().ofType(File.class).defaultsTo(FileUtils.getFile("."));
         final OptionSpec<String> displayName = parser.accepts("displayName", "Name to show for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
         final OptionSpec<String> keyword = parser.accepts("keyword", "Keyword to use for the docset in Dash. Defaults to value of 'name' if not specified.").withRequiredArg().ofType(String.class);
@@ -57,7 +57,7 @@ public class Main {
         setVerbose(options.has(verbose));
         final DocsetCreator.Builder builder = new DocsetCreator.Builder(
                 options.valueOf(docsetName),
-                options.valueOf(javadocRoot)
+                options.valueOf(docRoot)
         )
                 .displayName(options.valueOf(displayName))
                 .displayName(options.valueOf(keyword))

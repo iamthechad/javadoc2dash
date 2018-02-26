@@ -16,24 +16,19 @@
 package com.megatome.d2d.support.jsdoc;
 
 import com.megatome.d2d.exception.BuilderException;
-import com.megatome.d2d.support.MatchTypeInterface;
+import com.megatome.d2d.support.DocSetParserBaseTest;
 import com.megatome.d2d.util.IndexData;
-import com.megatome.d2d.util.SearchIndexValue;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.megatome.d2d.support.jsdoc.ExpectedJSDocDataUtil.getExpectedData;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 
-public class JSDocSupportTest {
+public class JSDocSupportTest extends DocSetParserBaseTest {
     private static final File resourcesRoot = getFile("src", "test", "resources");
     private static final File regularJSDoc = getFile(System.getProperty("d2d-sample-jsdoc"));
     private static final String NOT_JAVADOC_DIR = "not-javadoc";
@@ -55,7 +50,7 @@ public class JSDocSupportTest {
 
     @Test
     public void testIndexFilesFound() throws Exception {
-        verifyFoundIndexValues(getAndVerifyIndexFiles(1, regularJSDoc));
+        verifyFoundIndexValues(new JSDocSupport(), getAndVerifyIndexFiles(1, regularJSDoc), ExpectedJSDocDataUtil.getExpectedData());
     }
 
     private IndexData getAndVerifyIndexFiles(int expectedFileCount, File javadocDir) throws Exception {
@@ -69,31 +64,4 @@ public class JSDocSupportTest {
         assertThat(expectedFileCount, is(files.size()));
         return indexData;
     }
-
-    private void verifyFoundIndexValues(final IndexData indexData) throws Exception {
-        final List<SearchIndexValue> indexValues = (new JSDocSupport()).findSearchIndexValues(indexData.getFilesToIndex());
-        assertNotNull(indexValues);
-        assertThat(indexValues.size(), is(getExpectedData().getExpectedEntryCount()));
-        final Map<MatchTypeInterface, List<String>> valueMap = new HashMap<>();
-        for (final SearchIndexValue value : indexValues) {
-            List<String> nameSet = valueMap.get(value.getType());
-            if (nameSet == null) {
-                nameSet = new ArrayList<>();
-            }
-            assertThat(nameSet, not(hasItem(value.getName())));
-            nameSet.add(value.getName());
-            valueMap.put(value.getType(), nameSet);
-        }
-
-        final Map<JSDocMatchType, Integer> expectedTypes = getExpectedData().getExpectedTypes();
-        assertThat(valueMap.size(), is(expectedTypes.keySet().size()));
-        for (final Map.Entry<JSDocMatchType, Integer> expectedType : expectedTypes.entrySet()) {
-            assertThat(valueMap, hasKey(expectedType.getKey()));
-            final List<String> namesForType = valueMap.get(expectedType.getKey());
-            assertNotNull(namesForType);
-            assertThat("Wrong count for " + expectedType, namesForType.size(), is(expectedType.getValue()));
-        }
-    }
 }
-
-

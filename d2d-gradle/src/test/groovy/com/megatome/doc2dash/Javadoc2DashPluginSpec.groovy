@@ -21,7 +21,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-class Doc2DashPluginSpec extends Specification {
+class Javadoc2DashPluginSpec extends Specification {
     static final TASK_NAME = "doc2dash"
     static final EXTENSION_NAME = "doc2dash"
     static final PLUGIN_ID = 'com.megatome.doc2dash'
@@ -48,10 +48,10 @@ class Doc2DashPluginSpec extends Specification {
             d2dTask.docsetName == project.name
             d2dTask.displayName == project.name
             d2dTask.keyword == project.name
-            d2dTask.javadocRoot == project.file("${project.docsDir}/javadoc")
+            d2dTask.docRoot == project.file("${project.docsDir}/javadoc")
             d2dTask.outputLocation == project.file("${project.buildDir}/doc2dash")
             d2dTask.iconFile == null
-            baseExtension.javadocTask == "javadoc"
+            baseExtension.docTask == "javadoc"
     }
 
     def "Apply plugin and set all extension values"() {
@@ -64,10 +64,10 @@ class Doc2DashPluginSpec extends Specification {
                 docsetName = "Project Name"
                 displayName = "Display Name"
                 keyword = "Keyword"
-                javadocRoot = project.file("${project.docsDir}/docs")
+                docRoot = project.file("${project.docsDir}/docs")
                 outputLocation = project.file("${project.buildDir}/docsets")
                 iconFile = project.file("icon.png")
-                javadocTask = "allJavadoc"
+                docTask = "allJavadoc"
             }
         then:
             project.plugins.hasPlugin(JavaPlugin)
@@ -78,10 +78,10 @@ class Doc2DashPluginSpec extends Specification {
             d2dTask.docsetName == "Project Name"
             d2dTask.displayName == "Display Name"
             d2dTask.keyword == "Keyword"
-            d2dTask.javadocRoot == project.file("${project.docsDir}/docs")
+            d2dTask.docRoot == project.file("${project.docsDir}/docs")
             d2dTask.outputLocation == project.file("${project.buildDir}/docsets")
             d2dTask.iconFile == project.file("icon.png")
-            baseExtension.javadocTask == "allJavadoc"
+            baseExtension.docTask == "allJavadoc"
     }
 
     def "Apply plugin and set some extension values"() {
@@ -103,7 +103,7 @@ class Doc2DashPluginSpec extends Specification {
         d2dTask.docsetName == project.name
         d2dTask.displayName == "Display Name"
         d2dTask.keyword == "Keyword"
-        d2dTask.javadocRoot == project.file("${project.docsDir}/javadoc")
+        d2dTask.docRoot == project.file("${project.docsDir}/javadoc")
         d2dTask.outputLocation == project.file("${project.buildDir}/docsets")
         d2dTask.iconFile == null
     }

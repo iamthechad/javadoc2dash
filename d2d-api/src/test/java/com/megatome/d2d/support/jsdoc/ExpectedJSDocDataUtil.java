@@ -15,11 +15,14 @@
  */
 package com.megatome.d2d.support.jsdoc;
 
+import com.megatome.d2d.support.ExpectedDataUtil;
+import com.megatome.d2d.support.MatchTypeInterface;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExpectedJSDocDataUtil {
+public class ExpectedJSDocDataUtil implements ExpectedDataUtil {
     private final Map<JSDocMatchType, Integer> EXPECTED_TYPES = new HashMap<>();
     private final Map<String, Integer> EXPECTED_DATABASE_TYPES = new HashMap<>();
     private int EXPECTED_ENTRY_COUNT = 0;
@@ -47,7 +50,7 @@ public class ExpectedJSDocDataUtil {
         return INSTANCE;
     }
 
-    public Map<JSDocMatchType, Integer> getExpectedTypes() {
+    public Map<MatchTypeInterface, Integer> getExpectedTypes() {
         return Collections.unmodifiableMap(EXPECTED_TYPES);
     }
 

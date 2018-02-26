@@ -15,6 +15,7 @@
  */
 package com.megatome.d2d;
 
+import com.megatome.d2d.support.BuilderImplementation;
 import com.megatome.d2d.support.javadoc.JavadocSupport;
 import com.megatome.d2d.support.jsdoc.JSDocSupport;
 import org.apache.commons.io.FileUtils;
@@ -134,7 +135,7 @@ public class DocsetCreatorTest {
         expectedValues.put(IMPLEMENTATION_TYPE, JavadocSupport.class);
         verifyCreatorValues(builder.build());
 
-        builder.implementation(JSDocSupport.JSDOC_IMPLEMENTATION);
+        builder.implementation(BuilderImplementation.JSDOC);
         expectedValues.put(IMPLEMENTATION_TYPE, JSDocSupport.class);
         verifyCreatorValues(builder.build());
 
@@ -155,7 +156,7 @@ public class DocsetCreatorTest {
         assertNotNull(creator);
         assertEquals(expectedValueMap.get(DOCSET_NAME), creator.getDocsetName());
         assertEquals(expectedValueMap.get(DISPLAY_NAME), creator.getDisplayName());
-        assertEquals(expectedValueMap.get(JAVADOC_DIR), creator.getJavadocRoot());
+        assertEquals(expectedValueMap.get(JAVADOC_DIR), creator.getDocRoot());
         assertEquals(expectedValueMap.get(KEYWORD), creator.getKeyword());
         assertEquals(expectedValueMap.get(OUTPUT_DIR), creator.getOutputDirectory());
         assertEquals(expectedValueMap.get(ICON_FILE), creator.getIconFilePath());
