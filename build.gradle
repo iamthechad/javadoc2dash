@@ -1,11 +1,10 @@
 ext.projectVersion = '1.2.0'
-ext.projectLocation = "https://github.com/iamthechad/javadoc2dash"
+ext.projectLocation = "https://github.com/i-net-software/doc2dash"
 
 apply plugin: 'com.github.kt3k.coveralls'
 
 buildscript {
     repositories {
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -22,7 +21,7 @@ allprojects {
     apply plugin: 'jacoco'
 
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
