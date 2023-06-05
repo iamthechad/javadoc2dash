@@ -72,14 +72,14 @@ public class JavadocSupportTest extends DocSetParserBaseTest {
         final List<File> filesToIndex = Collections.singletonList(new File(uri));
 
         final ByteArrayOutputStream errStream = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errStream, true, StandardCharsets.ISO_8859_1));
+        System.setErr(new PrintStream(errStream, true, StandardCharsets.ISO_8859_1.toString()));
         try {
             (new JavadocSupport()).findSearchIndexValues(filesToIndex);
         } finally {
             System.setErr(null);
         }
 
-        final String err = errStream.toString(StandardCharsets.ISO_8859_1);
+        final String err = errStream.toString(StandardCharsets.ISO_8859_1.toString());
 
         assertThat(err, containsString("Something went wrong with parsing a link, possibly unescaped tags" + " in Javadoc. (Name: , Type: CONSTRUCTOR, Link: )"));
         assertThat(err, containsString("Most recently parsed value was: (Name: SampleClass, Type: CLASS," + " Path: ./com/megatome/d2d/sample/clazz/SampleClass.html)"));
