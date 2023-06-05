@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,14 +72,14 @@ public class JavadocSupportTest extends DocSetParserBaseTest {
         final List<File> filesToIndex = Collections.singletonList(new File(uri));
 
         final ByteArrayOutputStream errStream = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errStream));
+        System.setErr(new PrintStream(errStream, true, StandardCharsets.ISO_8859_1));
         try {
             (new JavadocSupport()).findSearchIndexValues(filesToIndex);
         } finally {
             System.setErr(null);
         }
 
-        final String err = errStream.toString();
+        final String err = errStream.toString(StandardCharsets.ISO_8859_1);
 
         assertThat(err, containsString("Something went wrong with parsing a link, possibly unescaped tags" + " in Javadoc. (Name: , Type: CONSTRUCTOR, Link: )"));
         assertThat(err, containsString("Most recently parsed value was: (Name: SampleClass, Type: CLASS," + " Path: ./com/megatome/d2d/sample/clazz/SampleClass.html)"));
@@ -92,7 +93,8 @@ public class JavadocSupportTest extends DocSetParserBaseTest {
         assertThat("overview-summary.html", is(indexFile));
         final List<File> files = indexData.getFilesToIndex();
         assertNotNull(files);
-        assertThat(expectedFileCount, is(files.size()));
+        // System.out.println( "Expected: " + expectedFileCount + ", had: " + files.size() );
+        assertThat( expectedFileCount, is(files.size()));
         return indexData;
     }
 }
