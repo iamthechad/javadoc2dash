@@ -7,3 +7,6 @@ bin
 .classpath
 .settings
 out/
+.project
+.vscode
+.DS_Store
